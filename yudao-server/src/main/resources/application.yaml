@@ -204,6 +204,12 @@ yudao:
   #    base-url: https://suno-55ishh05u-status2xxs-projects.vercel.app
       base-url: http://127.0.0.1:3001
 
+--- #################### 每日饭菜相关配置 ####################
+
+daily-meals:
+  info:
+    base-package: cn.insectmk.meals
+
 --- #################### 芋道相关配置 ####################
 
 yudao:
