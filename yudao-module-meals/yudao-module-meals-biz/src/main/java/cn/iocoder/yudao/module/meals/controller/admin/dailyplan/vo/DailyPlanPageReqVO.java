@@ -1,8 +1,6 @@
 package cn.iocoder.yudao.module.meals.controller.admin.dailyplan.vo;
 
 import lombok.*;
-
-import java.time.LocalDate;
 import java.util.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
@@ -22,7 +20,7 @@ public class DailyPlanPageReqVO extends PageParam {
 
     @Schema(description = "计划日")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
-    private LocalDate[] planDate;
+    private LocalDateTime[] planDate;
 
     @Schema(description = "餐次类型", example = "1")
     private Integer mealType;

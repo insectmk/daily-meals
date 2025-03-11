@@ -2,10 +2,10 @@ package cn.iocoder.yudao.module.meals.controller.admin.dailyplan.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-
-import java.time.LocalDate;
 import java.util.*;
 import jakarta.validation.constraints.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDateTime;
 
 @Schema(description = "管理后台 - 菜谱计划新增/修改 Request VO")
 @Data
@@ -18,7 +18,7 @@ public class DailyPlanSaveReqVO {
     private Long recipeId;
 
     @Schema(description = "计划日")
-    private LocalDate planDate;
+    private LocalDateTime planDate;
 
     @Schema(description = "餐次类型", example = "1")
     private Integer mealType;

@@ -1,9 +1,8 @@
 package cn.iocoder.yudao.module.meals.dal.dataobject.dailyplan;
 
 import lombok.*;
-
-import java.time.LocalDate;
 import java.util.*;
+import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.*;
@@ -36,7 +35,7 @@ public class DailyPlanDO extends BaseDO {
     /**
      * 计划日
      */
-    private LocalDate planDate;
+    private LocalDateTime planDate;
     /**
      * 餐次类型
      *

@@ -1,10 +1,7 @@
 package cn.iocoder.yudao.module.meals.controller.admin.dailyplan.vo;
 
-import cn.iocoder.yudao.module.meals.enums.DictTypeConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-
-import java.time.LocalDate;
 import java.util.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
@@ -27,11 +24,11 @@ public class DailyPlanRespVO {
 
     @Schema(description = "计划日")
     @ExcelProperty("计划日")
-    private LocalDate planDate;
+    private LocalDateTime planDate;
 
     @Schema(description = "餐次类型", example = "1")
     @ExcelProperty(value = "餐次类型", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.MEALS_MEAL_TYPE)
+    @DictFormat("meals_meal_type") // TODO 代码优化：建议设置到对应的 DictTypeConstants 枚举类中
     private Integer mealType;
 
     @Schema(description = "备注", example = "你说的对")
