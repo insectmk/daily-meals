@@ -52,3 +52,4 @@ application-my.yaml
 
 /yudao-ui-app/unpackage/
 /database/basic/secret/
+**/.DS_Store
