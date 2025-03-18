@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.module.meals.controller.admin.dailyplan.vo;
+package cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -9,18 +9,22 @@ import com.alibaba.excel.annotation.*;
 import cn.iocoder.yudao.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.framework.excel.core.convert.DictConvert;
 
-@Schema(description = "管理后台 - 菜谱计划 Response VO")
+@Schema(description = "用户 APP - 菜谱计划 Response VO")
 @Data
 @ExcelIgnoreUnannotated
-public class DailyPlanRespVO {
+public class AppDailyPlanRespVO {
 
-    @Schema(description = "编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "22481")
+    @Schema(description = "编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "10060")
     @ExcelProperty("编号")
     private Long id;
 
     @Schema(description = "菜谱ID", example = "12195")
     @ExcelProperty("菜谱ID")
     private Long recipeId;
+
+    @Schema(description = "用户编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "28829")
+    @ExcelProperty("用户编号")
+    private Long userId;
 
     @Schema(description = "计划日")
     @ExcelProperty("计划日")

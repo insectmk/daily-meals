@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import cn.iocoder.yudao.module.meals.controller.admin.dailyplan.vo.*;
+import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.*;
 import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplan.DailyPlanDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
@@ -30,7 +30,7 @@ public class DailyPlanServiceImpl implements DailyPlanService {
     private DailyPlanMapper dailyPlanMapper;
 
     @Override
-    public Long createDailyPlan(DailyPlanSaveReqVO createReqVO) {
+    public Long createDailyPlan(AppDailyPlanSaveReqVO createReqVO) {
         // 插入
         DailyPlanDO dailyPlan = BeanUtils.toBean(createReqVO, DailyPlanDO.class);
         dailyPlanMapper.insert(dailyPlan);
@@ -39,7 +39,7 @@ public class DailyPlanServiceImpl implements DailyPlanService {
     }
 
     @Override
-    public void updateDailyPlan(DailyPlanSaveReqVO updateReqVO) {
+    public void updateDailyPlan(AppDailyPlanSaveReqVO updateReqVO) {
         // 校验存在
         validateDailyPlanExists(updateReqVO.getId());
         // 更新
@@ -67,7 +67,7 @@ public class DailyPlanServiceImpl implements DailyPlanService {
     }
 
     @Override
-    public PageResult<DailyPlanDO> getDailyPlanPage(DailyPlanPageReqVO pageReqVO) {
+    public PageResult<DailyPlanDO> getDailyPlanPage(AppDailyPlanPageReqVO pageReqVO) {
         return dailyPlanMapper.selectPage(pageReqVO);
     }
 

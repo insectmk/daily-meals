@@ -2,7 +2,7 @@ package cn.iocoder.yudao.module.meals.service.dailyplan;
 
 import java.util.*;
 import jakarta.validation.*;
-import cn.iocoder.yudao.module.meals.controller.admin.dailyplan.vo.*;
+import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.*;
 import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplan.DailyPlanDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
@@ -20,14 +20,14 @@ public interface DailyPlanService {
      * @param createReqVO 创建信息
      * @return 编号
      */
-    Long createDailyPlan(@Valid DailyPlanSaveReqVO createReqVO);
+    Long createDailyPlan(@Valid AppDailyPlanSaveReqVO createReqVO);
 
     /**
      * 更新菜谱计划
      *
      * @param updateReqVO 更新信息
      */
-    void updateDailyPlan(@Valid DailyPlanSaveReqVO updateReqVO);
+    void updateDailyPlan(@Valid AppDailyPlanSaveReqVO updateReqVO);
 
     /**
      * 删除菜谱计划
@@ -50,6 +50,6 @@ public interface DailyPlanService {
      * @param pageReqVO 分页查询
      * @return 菜谱计划分页
      */
-    PageResult<DailyPlanDO> getDailyPlanPage(DailyPlanPageReqVO pageReqVO);
+    PageResult<DailyPlanDO> getDailyPlanPage(AppDailyPlanPageReqVO pageReqVO);
 
 }

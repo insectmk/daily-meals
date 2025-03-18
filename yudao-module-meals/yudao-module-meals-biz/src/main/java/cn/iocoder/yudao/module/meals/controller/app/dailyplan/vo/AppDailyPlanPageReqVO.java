@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.module.meals.controller.admin.dailyplan.vo;
+package cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo;
 
 import lombok.*;
 import java.util.*;
@@ -9,14 +9,17 @@ import java.time.LocalDateTime;
 
 import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 
-@Schema(description = "管理后台 - 菜谱计划分页 Request VO")
+@Schema(description = "用户 APP - 菜谱计划分页 Request VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DailyPlanPageReqVO extends PageParam {
+public class AppDailyPlanPageReqVO extends PageParam {
 
     @Schema(description = "菜谱ID", example = "12195")
     private Long recipeId;
+
+    @Schema(description = "用户编号", example = "28829")
+    private Long userId;
 
     @Schema(description = "计划日")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)

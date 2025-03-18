@@ -7,7 +7,7 @@ import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
 import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplan.DailyPlanDO;
 import org.apache.ibatis.annotations.Mapper;
-import cn.iocoder.yudao.module.meals.controller.admin.dailyplan.vo.*;
+import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.*;
 
 /**
  * 菜谱计划 Mapper
@@ -17,9 +17,10 @@ import cn.iocoder.yudao.module.meals.controller.admin.dailyplan.vo.*;
 @Mapper
 public interface DailyPlanMapper extends BaseMapperX<DailyPlanDO> {
 
-    default PageResult<DailyPlanDO> selectPage(DailyPlanPageReqVO reqVO) {
+    default PageResult<DailyPlanDO> selectPage(AppDailyPlanPageReqVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<DailyPlanDO>()
                 .eqIfPresent(DailyPlanDO::getRecipeId, reqVO.getRecipeId())
+                .eqIfPresent(DailyPlanDO::getUserId, reqVO.getUserId())
                 .betweenIfPresent(DailyPlanDO::getPlanDate, reqVO.getPlanDate())
                 .eqIfPresent(DailyPlanDO::getMealType, reqVO.getMealType())
                 .eqIfPresent(DailyPlanDO::getMemo, reqVO.getMemo())

@@ -33,6 +33,10 @@ public class DailyPlanDO extends BaseDO {
      */
     private Long recipeId;
     /**
+     * 用户编号
+     */
+    private Long userId;
+    /**
      * 计划日
      */
     private LocalDateTime planDate;

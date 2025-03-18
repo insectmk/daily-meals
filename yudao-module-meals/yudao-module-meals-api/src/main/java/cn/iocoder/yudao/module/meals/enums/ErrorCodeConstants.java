@@ -14,6 +14,6 @@ public interface ErrorCodeConstants {
     ErrorCode FOOD_NOT_EXISTS = new ErrorCode(100_000_002, "食材不存在");
     // ========== 菜谱计划 ==========
     ErrorCode DAILY_PLAN_NOT_EXISTS = new ErrorCode(100_000_003, "菜谱计划不存在");
-    // ========== 菜谱诗词啊 ==========
+    // ========== 菜谱食材 ==========
     ErrorCode RECIPE_FOOD_NOT_EXISTS = new ErrorCode(100_000_004, "菜谱食材不存在");
 }
