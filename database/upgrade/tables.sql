@@ -2,12 +2,11 @@
 CREATE TABLE IF NOT EXISTS `meals_recipe`
 (
     `id`           bigint   NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `user_id`      bigint   NOT NULL COMMENT '用户编号',
+    `user_id`      bigint                                                       DEFAULT NULL COMMENT '用户编号',
     `name`         varchar(255)                                                 DEFAULT NULL COMMENT '名称',
     `recipe_desc`  varchar(512)                                                 DEFAULT NULL COMMENT '简介',
     `recipe_step`  text                                                         DEFAULT NULL COMMENT '教程',
     `recipe_type`  tinyint                                                      DEFAULT NULL COMMENT '菜谱类型',
-    `recipe_tag`   tinyint                                                      DEFAULT NULL COMMENT '标签',
     `recipe_level` tinyint                                                      DEFAULT '0' COMMENT '烹饪难度',
     `sort`         int                                                          DEFAULT '0' COMMENT '排序',
     `memo`         varchar(2000)                                                DEFAULT NULL COMMENT '备注',
@@ -65,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `meals_recipe_food`
 CREATE TABLE IF NOT EXISTS `meals_daily_plan`
 (
     `id`          bigint   NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `user_id`     bigint   NOT NULL COMMENT '用户编号',
+    `user_id`     bigint                                                       DEFAULT NULL COMMENT '用户编号',
     `recipe_id`   bigint                                                       DEFAULT NULL COMMENT '菜谱ID',
     `plan_date`   date                                                         DEFAULT NULL COMMENT '计划日',
     `meal_type`   tinyint                                                      DEFAULT NULL COMMENT '餐次类型',

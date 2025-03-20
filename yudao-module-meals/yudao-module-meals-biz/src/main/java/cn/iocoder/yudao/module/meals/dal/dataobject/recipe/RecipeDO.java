@@ -46,12 +46,6 @@ public class RecipeDO extends BaseDO {
      */
     private Integer recipeType;
     /**
-     * 标签
-     *
-     * 枚举 {@link TODO meals_recipe_tag 对应的类}
-     */
-    private Integer recipeTag;
-    /**
      * 烹饪难度
      *
      * 枚举 {@link TODO meals_recipe_level 对应的类}

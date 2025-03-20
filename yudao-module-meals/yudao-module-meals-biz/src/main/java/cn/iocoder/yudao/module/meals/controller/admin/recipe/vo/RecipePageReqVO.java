@@ -21,9 +21,6 @@ public class RecipePageReqVO extends PageParam {
     @Schema(description = "菜谱类型", example = "1")
     private Integer recipeType;
 
-    @Schema(description = "标签", example = "1")
-    private Integer recipeTag;
-
     @Schema(description = "烹饪难度", example = "1")
     private Integer recipeLevel;
 

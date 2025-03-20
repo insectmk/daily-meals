@@ -36,11 +36,6 @@ public class RecipeRespVO {
     @DictFormat(DictTypeConstants.MEALS_RECIPE_TYPE)
     private Integer recipeType;
 
-    @Schema(description = "标签", example = "1")
-    @ExcelProperty(value = "标签", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.MEALS_RECIPE_TAG)
-    private Integer recipeTag;
-
     @Schema(description = "烹饪难度", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @ExcelProperty(value = "烹饪难度", converter = DictConvert.class)
     @DictFormat(DictTypeConstants.MEALS_RECIPE_LEVEL)

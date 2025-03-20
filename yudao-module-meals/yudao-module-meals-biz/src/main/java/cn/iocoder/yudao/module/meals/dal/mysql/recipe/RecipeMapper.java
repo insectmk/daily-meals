@@ -21,7 +21,6 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
         return selectPage(reqVO, new LambdaQueryWrapperX<RecipeDO>()
                 .likeIfPresent(RecipeDO::getName, reqVO.getName())
                 .eqIfPresent(RecipeDO::getRecipeType, reqVO.getRecipeType())
-                .eqIfPresent(RecipeDO::getRecipeTag, reqVO.getRecipeTag())
                 .eqIfPresent(RecipeDO::getRecipeLevel, reqVO.getRecipeLevel())
                 .eqIfPresent(RecipeDO::getStatus, reqVO.getStatus())
                 .betweenIfPresent(RecipeDO::getCreateTime, reqVO.getCreateTime())
