@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * 拓展 MyBatis Plus QueryWrapper 类，主要增加如下功能：
@@ -101,6 +102,30 @@ public class LambdaQueryWrapperX<T> extends LambdaQueryWrapper<T> {
     }
 
     // ========== 重写父类方法，方便链式调用 ==========
+
+    @Override
+    public LambdaQueryWrapperX<T> and(boolean condition, Consumer<LambdaQueryWrapper<T>> consumer) {
+        super.and(condition, consumer);
+        return this;
+    }
+
+    @Override
+    protected LambdaQueryWrapperX<T> and(boolean condition) {
+        super.and(condition);
+        return this;
+    }
+
+    @Override
+    public LambdaQueryWrapperX<T> and(Consumer<LambdaQueryWrapper<T>> consumer) {
+        super.and(consumer);
+        return this;
+    }
+
+    @Override
+    public LambdaQueryWrapperX<T> or(boolean condition, Consumer<LambdaQueryWrapper<T>> consumer) {
+        super.or(condition, consumer);
+        return this;
+    }
 
     @Override
     public LambdaQueryWrapperX<T> eq(boolean condition, SFunction<T, ?> column, Object val) {

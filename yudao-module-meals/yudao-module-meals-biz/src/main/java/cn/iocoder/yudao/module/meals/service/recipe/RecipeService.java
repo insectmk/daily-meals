@@ -1,6 +1,11 @@
 package cn.iocoder.yudao.module.meals.service.recipe;
 
 import java.util.*;
+
+import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.AppDailyPlanPageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplan.DailyPlanDO;
 import jakarta.validation.*;
 import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.*;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
@@ -94,4 +99,11 @@ public interface RecipeService {
 	 */
     RecipeFoodDO getRecipeFood(Long id);
 
+    /**
+     * 【会员】 获取菜谱分页信息
+     * @param loginUserId 用户ID
+     * @param pageReqVO 分页对象
+     * @return 菜谱食材分页
+     */
+    PageResult<RecipeDO> getRecipePage(Long loginUserId, @Valid AppRecipePageReqVO pageReqVO);
 }

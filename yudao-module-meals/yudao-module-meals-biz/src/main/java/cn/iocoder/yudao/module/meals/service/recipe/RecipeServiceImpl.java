@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.meals.service.recipe;
 
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -112,6 +113,11 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public RecipeFoodDO getRecipeFood(Long id) {
         return recipeFoodMapper.selectById(id);
+    }
+
+    @Override
+    public PageResult<RecipeDO> getRecipePage(Long loginUserId, AppRecipePageReqVO pageReqVO) {
+        return recipeMapper.selectPage(loginUserId, pageReqVO);
     }
 
     private void validateRecipeFoodExists(Long id) {

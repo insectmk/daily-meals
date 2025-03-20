@@ -28,6 +28,10 @@ public class RecipeDO extends BaseDO {
     @TableId
     private Long id;
     /**
+     * 用户ID
+     */
+    private String userId;
+    /**
      * 名称
      */
     private String name;
