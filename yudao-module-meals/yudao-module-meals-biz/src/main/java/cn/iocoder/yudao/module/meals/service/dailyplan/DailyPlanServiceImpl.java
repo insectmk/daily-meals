@@ -67,8 +67,8 @@ public class DailyPlanServiceImpl implements DailyPlanService {
     }
 
     @Override
-    public PageResult<DailyPlanDO> getDailyPlanPage(AppDailyPlanPageReqVO pageReqVO) {
-        return dailyPlanMapper.selectPage(pageReqVO);
+    public PageResult<DailyPlanDO> getDailyPlanPage(Long userId,AppDailyPlanPageReqVO pageReqVO) {
+        return dailyPlanMapper.selectPage(userId, pageReqVO);
     }
 
 }

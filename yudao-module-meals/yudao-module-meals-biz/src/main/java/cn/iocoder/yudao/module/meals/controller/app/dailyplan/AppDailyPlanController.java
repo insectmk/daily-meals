@@ -24,6 +24,7 @@ import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 
 import cn.iocoder.yudao.framework.apilog.core.annotation.ApiAccessLog;
 import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.*;
+import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.*;
 import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplan.DailyPlanDO;
@@ -70,7 +71,7 @@ public class AppDailyPlanController {
     @GetMapping("/page")
     @Operation(summary = "获得菜谱计划分页")
     public CommonResult<PageResult<AppDailyPlanRespVO>> getDailyPlanPage(@Valid AppDailyPlanPageReqVO pageReqVO) {
-        PageResult<DailyPlanDO> pageResult = dailyPlanService.getDailyPlanPage(pageReqVO);
+        PageResult<DailyPlanDO> pageResult = dailyPlanService.getDailyPlanPage(getLoginUserId(),pageReqVO);
         return success(BeanUtils.toBean(pageResult, AppDailyPlanRespVO.class));
     }
 
@@ -80,7 +81,7 @@ public class AppDailyPlanController {
     public void exportDailyPlanExcel(@Valid AppDailyPlanPageReqVO pageReqVO,
               HttpServletResponse response) throws IOException {
         pageReqVO.setPageSize(PageParam.PAGE_SIZE_NONE);
-        List<DailyPlanDO> list = dailyPlanService.getDailyPlanPage(pageReqVO).getList();
+        List<DailyPlanDO> list = dailyPlanService.getDailyPlanPage(getLoginUserId(),pageReqVO).getList();
         // 导出 Excel
         ExcelUtils.write(response, "菜谱计划.xls", "数据", AppDailyPlanRespVO.class,
                         BeanUtils.toBean(list, AppDailyPlanRespVO.class));

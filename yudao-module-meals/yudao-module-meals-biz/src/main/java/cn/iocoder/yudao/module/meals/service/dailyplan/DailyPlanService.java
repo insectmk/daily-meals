@@ -46,10 +46,9 @@ public interface DailyPlanService {
 
     /**
      * 获得菜谱计划分页
-     *
-     * @param pageReqVO 分页查询
-     * @return 菜谱计划分页
+     * @param userId 分页查询
+     * @param pageReqVO 菜谱计划分页
+     * @return
      */
-    PageResult<DailyPlanDO> getDailyPlanPage(AppDailyPlanPageReqVO pageReqVO);
-
+    PageResult<DailyPlanDO> getDailyPlanPage(Long userId, @Valid AppDailyPlanPageReqVO pageReqVO);
 }

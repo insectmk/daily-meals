@@ -17,8 +17,13 @@ import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.*;
 @Mapper
 public interface DailyPlanMapper extends BaseMapperX<DailyPlanDO> {
 
-    default PageResult<DailyPlanDO> selectPage(AppDailyPlanPageReqVO reqVO) {
+    default PageResult<DailyPlanDO> selectPage(Long userId,AppDailyPlanPageReqVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<DailyPlanDO>()
+                .and(wrapper -> wrapper
+                    .eq(DailyPlanDO::getUserId, userId)
+                    .or()
+                    .isNull(DailyPlanDO::getUserId)
+                )
                 .eqIfPresent(DailyPlanDO::getRecipeId, reqVO.getRecipeId())
                 .eqIfPresent(DailyPlanDO::getUserId, reqVO.getUserId())
                 .betweenIfPresent(DailyPlanDO::getPlanDate, reqVO.getPlanDate())
