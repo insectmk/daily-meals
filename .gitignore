@@ -53,3 +53,4 @@ application-my.yaml
 /yudao-ui-app/unpackage/
 /database/basic/secret/
 **/.DS_Store
+/jrebel-classpath-33600.jar
