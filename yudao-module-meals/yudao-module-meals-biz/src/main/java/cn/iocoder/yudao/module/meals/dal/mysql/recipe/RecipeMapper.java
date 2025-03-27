@@ -37,11 +37,7 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
      */
     default PageResult<RecipeDO> selectPage(Long userId,AppRecipePageReqVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<RecipeDO>()
-                .and(wrapper -> wrapper
-                        .eq(RecipeDO::getUserId, userId) // userId = ?
-                        .or() // 或者
-                        .isNull(RecipeDO::getUserId) // userId IS NULL
-                )
+                .eqIfPresent(RecipeDO::getUserId, userId)
                 .likeIfPresent(RecipeDO::getName, reqVO.getName())
                 .eqIfPresent(RecipeDO::getRecipeType, reqVO.getRecipeType())
                 .eqIfPresent(RecipeDO::getRecipeLevel, reqVO.getRecipeLevel())

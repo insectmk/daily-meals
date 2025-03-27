@@ -25,5 +25,5 @@ public interface AppRecipeService {
      * @param pageReqVO 分页信息
      * @return 详细信息分页
      */
-    PageResult<RecipeDO> getRecipeDetailPage(Long userId, @Valid AppRecipePageReqVO pageReqVO);
+    PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, @Valid AppRecipePageReqVO pageReqVO);
 }

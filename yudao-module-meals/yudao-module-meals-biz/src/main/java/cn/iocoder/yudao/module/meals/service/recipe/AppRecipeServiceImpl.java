@@ -1,10 +1,12 @@
 package cn.iocoder.yudao.module.meals.service.recipe;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeFoodDetailRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
+import cn.iocoder.yudao.module.meals.convert.recipe.RecipeConvert;
 import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
@@ -15,8 +17,10 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-
 import java.util.List;
+import java.util.Set;
+
+import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 
 /**
  * APP菜谱 Service 实现类
@@ -52,7 +56,25 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     }
 
     @Override
-    public PageResult<RecipeDO> getRecipeDetailPage(Long userId, AppRecipePageReqVO pageReqVO) {
-        return recipeMapper.selectPage(userId, pageReqVO);
+    public PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, AppRecipePageReqVO pageReqVO) {
+        // 查询基础信息
+        PageResult<RecipeDO> pageResult = recipeMapper.selectPage(userId, pageReqVO);
+        List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
+        if (CollUtil.isEmpty(recipes)) {
+            // 为空直接返回
+            return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
+        }
+        // 查询菜谱食材信息
+        List<RecipeFoodDetailDO> recipeFoods = recipeFoodMapper.selectJoinList(
+                RecipeFoodDetailDO.class,
+                new MPJLambdaWrapper<RecipeFoodDO>()
+                        .selectAll(RecipeFoodDO.class) // 查询所有基础字段
+                        .selectAs(FoodDO::getName, RecipeFoodDetailDO::getFoodName) // 食物的名称作为详细信息名称
+                        .selectAs(FoodDO::getFoodUnit, RecipeFoodDetailDO::getFoodUnit) // 食物的单位作为详细信息单位
+                        .leftJoin(FoodDO.class, FoodDO::getId, RecipeFoodDO::getFoodId) // 联表 WHERE meals_recipe_food.food_id = meals_food.id
+                        // 查询所有分页菜谱的食材信息
+                        .in(RecipeFoodDO::getRecipeId, convertSet(recipes, RecipeDO::getId)));
+        // 装载信息
+        return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
     }
 }
