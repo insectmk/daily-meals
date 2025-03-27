@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.meals.convert.recipe;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 /**
  * @Title: ReceipeConvert
@@ -11,4 +12,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface RecipeConvert {
+    RecipeConvert INSTANCE = Mappers.getMapper(RecipeConvert.class);
+
 }

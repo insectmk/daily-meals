@@ -2,6 +2,7 @@ package cn.iocoder.yudao.module.meals.service.recipe;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import jakarta.validation.Valid;
 
@@ -16,7 +17,7 @@ public interface AppRecipeService {
      * @param id 菜谱ID
      * @return 详细信息
      */
-    RecipeDO getRecipeDetail(Long id);
+    AppRecipeRespVO getRecipeDetail(Long id);
 
     /**
      * 获取菜谱的详细信息分页

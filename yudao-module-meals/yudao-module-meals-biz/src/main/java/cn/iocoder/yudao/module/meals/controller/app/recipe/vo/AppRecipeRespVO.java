@@ -1,16 +1,17 @@
 package cn.iocoder.yudao.module.meals.controller.app.recipe.vo;
 
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-import java.util.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Data;
 import java.time.LocalDateTime;
-import com.alibaba.excel.annotation.*;
+import java.util.List;
 
 @Schema(description = "用户 APP - 菜谱 Response VO")
 @Data
 @ExcelIgnoreUnannotated
 public class AppRecipeRespVO {
+    // ========== 食谱基本信息 ==========
 
     @Schema(description = "编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "23107")
     @ExcelProperty("编号")
@@ -55,5 +56,8 @@ public class AppRecipeRespVO {
     @Schema(description = "创建时间", requiredMode = Schema.RequiredMode.REQUIRED)
     @ExcelProperty("创建时间")
     private LocalDateTime createTime;
+
+    // ========== 食谱食材信息 ==========
+    List<AppRecipeFoodDetailRespVO> foods;
 
 }

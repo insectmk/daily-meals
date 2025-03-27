@@ -6,6 +6,7 @@ import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.service.recipe.AppRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,9 +33,9 @@ public class AppRecipeController {
 
     @GetMapping("/get")
     @Operation(summary = "获取菜谱")
-    public CommonResult<RecipeRespVO> createRecipe(@RequestParam("id") Long id) {
-        RecipeDO recipe = appRecipeService.getRecipeDetail(id);
-        return success(BeanUtils.toBean(recipe, RecipeRespVO.class));
+    public CommonResult<AppRecipeRespVO> createRecipe(@RequestParam("id") Long id) {
+        AppRecipeRespVO recipe = appRecipeService.getRecipeDetail(id);
+        return success(recipe);
     }
 
     @GetMapping("/page")

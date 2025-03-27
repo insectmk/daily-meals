@@ -19,4 +19,8 @@ public class RecipeFoodDetailDO extends RecipeFoodDO {
      * 食材名称
      */
     private String foodName;
+    /**
+     * 食材单位
+     */
+    private Long foodUnit;
 }
