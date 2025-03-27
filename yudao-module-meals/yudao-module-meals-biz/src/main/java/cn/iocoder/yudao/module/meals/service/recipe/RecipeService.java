@@ -98,12 +98,4 @@ public interface RecipeService {
      * @return 菜谱食材
 	 */
     RecipeFoodDO getRecipeFood(Long id);
-
-    /**
-     * 【会员】 获取菜谱分页信息
-     * @param loginUserId 用户ID
-     * @param pageReqVO 分页对象
-     * @return 菜谱食材分页
-     */
-    PageResult<RecipeDO> getRecipePage(Long loginUserId, @Valid AppRecipePageReqVO pageReqVO);
 }

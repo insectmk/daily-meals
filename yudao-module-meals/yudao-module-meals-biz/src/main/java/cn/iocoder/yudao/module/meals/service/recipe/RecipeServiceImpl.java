@@ -115,11 +115,6 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeFoodMapper.selectById(id);
     }
 
-    @Override
-    public PageResult<RecipeDO> getRecipePage(Long loginUserId, AppRecipePageReqVO pageReqVO) {
-        return recipeMapper.selectPage(loginUserId, pageReqVO);
-    }
-
     private void validateRecipeFoodExists(Long id) {
         if (recipeFoodMapper.selectById(id) == null) {
             throw exception(RECIPE_FOOD_NOT_EXISTS);
