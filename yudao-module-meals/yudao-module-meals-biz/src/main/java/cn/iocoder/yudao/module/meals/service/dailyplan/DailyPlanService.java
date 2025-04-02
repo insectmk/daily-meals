@@ -14,6 +14,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageParam;
  */
 public interface DailyPlanService {
 
+
     /**
      * 创建菜谱计划
      *
@@ -51,4 +52,12 @@ public interface DailyPlanService {
      * @return
      */
     PageResult<DailyPlanDO> getDailyPlanPage(Long userId, @Valid AppDailyPlanPageReqVO pageReqVO);
+
+    /**
+     * 将菜谱加入到当天的计划
+     * @param createReqVO 菜谱信息
+     * @param loginUserId 用户ID
+     * @return
+     */
+    List<Long> addRecipesTodayPlan(@Valid AppDailyPlanRecipeSaveTodayReqVO createReqVO, Long loginUserId);
 }

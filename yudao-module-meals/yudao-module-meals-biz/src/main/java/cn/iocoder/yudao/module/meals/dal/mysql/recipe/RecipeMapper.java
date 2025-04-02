@@ -9,7 +9,10 @@ import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDetailDO;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -31,11 +34,12 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
 
     /**
      * 会员：分页查询菜谱
+     *
      * @param userId 用户ID
-     * @param reqVO 请求对象
+     * @param reqVO  请求对象
      * @return
      */
-    default PageResult<RecipeDO> selectPage(Long userId,AppRecipePageReqVO reqVO) {
+    default PageResult<RecipeDO> selectPage(Long userId, AppRecipePageReqVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<RecipeDO>()
                 .eqIfPresent(RecipeDO::getUserId, userId)
                 .likeIfPresent(RecipeDO::getName, reqVO.getName())

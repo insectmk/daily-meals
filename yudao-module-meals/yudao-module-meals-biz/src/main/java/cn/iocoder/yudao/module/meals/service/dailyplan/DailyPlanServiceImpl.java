@@ -1,10 +1,13 @@
 package cn.iocoder.yudao.module.meals.service.dailyplan;
 
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.*;
 import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplan.DailyPlanDO;
@@ -71,4 +74,31 @@ public class DailyPlanServiceImpl implements DailyPlanService {
         return dailyPlanMapper.selectPage(userId, pageReqVO);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<Long> addRecipesTodayPlan(AppDailyPlanRecipeSaveTodayReqVO createReqVO, Long loginUserId) {
+        List<Long> planIds = new ArrayList<>();
+        LocalDateTime startDate = LocalDate.now().atStartOfDay(); // 开始时间
+        LocalDateTime endDate = LocalDateTime.now().plusDays(1); // 结束时间
+        // 遍历菜谱ID，加入到用户的今日计划中
+        createReqVO.getRecipeIds().forEach(recipeId -> {
+            // 判断是否已经存在
+            if (dailyPlanMapper.selectList(new LambdaQueryWrapperX<DailyPlanDO>()
+                    .eq(DailyPlanDO::getRecipeId, recipeId) // 该菜谱
+                    .eq(DailyPlanDO::getUserId, loginUserId) // 该用户
+                    .ge(DailyPlanDO::getPlanDate, startDate)  // 大于等于当天开始时间
+                    .lt(DailyPlanDO::getPlanDate, endDate))    // 小于第二天开始时间
+                    .isEmpty()) {
+                DailyPlanDO dailyPlan = BeanUtils.toBean(createReqVO, DailyPlanDO.class);
+                dailyPlan.setUserId(loginUserId); // 用户
+                dailyPlan.setRecipeId(recipeId); // 菜谱ID
+                dailyPlan.setPlanDate(startDate); // 日期
+                dailyPlanMapper.insert(dailyPlan); // 插入
+                planIds.add(dailyPlan.getId()); // 将生成的id装入集合中进行返回
+            } else {
+                throw exception(DAILY_PLAN_ALREADY_EXISTS);
+            }
+        });
+        return planIds;
+    }
 }

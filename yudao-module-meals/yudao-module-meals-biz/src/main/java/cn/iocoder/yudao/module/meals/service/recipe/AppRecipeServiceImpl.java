@@ -18,8 +18,6 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import java.util.List;
-import java.util.Set;
-
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 
 /**
@@ -38,7 +36,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
 
     @Override
     public AppRecipeRespVO getRecipeDetail(Long id) {
-        // 查询基础信息
+        // 查询基础信息并判断是否在今日计划中
         RecipeDO recipeDO = recipeMapper.selectById(id);
         AppRecipeRespVO appRecipeRespVO = BeanUtils.toBean(recipeDO, AppRecipeRespVO.class);
         // 查询食材信息
