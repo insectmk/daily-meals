@@ -84,14 +84,12 @@ public class DailyPlanServiceImpl implements DailyPlanService {
         createReqVO.getRecipeIds().forEach(recipeId -> {
             // 判断是否已经存在
             if (dailyPlanMapper.selectList(new LambdaQueryWrapperX<DailyPlanDO>()
-                    .eq(DailyPlanDO::getRecipeId, recipeId) // 该菜谱
                     .eq(DailyPlanDO::getUserId, loginUserId) // 该用户
                     .ge(DailyPlanDO::getPlanDate, startDate)  // 大于等于当天开始时间
                     .lt(DailyPlanDO::getPlanDate, endDate))    // 小于第二天开始时间
                     .isEmpty()) {
                 DailyPlanDO dailyPlan = BeanUtils.toBean(createReqVO, DailyPlanDO.class);
                 dailyPlan.setUserId(loginUserId); // 用户
-                dailyPlan.setRecipeId(recipeId); // 菜谱ID
                 dailyPlan.setPlanDate(startDate); // 日期
                 dailyPlanMapper.insert(dailyPlan); // 插入
                 planIds.add(dailyPlan.getId()); // 将生成的id装入集合中进行返回

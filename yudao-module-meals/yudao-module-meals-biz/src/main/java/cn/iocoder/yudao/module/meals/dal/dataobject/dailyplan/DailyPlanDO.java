@@ -29,10 +29,6 @@ public class DailyPlanDO extends BaseDO {
     @TableId
     private Long id;
     /**
-     * 菜谱ID
-     */
-    private Long recipeId;
-    /**
      * 用户编号
      */
     private Long userId;
@@ -40,12 +36,6 @@ public class DailyPlanDO extends BaseDO {
      * 计划日
      */
     private LocalDateTime planDate;
-    /**
-     * 餐次类型
-     *
-     * 枚举 {@link TODO meals_meal_type 对应的类}
-     */
-    private Integer mealType;
     /**
      * 备注
      */

@@ -60,13 +60,30 @@ CREATE TABLE IF NOT EXISTS `meals_recipe_food`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci COMMENT ='菜谱食材表，储存菜谱的食材信息';
 
--- 菜谱计划
+-- 每日计划
 CREATE TABLE IF NOT EXISTS `meals_daily_plan`
 (
     `id`          bigint   NOT NULL AUTO_INCREMENT COMMENT '编号',
     `user_id`     bigint                                                       DEFAULT NULL COMMENT '用户编号',
-    `recipe_id`   bigint                                                       DEFAULT NULL COMMENT '菜谱ID',
     `plan_date`   date                                                         DEFAULT NULL COMMENT '计划日',
+    `memo`        varchar(2000)                                                DEFAULT NULL COMMENT '备注',
+    `creator`     varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '创建者',
+    `create_time` datetime NOT NULL                                            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updater`     varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '更新者',
+    `update_time` datetime NOT NULL                                            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `deleted`     bit(1)   NOT NULL                                            DEFAULT b'0' COMMENT '是否删除',
+    `tenant_id`   bigint   NOT NULL                                            DEFAULT '0' COMMENT '租户编号',
+    CONSTRAINT `pk_meals_daily_plan_id` PRIMARY KEY (`id`) using btree
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci COMMENT ='每日计划表，储存计划基本信息';
+
+-- 每日计划明细
+CREATE TABLE IF NOT EXISTS `meals_daily_plan_item`
+(
+    `id`          bigint   NOT NULL AUTO_INCREMENT COMMENT '编号',
+    `plan_id`     bigint                                                       default null comment '计划ID',
+    `recipe_id`   bigint                                                       DEFAULT NULL COMMENT '菜谱ID',
     `meal_type`   tinyint                                                      DEFAULT NULL COMMENT '餐次类型',
     `memo`        varchar(2000)                                                DEFAULT NULL COMMENT '备注',
     `creator`     varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '创建者',
@@ -78,4 +95,4 @@ CREATE TABLE IF NOT EXISTS `meals_daily_plan`
     CONSTRAINT `pk_meals_daily_plan_id` PRIMARY KEY (`id`) using btree
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci COMMENT ='菜谱计划表，储存菜谱计划信息';
+  COLLATE = utf8mb4_unicode_ci COMMENT ='每日计划明细表，储存菜谱计划信息';
