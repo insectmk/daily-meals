@@ -30,9 +30,9 @@ public class AppDailyPlanController {
 
     @PostMapping("/create/today")
     @Operation(summary = "将菜谱加入到今日计划")
-    public CommonResult<List<Long>> addRecipesTodayPlan(@Valid @RequestBody AppDailyPlanRecipeSaveTodayReqVO createReqVO) {
-        List<Long> planIds = dailyPlanService.addRecipesTodayPlan(createReqVO, getLoginUserId());
-        return success(planIds);
+    public CommonResult<Long> addRecipesTodayPlan(@Valid @RequestBody AppDailyPlanRecipeSaveTodayReqVO createReqVO) {
+        Long planId = dailyPlanService.addRecipesTodayPlan(createReqVO, getLoginUserId());
+        return success(planId);
     }
 
     @GetMapping("/page")

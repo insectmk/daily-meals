@@ -59,5 +59,5 @@ public interface DailyPlanService {
      * @param loginUserId 用户ID
      * @return
      */
-    List<Long> addRecipesTodayPlan(@Valid AppDailyPlanRecipeSaveTodayReqVO createReqVO, Long loginUserId);
+    Long addRecipesTodayPlan(@Valid AppDailyPlanRecipeSaveTodayReqVO createReqVO, Long loginUserId);
 }
