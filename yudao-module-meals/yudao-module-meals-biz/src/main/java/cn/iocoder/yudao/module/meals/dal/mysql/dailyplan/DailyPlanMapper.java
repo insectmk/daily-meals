@@ -25,7 +25,7 @@ public interface DailyPlanMapper extends BaseMapperX<DailyPlanDO> {
                 .betweenIfPresent(DailyPlanDO::getPlanDate, reqVO.getPlanDate())
                 .eqIfPresent(DailyPlanDO::getMemo, reqVO.getMemo())
                 .betweenIfPresent(DailyPlanDO::getCreateTime, reqVO.getCreateTime())
-                .orderByDesc(DailyPlanDO::getId));
+                .orderByDesc(DailyPlanDO::getPlanDate));
     }
 
     default PageResult<DailyPlanDO> selectDayGroupPage(AppDailyPlanPageReqVO reqVO, Long userId) {

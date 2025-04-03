@@ -68,4 +68,11 @@ public interface DailyPlanService {
      * @return
      */
     PageResult<AppDailyPlanDetailRespVO> getDailyPlanDetailPage(@Valid AppDailyPlanPageReqVO pageReqVO, Long userId);
+
+    /**
+     * 获取计划详细信息
+     * @param id 计划ID
+     * @return
+     */
+    AppDailyPlanDetailRespVO getDailyPlanDetail(Long id);
 }
