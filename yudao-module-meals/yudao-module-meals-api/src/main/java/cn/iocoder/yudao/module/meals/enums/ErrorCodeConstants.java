@@ -16,6 +16,9 @@ public interface ErrorCodeConstants {
     ErrorCode DAILY_PLAN_NOT_EXISTS = new ErrorCode(300_000_001, "菜谱计划不存在");
     ErrorCode DAILY_PLAN_ALREADY_EXISTS = new ErrorCode(300_000_002, "菜谱计划已存在");
 
+    // ========== 每日计划明细 ==========
+    ErrorCode DAILY_PLAN_ITEM_NOT_EXISTS = new ErrorCode(300_001_001, "每日计划明细不存在");
+
     // ========== 菜谱食材 ==========
     ErrorCode RECIPE_FOOD_NOT_EXISTS = new ErrorCode(400_000_001, "菜谱食材不存在");
 }
