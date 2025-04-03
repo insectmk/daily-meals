@@ -47,11 +47,11 @@ public interface DailyPlanService {
 
     /**
      * 获得菜谱计划分页
-     * @param userId 分页查询
      * @param pageReqVO 菜谱计划分页
+     * @param userId 用户ID
      * @return
      */
-    PageResult<DailyPlanDO> getDailyPlanPage(Long userId, @Valid AppDailyPlanPageReqVO pageReqVO);
+    PageResult<DailyPlanDO> getDailyPlanPage(@Valid AppDailyPlanPageReqVO pageReqVO, Long userId);
 
     /**
      * 将菜谱加入到当天的计划

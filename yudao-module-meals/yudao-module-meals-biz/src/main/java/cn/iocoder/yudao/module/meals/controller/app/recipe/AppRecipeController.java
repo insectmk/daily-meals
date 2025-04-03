@@ -40,7 +40,7 @@ public class AppRecipeController {
 
     @GetMapping("/page")
     @Operation(summary = "获得菜谱分页")
-    public CommonResult<PageResult<AppRecipeRespVO>> getDailyPlanPage(@Valid AppRecipePageReqVO pageReqVO) {
+    public CommonResult<PageResult<AppRecipeRespVO>> getRecipePage(@Valid AppRecipePageReqVO pageReqVO) {
         PageResult<AppRecipeRespVO> pageResult = appRecipeService.getRecipeDetailPage(getLoginUserId(),pageReqVO);
         return success(pageResult);
     }
