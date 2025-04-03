@@ -1,9 +1,19 @@
 package cn.iocoder.yudao.module.meals.service.dailyplan;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
+import cn.iocoder.yudao.module.meals.convert.dailyplan.DailyPlanConvert;
+import cn.iocoder.yudao.module.meals.convert.recipe.RecipeConvert;
 import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplanitem.DailyPlanItemDO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplanitem.DailyPlanItemDetailDO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDetailDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.dailyplanitem.DailyPlanItemMapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +31,7 @@ import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.meals.dal.mysql.dailyplan.DailyPlanMapper;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.*;
 
 /**
@@ -116,5 +127,27 @@ public class DailyPlanServiceImpl implements DailyPlanService {
             dailyPlanItemMapper.insert(dailyPlanItemDO); // 插入
         });
         return planId;
+    }
+
+    @Override
+    public PageResult<AppDailyPlanDetailRespVO> getDailyPlanDetailPage(AppDailyPlanPageReqVO pageReqVO, Long userId) {
+        // 查询基础信息
+        PageResult<DailyPlanDO> pageResult = dailyPlanMapper.selectPage(pageReqVO, userId);
+        List<DailyPlanDO> plans = pageResult.getList(); // 计划信息
+        if (CollUtil.isEmpty(plans)) {
+            // 为空直接返回
+            return BeanUtils.toBean(pageResult, AppDailyPlanDetailRespVO.class);
+        }
+        // 查询菜谱食材信息
+        List<DailyPlanItemDetailDO> planItems = dailyPlanItemMapper.selectJoinList(
+                DailyPlanItemDetailDO.class,
+                new MPJLambdaWrapper<DailyPlanItemDO>()
+                        .selectAll(DailyPlanItemDO.class) // 查询所有基础字段
+                        .selectAs(RecipeDO::getName, DailyPlanItemDetailDO::getRecipeName) // 食谱的名称作为详细信息名称
+                        .leftJoin(RecipeDO.class, RecipeDO::getId, DailyPlanItemDetailDO::getRecipeId) // 联表 WHERE meals_recipe.id = meals_daily_plan_item.recipe_id
+                        // 查询所有分页菜谱的食材信息
+                        .in(DailyPlanItemDetailDO::getRecipeId, convertSet(plans, DailyPlanDO::getId)));
+        // 装载信息
+        return DailyPlanConvert.INSTANCE.convertPage(pageResult, planItems);
     }
 }

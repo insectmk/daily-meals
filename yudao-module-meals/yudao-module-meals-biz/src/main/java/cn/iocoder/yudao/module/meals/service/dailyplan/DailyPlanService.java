@@ -60,4 +60,12 @@ public interface DailyPlanService {
      * @return
      */
     Long addRecipesTodayPlan(@Valid AppDailyPlanRecipeSaveTodayReqVO createReqVO, Long loginUserId);
+
+    /**
+     * 查询计划详情信息分页
+     * @param pageReqVO
+     * @param userId
+     * @return
+     */
+    PageResult<AppDailyPlanDetailRespVO> getDailyPlanDetailPage(@Valid AppDailyPlanPageReqVO pageReqVO, Long userId);
 }

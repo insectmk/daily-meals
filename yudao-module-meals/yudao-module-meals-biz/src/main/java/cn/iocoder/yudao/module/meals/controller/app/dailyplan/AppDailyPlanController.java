@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.meals.controller.app.dailyplan;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.AppDailyPlanDetailRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.AppDailyPlanPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.AppDailyPlanRecipeSaveTodayReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.dailyplan.vo.AppDailyPlanRespVO;
@@ -37,8 +38,8 @@ public class AppDailyPlanController {
 
     @GetMapping("/page")
     @Operation(summary = "分页查询菜谱计划")
-    public CommonResult<PageResult<AppDailyPlanRespVO>> getDailyPlanPage(@Valid AppDailyPlanPageReqVO pageReqVO) {
-        PageResult<DailyPlanDO> pageResult = dailyPlanService.getDailyPlanPage(pageReqVO, getLoginUserId());
-        return success(BeanUtils.toBean(pageResult, AppDailyPlanRespVO.class));
+    public CommonResult<PageResult<AppDailyPlanDetailRespVO>> getDailyPlanPage(@Valid AppDailyPlanPageReqVO pageReqVO) {
+        PageResult<AppDailyPlanDetailRespVO> pageResult = dailyPlanService.getDailyPlanDetailPage(pageReqVO, getLoginUserId());
+        return success(pageResult);
     }
 }
