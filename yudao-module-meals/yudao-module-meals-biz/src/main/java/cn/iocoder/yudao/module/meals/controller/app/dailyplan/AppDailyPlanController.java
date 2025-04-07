@@ -25,10 +25,10 @@ public class AppDailyPlanController {
     @Resource
     private DailyPlanService dailyPlanService;
 
-    @PostMapping("/create/today")
-    @Operation(summary = "将菜谱加入到今日计划")
+    @PostMapping("/create")
+    @Operation(summary = "将菜谱加入到计划")
     public CommonResult<Long> addRecipesTodayPlan(@Valid @RequestBody AppDailyPlanRecipeSaveTodayReqVO createReqVO) {
-        Long planId = dailyPlanService.addRecipesTodayPlan(createReqVO, getLoginUserId());
+        Long planId = dailyPlanService.addRecipesToPlan(createReqVO, getLoginUserId());
         return success(planId);
     }
 

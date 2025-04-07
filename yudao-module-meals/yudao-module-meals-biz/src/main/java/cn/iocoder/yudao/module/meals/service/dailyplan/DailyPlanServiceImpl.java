@@ -94,10 +94,11 @@ public class DailyPlanServiceImpl implements DailyPlanService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Long addRecipesTodayPlan(AppDailyPlanRecipeSaveTodayReqVO createReqVO, Long loginUserId) {
-        LocalDateTime startDate = LocalDate.now().atStartOfDay(); // 开始时间
-        LocalDateTime endDate = LocalDateTime.now().plusDays(1); // 结束时间
-        // 1. 判断是否存在今天的菜谱
+    public Long addRecipesToPlan(AppDailyPlanRecipeSaveTodayReqVO createReqVO, Long loginUserId) {
+        LocalDate planDate = createReqVO.getPlanDate().toLocalDate(); // 计划日期
+        LocalDateTime startDate = planDate.atStartOfDay(); // 开始时间
+        LocalDateTime endDate = startDate.plusDays(1); // 结束时间
+        // 1. 判断是否存在指定日期的菜谱
         DailyPlanDO dailyPlanDO = dailyPlanMapper.selectOne(new LambdaQueryWrapperX<DailyPlanDO>()
                 .eq(DailyPlanDO::getUserId, loginUserId) // 该用户
                 .ge(DailyPlanDO::getPlanDate, startDate)  // 大于等于当天开始时间
@@ -166,6 +167,7 @@ public class DailyPlanServiceImpl implements DailyPlanService {
                         .selectAll(DailyPlanItemDO.class) // 查询所有基础字段
                         .selectAs(RecipeDO::getName, DailyPlanItemDetailDO::getRecipeName) // 食谱的名称作为详细信息名称
                         .leftJoin(RecipeDO.class, RecipeDO::getId, DailyPlanItemDetailDO::getRecipeId) // 联表 WHERE meals_recipe.id = meals_daily_plan_item.recipe_id
+                        .eq(DailyPlanItemDO::getPlanId, id) // 计划ID
                         .orderByDesc(DailyPlanItemDetailDO::getCreateTime));
         // 拼装信息
         detailRespVO.setItems(BeanUtils.toBean(planItems, AppDailyPlanItemDetailRespVO.class));
