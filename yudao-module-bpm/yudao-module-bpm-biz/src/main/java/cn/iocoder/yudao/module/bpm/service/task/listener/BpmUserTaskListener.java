@@ -13,7 +13,6 @@ import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.service.delegate.DelegateTask;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import static cn.iocoder.yudao.module.bpm.framework.flowable.core.util.BpmnModelUtils.parseListenerConfig;
 
@@ -53,10 +52,7 @@ public class BpmUserTaskListener implements TaskListener {
         listenerHandler.getBody().add(new BpmSimpleModelNodeVO.HttpRequestParam().setKey("taskId")
                 .setType(BpmHttpRequestParamTypeEnum.FIXED_VALUE.getType()).setValue(delegateTask.getId()));
         BpmHttpRequestUtils.executeBpmHttpRequest(processInstance,
-                listenerHandler.getPath(),
-                listenerHandler.getHeader(),
-                listenerHandler.getBody(),
-                false, null);
+                listenerHandler.getPath(), listenerHandler.getHeader(), listenerHandler.getBody(), false, null);
 
         // 3. 是否需要后续操作？TODO 芋艿：待定！
     }
