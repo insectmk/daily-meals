@@ -54,3 +54,4 @@ application-my.yaml
 /database/basic/secret/
 **/.DS_Store
 /jrebel-classpath-33600.jar
+/yudao-server/src/main/resources/application-prod.yaml
