@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.meals.service.recipe;
 import cn.hutool.core.collection.CollUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeFoodDetailRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
@@ -57,6 +58,29 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     public PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, AppRecipePageReqVO pageReqVO) {
         // 查询基础信息
         PageResult<RecipeDO> pageResult = recipeMapper.selectPage(userId, pageReqVO);
+        List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
+        if (CollUtil.isEmpty(recipes)) {
+            // 为空直接返回
+            return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
+        }
+        // 查询菜谱食材信息
+        List<RecipeFoodDetailDO> recipeFoods = recipeFoodMapper.selectJoinList(
+                RecipeFoodDetailDO.class,
+                new MPJLambdaWrapper<RecipeFoodDO>()
+                        .selectAll(RecipeFoodDO.class) // 查询所有基础字段
+                        .selectAs(FoodDO::getName, RecipeFoodDetailDO::getFoodName) // 食物的名称作为详细信息名称
+                        .selectAs(FoodDO::getFoodUnit, RecipeFoodDetailDO::getFoodUnit) // 食物的单位作为详细信息单位
+                        .leftJoin(FoodDO.class, FoodDO::getId, RecipeFoodDO::getFoodId) // 联表 WHERE meals_recipe_food.food_id = meals_food.id
+                        // 查询所有分页菜谱的食材信息
+                        .in(RecipeFoodDO::getRecipeId, convertSet(recipes, RecipeDO::getId)));
+        // 装载信息
+        return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
+    }
+
+    @Override
+    public PageResult<AppRecipeRespVO> getPublicRecipeDetailPage(AppRecipePageReqVO pageReqVO) {
+        // 查询基础信息
+        PageResult<RecipeDO> pageResult = recipeMapper.selectPublicPage(pageReqVO);
         List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
         if (CollUtil.isEmpty(recipes)) {
             // 为空直接返回

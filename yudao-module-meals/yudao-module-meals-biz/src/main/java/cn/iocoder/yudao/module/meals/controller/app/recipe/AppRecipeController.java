@@ -44,4 +44,11 @@ public class AppRecipeController {
         PageResult<AppRecipeRespVO> pageResult = appRecipeService.getRecipeDetailPage(getLoginUserId(),pageReqVO);
         return success(pageResult);
     }
+
+    @GetMapping("/page/public")
+    @Operation(summary = "获得公共菜谱分页")
+    public CommonResult<PageResult<AppRecipeRespVO>> getPublicRecipePage(@Valid AppRecipePageReqVO pageReqVO) {
+        PageResult<AppRecipeRespVO> pageResult = appRecipeService.getPublicRecipeDetailPage(pageReqVO);
+        return success(pageResult);
+    }
 }

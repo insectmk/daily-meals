@@ -26,4 +26,11 @@ public interface AppRecipeService {
      * @return 详细信息分页
      */
     PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, @Valid AppRecipePageReqVO pageReqVO);
+
+    /**
+     * 获取公共菜谱分页（没有用户ID的）
+     * @param pageReqVO 分页信息
+     * @return 详细信息分页
+     */
+    PageResult<AppRecipeRespVO> getPublicRecipeDetailPage(@Valid AppRecipePageReqVO pageReqVO);
 }
