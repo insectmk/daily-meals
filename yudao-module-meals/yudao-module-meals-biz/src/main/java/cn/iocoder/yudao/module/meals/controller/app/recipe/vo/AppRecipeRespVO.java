@@ -57,6 +57,13 @@ public class AppRecipeRespVO {
     @ExcelProperty("创建时间")
     private LocalDateTime createTime;
 
+    @Schema(description = "菜谱封面图", requiredMode = Schema.RequiredMode.REQUIRED, example = "https://www.iocoder.cn/xx.png")
+    @ExcelProperty("菜谱封面图")
+    private String picUrl;
+
+    @Schema(description = "菜谱轮播图", requiredMode = Schema.RequiredMode.REQUIRED, example = "[https://www.iocoder.cn/xx.png, https://www.iocoder.cn/xxx.png]")
+    private List<String> sliderPicUrls;
+
     // ========== 食谱食材信息 ==========
     List<AppRecipeFoodDetailRespVO> foods;
 
