@@ -142,7 +142,7 @@ public class DailyPlanServiceImpl implements DailyPlanService {
             // 为空直接返回
             return BeanUtils.toBean(pageResult, AppDailyPlanDetailRespVO.class);
         }
-        // 查询菜谱食材信息
+        // 查询计划详情信息
         List<DailyPlanItemDetailDO> planItems = dailyPlanItemMapper.selectJoinList(
                 DailyPlanItemDetailDO.class,
                 new MPJLambdaWrapper<DailyPlanItemDO>()
@@ -150,7 +150,7 @@ public class DailyPlanServiceImpl implements DailyPlanService {
                         .selectAs(RecipeDO::getName, DailyPlanItemDetailDO::getRecipeName) // 食谱的名称作为详细信息名称
                         .leftJoin(RecipeDO.class, RecipeDO::getId, DailyPlanItemDetailDO::getRecipeId) // 联表 WHERE meals_recipe.id = meals_daily_plan_item.recipe_id
                         // 查询所有分页菜谱的食材信息
-                        .in(DailyPlanItemDetailDO::getRecipeId, convertSet(plans, DailyPlanDO::getId))
+                        .in(DailyPlanItemDetailDO::getPlanId, convertSet(plans, DailyPlanDO::getId))
                         .orderByDesc(DailyPlanItemDetailDO::getCreateTime));
         // 装载信息
         return DailyPlanConvert.INSTANCE.convertPage(pageResult, planItems);
