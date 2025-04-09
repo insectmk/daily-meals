@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.meals.controller.app.dailyplanitem.vo;
 
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,4 +40,8 @@ public class AppDailyPlanItemDetailRespVO {
     @Schema(description = "菜谱名称", requiredMode = Schema.RequiredMode.REQUIRED)
     @ExcelProperty("菜谱名称")
     private String recipeName;
+
+    @Schema(description = "菜谱信息", requiredMode = Schema.RequiredMode.REQUIRED)
+    @ExcelProperty("菜谱信息")
+    private AppRecipeRespVO recipeInfo;
 }

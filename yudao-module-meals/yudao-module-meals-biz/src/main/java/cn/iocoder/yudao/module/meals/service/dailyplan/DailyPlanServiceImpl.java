@@ -15,6 +15,7 @@ import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDetailDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.dailyplanitem.DailyPlanItemMapper;
+import cn.iocoder.yudao.module.meals.service.recipe.AppRecipeService;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
@@ -49,6 +50,8 @@ public class DailyPlanServiceImpl implements DailyPlanService {
     private DailyPlanMapper dailyPlanMapper;
     @Resource
     private DailyPlanItemMapper dailyPlanItemMapper;
+    @Resource
+    private AppRecipeService appRecipeService;
 
     @Override
     public Long createDailyPlan(AppDailyPlanSaveReqVO createReqVO) {
@@ -170,8 +173,14 @@ public class DailyPlanServiceImpl implements DailyPlanService {
                         .leftJoin(RecipeDO.class, RecipeDO::getId, DailyPlanItemDetailDO::getRecipeId) // 联表 WHERE meals_recipe.id = meals_daily_plan_item.recipe_id
                         .eq(DailyPlanItemDO::getPlanId, id) // 计划ID
                         .orderByDesc(DailyPlanItemDetailDO::getCreateTime));
+        // 转化itemDO为VO
+        List<AppDailyPlanItemDetailRespVO> planItemVOs = BeanUtils.toBean(planItems, AppDailyPlanItemDetailRespVO.class);
+        // 查询菜谱信息装载到计划明细中
+        planItemVOs.forEach(planItemVO -> {
+            planItemVO.setRecipeInfo(appRecipeService.getRecipeDetail(planItemVO.getRecipeId()));
+        });
         // 拼装信息
-        detailRespVO.setItems(BeanUtils.toBean(planItems, AppDailyPlanItemDetailRespVO.class));
+        detailRespVO.setItems(planItemVOs);
         return detailRespVO;
     }
 }
