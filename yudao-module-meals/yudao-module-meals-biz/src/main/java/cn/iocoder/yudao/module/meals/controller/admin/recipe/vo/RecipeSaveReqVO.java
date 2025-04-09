@@ -46,4 +46,12 @@ public class RecipeSaveReqVO {
     @NotNull(message = "状态不能为空")
     private Integer status;
 
+    @Schema(description = "菜谱封面图", requiredMode = Schema.RequiredMode.REQUIRED, example = "https://www.iocoder.cn/xx.png")
+    @NotEmpty(message = "菜谱封面图不能为空")
+    private String picUrl;
+
+    @Schema(description = "菜谱轮播图", requiredMode = Schema.RequiredMode.REQUIRED,
+            example = "[https://www.iocoder.cn/xx.png, https://www.iocoder.cn/xxx.png]")
+    private List<String> sliderPicUrls;
+
 }
