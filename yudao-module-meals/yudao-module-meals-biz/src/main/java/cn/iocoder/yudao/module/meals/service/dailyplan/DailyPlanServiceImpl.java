@@ -98,7 +98,7 @@ public class DailyPlanServiceImpl implements DailyPlanService {
         LocalDate planDate = createReqVO.getPlanDate().toLocalDate(); // 计划日期
         LocalDateTime startDate = planDate.atStartOfDay(); // 开始时间
         LocalDateTime endDate = startDate.plusDays(1); // 结束时间
-        // 1. 判断是否存在指定日期的菜谱
+        // 1. 判断是否存在指定日期与类型的菜谱
         DailyPlanDO dailyPlanDO = dailyPlanMapper.selectOne(new LambdaQueryWrapperX<DailyPlanDO>()
                 .eq(DailyPlanDO::getUserId, loginUserId) // 该用户
                 .ge(DailyPlanDO::getPlanDate, startDate)  // 大于等于当天开始时间
@@ -116,6 +116,7 @@ public class DailyPlanServiceImpl implements DailyPlanService {
             // 1.2 存在计划，判断菜谱是否在计划中
             if (!dailyPlanItemMapper.selectList(new LambdaQueryWrapperX<DailyPlanItemDO>()
                             .eq(DailyPlanItemDO::getPlanId, planId) // 该计划
+                            .eq(DailyPlanItemDO::getMealType, createReqVO.getMealType()) // 该类型
                             .in(DailyPlanItemDO::getRecipeId, createReqVO.getRecipeIds()))  // 菜谱
                     .isEmpty()) {
                 throw exception(DAILY_PLAN_ALREADY_EXISTS);
