@@ -13,9 +13,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.*;
+import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMap;
+import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMultiMap;
 
 /**
  * @Title: ReceipeConvert
@@ -72,8 +72,7 @@ public interface RecipeConvert {
      * @param foods 食材信息
      * @return
      */
-    default PageResult<RecipeFoodRespVO> convertRecipeFoodPage(PageResult<RecipeFoodDO> pageResult,
-                                                               List<FoodDO> foods) {
+    default PageResult<RecipeFoodRespVO> convertRecipeFoodPage(PageResult<RecipeFoodDO> pageResult, List<FoodDO> foods) {
         // 转换为VO分页
         PageResult<RecipeFoodRespVO> result = BeanUtils.toBean(pageResult, RecipeFoodRespVO.class);
         // 处理关联数据
@@ -84,6 +83,20 @@ public interface RecipeConvert {
             recipeFood.setFoodName(foodDO.getName());// 食材名称
             recipeFood.setFoodUnit(foodDO.getFoodUnit()); // 食材单位
         });
+        return result;
+    }
+    /**
+     * 将普通菜谱食材分页信息转为详细信息
+     * @param recipeFood 菜谱食材
+     * @param food 食材信息
+     * @return 拼装后的数据
+     */
+    default RecipeFoodRespVO convertRecipeFood(RecipeFoodDO recipeFood, FoodDO food) {
+        // 转换为VO分页
+        RecipeFoodRespVO result = BeanUtils.toBean(recipeFood, RecipeFoodRespVO.class);
+        // 拼装数据
+        result.setFoodName(food.getName());// 食材名称
+        result.setFoodUnit(food.getFoodUnit()); // 食材单位
         return result;
     }
 }

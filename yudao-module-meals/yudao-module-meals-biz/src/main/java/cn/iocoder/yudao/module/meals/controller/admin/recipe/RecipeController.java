@@ -1,39 +1,37 @@
 package cn.iocoder.yudao.module.meals.controller.admin.recipe;
 
-import cn.iocoder.yudao.module.meals.convert.recipe.RecipeConvert;
-import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
-import cn.iocoder.yudao.module.meals.service.food.FoodService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import jakarta.annotation.Resource;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.security.access.prepost.PreAuthorize;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Operation;
-
-import jakarta.validation.constraints.*;
-import jakarta.validation.*;
-import jakarta.servlet.http.*;
-import java.util.*;
-import java.io.IOException;
-
+import cn.iocoder.yudao.framework.apilog.core.annotation.ApiAccessLog;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
-
-import cn.iocoder.yudao.framework.apilog.core.annotation.ApiAccessLog;
-import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.*;
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
-
-import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.*;
+import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeFoodRespVO;
+import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipePageReqVO;
+import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeRespVO;
+import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeSaveReqVO;
+import cn.iocoder.yudao.module.meals.convert.recipe.RecipeConvert;
+import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
+import cn.iocoder.yudao.module.meals.service.food.FoodService;
 import cn.iocoder.yudao.module.meals.service.recipe.RecipeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
+
+import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.EXPORT;
+import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 
 @Tag(name = "管理后台 - 菜谱")
 @RestController
@@ -148,8 +146,13 @@ public class RecipeController {
 	@Operation(summary = "获得菜谱食材")
 	@Parameter(name = "id", description = "编号", required = true)
     @PreAuthorize("@ss.hasPermission('meals:recipe:query')")
-	public CommonResult<RecipeFoodDO> getRecipeFood(@RequestParam("id") Long id) {
-	    return success(recipeService.getRecipeFood(id));
+	public CommonResult<RecipeFoodRespVO> getRecipeFood(@RequestParam("id") Long id) {
+        // 查询基础信息
+        RecipeFoodDO recipeFood = recipeService.getRecipeFood(id);
+        // 查询食材信息
+        FoodDO food = foodService.getFood(recipeFood.getFoodId());
+        // 拼接食谱食材信息并返回
+	    return success(RecipeConvert.INSTANCE.convertRecipeFood(recipeFood, food));
 	}
 
 }
