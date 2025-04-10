@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @Title: AppRecipePopularPublicReqVO
  * @Author InsectMk
@@ -18,7 +20,7 @@ public class AppRecipePopularPublicReqVO {
     @NotNull(message = "排名数量不能为空")
     private Integer rankLen;
 
-    @Schema(description = "餐次类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "餐次类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "[1,2,3]")
     @NotNull(message = "餐次类型不能为空")
-    private Integer mealType;
+    private List<Integer> mealType;
 }

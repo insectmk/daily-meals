@@ -52,11 +52,11 @@ public interface DailyPlanItemMapper extends BaseMapperX<DailyPlanItemDO> {
                 // 用户ID为空的
                 .isNull(RecipeDO::getUserId)
                 // 指定餐次类型
-                .eq(DailyPlanItemDO::getMealType, reqVO.getMealType())
+                .in(DailyPlanItemDO::getMealType, reqVO.getMealType())
                 // 按照菜谱、餐次类型分组
                 .groupBy(DailyPlanItemDO::getRecipeId, DailyPlanItemDO::getMealType)
                 // 新增排序规则（按count升序）
-                .orderByAsc("count")
+                .orderByDesc("count")
                 // 新增限制结果数量（取前5条）
                 .last(String.format("LIMIT %d", reqVO.getRankLen())));
 

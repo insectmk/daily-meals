@@ -58,7 +58,7 @@ public class AppRecipeController {
     }
 
     @GetMapping("/public/popular")
-    @Operation(summary = "获得最热门的菜谱")
+    @Operation(summary = "获得最热门的公共菜谱")
     @PermitAll
     public CommonResult<List<AppRecipeRespVO>> getPopularPublicRecipes(@Valid AppRecipePopularPublicReqVO reqVO) {
         List<AppRecipeRespVO> result = appRecipeService.getPopularPublicRecipesDetail(reqVO);
