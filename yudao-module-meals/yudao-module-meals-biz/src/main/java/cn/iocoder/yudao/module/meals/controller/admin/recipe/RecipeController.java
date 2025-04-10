@@ -1,5 +1,9 @@
 package cn.iocoder.yudao.module.meals.controller.admin.recipe;
 
+import cn.iocoder.yudao.module.meals.convert.recipe.RecipeConvert;
+import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
+import cn.iocoder.yudao.module.meals.service.food.FoodService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +28,7 @@ import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 
 import cn.iocoder.yudao.framework.apilog.core.annotation.ApiAccessLog;
 import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.*;
+import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 
 import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.*;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
@@ -38,6 +43,8 @@ public class RecipeController {
 
     @Resource
     private RecipeService recipeService;
+    @Resource
+    private FoodService foodService;
 
     @PostMapping("/create")
     @Operation(summary = "创建菜谱")
@@ -99,9 +106,18 @@ public class RecipeController {
     @Operation(summary = "获得菜谱食材分页")
     @Parameter(name = "recipeId", description = "菜谱ID")
     @PreAuthorize("@ss.hasPermission('meals:recipe:query')")
-    public CommonResult<PageResult<RecipeFoodDO>> getRecipeFoodPage(PageParam pageReqVO,
+    public CommonResult<PageResult<RecipeFoodRespVO>> getRecipeFoodPage(PageParam pageReqVO,
                                                                                         @RequestParam("recipeId") Long recipeId) {
-        return success(recipeService.getRecipeFoodPage(pageReqVO, recipeId));
+        // 查询基础信息
+        PageResult<RecipeFoodDO> recipeFoodPage = recipeService.getRecipeFoodPage(pageReqVO, recipeId);
+        if (recipeFoodPage.getList().isEmpty()) {
+            // 为空直接返回
+            return success(BeanUtils.toBean(recipeFoodPage, RecipeFoodRespVO.class));
+        }
+        // 处理食材名称，单位反显
+        List<FoodDO> foods = foodService.getFoodList(convertSet(recipeFoodPage.getList(), RecipeFoodDO::getFoodId));
+        // 拼接数据并返回
+        return success(RecipeConvert.INSTANCE.convertRecipeFoodPage(recipeFoodPage,foods));
     }
 
     @PostMapping("/recipe-food/create")

@@ -2,8 +2,10 @@ package cn.iocoder.yudao.module.meals.convert.recipe;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeFoodRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeFoodDetailRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDetailDO;
@@ -12,7 +14,8 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMultiMap;
+
+import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.*;
 
 /**
  * @Title: ReceipeConvert
@@ -61,5 +64,26 @@ public interface RecipeConvert {
             recipe.setFoods(BeanUtils.toBean(recipeFoodDetailDOMap.get(recipe.getId()), AppRecipeFoodDetailRespVO.class));
         });
         return resultList;
+    }
+
+    /**
+     * 将普通菜谱食材分页信息转为详细信息
+     * @param pageResult 菜谱食材分页
+     * @param foods 食材信息
+     * @return
+     */
+    default PageResult<RecipeFoodRespVO> convertRecipeFoodPage(PageResult<RecipeFoodDO> pageResult,
+                                                               List<FoodDO> foods) {
+        // 转换为VO分页
+        PageResult<RecipeFoodRespVO> result = BeanUtils.toBean(pageResult, RecipeFoodRespVO.class);
+        // 处理关联数据
+        Map<Long, FoodDO> foodMap = convertMap(foods, FoodDO::getId); // 食材
+        // 填充关联数据
+        result.getList().forEach(recipeFood -> {
+            FoodDO foodDO = foodMap.get(recipeFood.getFoodId()); // 获取食材
+            recipeFood.setFoodName(foodDO.getName());// 食材名称
+            recipeFood.setFoodUnit(foodDO.getFoodUnit()); // 食材单位
+        });
+        return result;
     }
 }

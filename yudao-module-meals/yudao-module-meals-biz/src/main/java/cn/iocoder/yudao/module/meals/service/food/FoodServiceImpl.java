@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.meals.service.food;
 
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -74,6 +75,12 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public List<FoodDO> getFoodList() {
         return foodMapper.selectList();
+    }
+
+    @Override
+    public List<FoodDO> getFoodList(Collection<Long> ids) {
+        return foodMapper.selectList(new LambdaQueryWrapperX<FoodDO>()
+                .in(FoodDO::getId, ids));
     }
 
 }

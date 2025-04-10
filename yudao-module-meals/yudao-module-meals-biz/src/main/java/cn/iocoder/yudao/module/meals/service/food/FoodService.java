@@ -57,4 +57,11 @@ public interface FoodService {
      * @return
      */
     List<FoodDO> getFoodList();
+
+    /**
+     * 根据食材ID，获取食材
+     * @param ids 食材id集合
+     * @return
+     */
+    List<FoodDO> getFoodList(Collection<Long> ids);
 }

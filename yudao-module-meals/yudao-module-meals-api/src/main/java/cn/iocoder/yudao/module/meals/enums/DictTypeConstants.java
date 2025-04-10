@@ -11,5 +11,5 @@ public interface DictTypeConstants {
     String MEALS_RECIPE_LEVEL = "meals_recipe_level"; // 菜谱烹饪难度
     String MEALS_FOOD_TYPE = "meals_food_type"; // 食材分类
     String MEALS_FOOD_UNIT = "meals_food_unit"; // 食材单位
-    String MEALS_MEAL_TYPE = "meals_meal_type"; // 食材单位
+    String MEALS_MEAL_TYPE = "meals_meal_type"; // 餐次类型
 }
