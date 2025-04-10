@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.meals.controller.admin.food;
 
+import cn.iocoder.yudao.module.meals.convert.food.FoodConvert;
 import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -90,6 +91,14 @@ public class FoodController {
         // 导出 Excel
         ExcelUtils.write(response, "食材.xls", "数据", FoodRespVO.class,
                         BeanUtils.toBean(list, FoodRespVO.class));
+    }
+
+    @GetMapping("/list-all-simple")
+    @Operation(summary = "获取食材精简信息列表", description = "主要用于前端的下拉选项")
+    public CommonResult<List<FoodSimpleRespVO>> getSimpleFoodList() {
+        // 获用户列表，只要开启状态的
+        List<FoodDO> list = foodService.getFoodList();
+        return success(FoodConvert.INSTANCE.convertSimpleList(list));
     }
 
 }

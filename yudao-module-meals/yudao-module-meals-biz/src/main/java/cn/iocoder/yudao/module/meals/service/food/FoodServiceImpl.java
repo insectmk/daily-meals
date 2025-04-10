@@ -71,4 +71,9 @@ public class FoodServiceImpl implements FoodService {
         return foodMapper.selectPage(pageReqVO);
     }
 
+    @Override
+    public List<FoodDO> getFoodList() {
+        return foodMapper.selectList();
+    }
+
 }

@@ -52,4 +52,9 @@ public interface FoodService {
      */
     PageResult<FoodDO> getFoodPage(FoodPageReqVO pageReqVO);
 
+    /**
+     * 获得所有食材
+     * @return
+     */
+    List<FoodDO> getFoodList();
 }
