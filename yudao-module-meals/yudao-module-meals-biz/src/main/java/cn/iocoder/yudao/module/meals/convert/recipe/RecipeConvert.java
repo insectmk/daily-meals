@@ -44,4 +44,22 @@ public interface RecipeConvert {
         });
         return result;
     }
+
+    /**
+     * 将普通的菜谱集合，转换为带详细信息的菜谱集合
+     * @param recipeList 菜谱集合
+     * @param recipeFoods 菜谱食材集合
+     * @return
+     */
+    default List<AppRecipeRespVO> convertList(List<RecipeDO> recipeList, List<RecipeFoodDetailDO> recipeFoods) {
+        // 获取所有的菜谱
+        List<AppRecipeRespVO> resultList = BeanUtils.toBean(recipeList, AppRecipeRespVO.class);
+        // 将对应的食材信息装载到对应的食谱上
+        Map<Long, List<RecipeFoodDetailDO>> recipeFoodDetailDOMap = convertMultiMap(recipeFoods, RecipeFoodDetailDO::getRecipeId); // key：食谱ID，value：食材信息集合
+        resultList.forEach(recipe -> {
+            // 将食材信息装载到菜谱上
+            recipe.setFoods(BeanUtils.toBean(recipeFoodDetailDOMap.get(recipe.getId()), AppRecipeFoodDetailRespVO.class));
+        });
+        return resultList;
+    }
 }

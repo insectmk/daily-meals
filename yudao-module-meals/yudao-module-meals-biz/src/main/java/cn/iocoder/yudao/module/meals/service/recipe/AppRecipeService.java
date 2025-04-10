@@ -2,9 +2,12 @@ package cn.iocoder.yudao.module.meals.service.recipe;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePopularPublicReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import jakarta.validation.Valid;
+
+import java.util.List;
 
 /**
  * APP 菜谱 Service 接口
@@ -33,4 +36,11 @@ public interface AppRecipeService {
      * @return 详细信息分页
      */
     PageResult<AppRecipeRespVO> getPublicRecipeDetailPage(@Valid AppRecipePageReqVO pageReqVO);
+
+    /**
+     * 获得最热门的菜谱
+     * @param reqVO 参数
+     * @return
+     */
+    List<AppRecipeRespVO> getPopularPublicRecipesDetail(AppRecipePopularPublicReqVO reqVO);
 }
