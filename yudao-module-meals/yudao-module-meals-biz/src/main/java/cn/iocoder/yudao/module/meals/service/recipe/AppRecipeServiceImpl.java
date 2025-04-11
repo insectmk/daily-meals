@@ -22,6 +22,8 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -98,6 +100,10 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         List<PopularPublicRecipeDO> popularPublicRecipeDOS = dailyPlanItemMapper.selectPopularPublicRecipeList(reqVO);
         // 菜谱ID集合
         Set<Long> recipeIds = convertSet(popularPublicRecipeDOS, PopularPublicRecipeDO::getRecipeId);
+        // 如果没有菜谱就返回空集合
+        if (recipeIds.isEmpty()) {
+            return new ArrayList<>();
+        }
         List<RecipeDO> recipeList = recipeMapper.selectList(new LambdaQueryWrapperX<RecipeDO>()
                 .in(RecipeDO::getId, recipeIds));
         // 查询菜谱食材信息
