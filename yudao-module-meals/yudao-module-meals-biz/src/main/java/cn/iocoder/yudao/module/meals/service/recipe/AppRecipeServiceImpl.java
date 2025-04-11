@@ -5,10 +5,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipePageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeFoodDetailRespVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePopularPublicReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.*;
 import cn.iocoder.yudao.module.meals.convert.recipe.RecipeConvert;
 import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplanitem.PopularPublicRecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
@@ -110,6 +107,15 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         List<RecipeFoodDetailDO> recipeFoods = getRecipeFoodsByRecipeIds(recipeIds);
         // 装载信息
         return RecipeConvert.INSTANCE.convertList(recipeList,recipeFoods);
+    }
+
+    @Override
+    public Long createRecipe(AppRecipeSaveReqVO createReqVO) {
+        // 插入
+        RecipeDO recipe = BeanUtils.toBean(createReqVO, RecipeDO.class);
+        recipeMapper.insert(recipe);
+        // 返回
+        return recipe.getId();
     }
 
     /**

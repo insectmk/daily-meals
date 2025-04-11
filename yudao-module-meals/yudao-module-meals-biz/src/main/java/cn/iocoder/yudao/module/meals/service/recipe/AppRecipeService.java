@@ -4,6 +4,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePopularPublicReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeSaveReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import jakarta.validation.Valid;
 
@@ -43,4 +44,11 @@ public interface AppRecipeService {
      * @return
      */
     List<AppRecipeRespVO> getPopularPublicRecipesDetail(AppRecipePopularPublicReqVO reqVO);
+
+    /**
+     * 创建菜谱
+     * @param createReqVO 菜谱信息
+     * @return
+     */
+    Long createRecipe(@Valid AppRecipeSaveReqVO createReqVO);
 }

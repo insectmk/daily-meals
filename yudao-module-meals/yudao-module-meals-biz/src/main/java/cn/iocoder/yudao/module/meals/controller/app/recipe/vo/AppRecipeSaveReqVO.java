@@ -17,12 +17,15 @@ public class AppRecipeSaveReqVO {
     private Long userId;
 
     @Schema(description = "名称", example = "李四")
+    @NotNull(message = "名称不能为空")
     private String name;
 
     @Schema(description = "简介")
+    @NotNull(message = "简介不能为空")
     private String recipeDesc;
 
     @Schema(description = "教程")
+    @NotNull(message = "教程不能为空")
     private String recipeStep;
 
     @Schema(description = "菜谱类型", example = "2")
@@ -38,7 +41,6 @@ public class AppRecipeSaveReqVO {
     private String memo;
 
     @Schema(description = "状态", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
-    @NotNull(message = "状态不能为空")
     private Integer status;
 
 }

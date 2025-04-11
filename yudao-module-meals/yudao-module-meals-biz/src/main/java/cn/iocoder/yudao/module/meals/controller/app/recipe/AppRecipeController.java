@@ -2,13 +2,10 @@ package cn.iocoder.yudao.module.meals.controller.app.recipe;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipePageReqVO;
-import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePopularPublicReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
-import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeSaveReqVO;
 import cn.iocoder.yudao.module.meals.service.recipe.AppRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,11 +13,7 @@ import jakarta.annotation.Resource;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
@@ -63,5 +56,13 @@ public class AppRecipeController {
     public CommonResult<List<AppRecipeRespVO>> getPopularPublicRecipes(@Valid AppRecipePopularPublicReqVO reqVO) {
         List<AppRecipeRespVO> result = appRecipeService.getPopularPublicRecipesDetail(reqVO);
         return success(result);
+    }
+
+    @PostMapping("/create")
+    @Operation(summary = "创建菜谱")
+    public CommonResult<Long> createRecipe(@Valid @RequestBody AppRecipeSaveReqVO createReqVO) {
+        createReqVO.setUserId(getLoginUserId()); // 设置用户ID
+        createReqVO.setStatus(0); // 设置状态
+        return success(appRecipeService.createRecipe(createReqVO));
     }
 }
