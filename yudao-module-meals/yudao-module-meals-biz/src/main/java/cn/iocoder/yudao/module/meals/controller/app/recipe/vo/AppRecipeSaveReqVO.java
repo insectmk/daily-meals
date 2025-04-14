@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.meals.controller.app.recipe.vo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
@@ -43,4 +44,12 @@ public class AppRecipeSaveReqVO {
     @Schema(description = "状态", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private Integer status;
 
+    @Schema(description = "菜谱封面图", requiredMode = Schema.RequiredMode.REQUIRED, example = "https://www.iocoder.cn/xx.png")
+    private String picUrl;
+
+    @Schema(description = "菜谱轮播图", requiredMode = Schema.RequiredMode.REQUIRED, example = "[https://www.iocoder.cn/xx.png, https://www.iocoder.cn/xxx.png]")
+    private List<String> sliderPicUrls;
+
+    @Schema(description = "菜谱食材", requiredMode = Schema.RequiredMode.REQUIRED, example = "[{id: 1, recipeId: 1, foodId: 1, amount: 0.2, memo: '测试'},{id: 1, recipeId: 1, foodId: 1, amount: 0.2, memo: '测试'}]")
+    private List<AppRecipeFoodSaveReqVO> recipeFoods;
 }
