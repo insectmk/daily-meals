@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.meals.controller.app.recipe.vo;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,6 +37,11 @@ public class AppRecipeRespVO {
     @Schema(description = "菜谱类型", example = "2")
     @ExcelProperty("菜谱类型")
     private Integer recipeType;
+
+    @Schema(description = "菜谱分类", requiredMode = Schema.RequiredMode.REQUIRED,
+            example = "[22, 11]")
+    @ExcelProperty("菜谱分类")
+    private List<Integer> recipeCategory;
 
     @Schema(description = "烹饪难度")
     @ExcelProperty("烹饪难度")

@@ -29,6 +29,11 @@ public class RecipeSaveReqVO {
     @NotNull(message = "菜谱类型不能为空")
     private Integer recipeType;
 
+    @Schema(description = "菜谱分类", requiredMode = Schema.RequiredMode.REQUIRED,
+            example = "[22, 11]")
+    @NotNull(message = "菜谱分类不能为空")
+    private List<Long> recipeCategory;
+
     @Schema(description = "标签", example = "1")
     private Integer recipeTag;
 

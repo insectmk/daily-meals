@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.meals.dal.dataobject.recipe;
 
+import cn.iocoder.yudao.framework.mybatis.core.type.LongListTypeHandler;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.*;
 import java.util.*;
@@ -50,6 +51,13 @@ public class RecipeDO extends BaseDO {
      * 枚举 {@link TODO meals_recipe_type 对应的类}
      */
     private Integer recipeType;
+    /**
+     * 菜谱分类
+     *
+     * 菜谱分类JSON字符串
+     */
+    @TableField(typeHandler = LongListTypeHandler.class)
+    private List<Long> recipeCategory;
     /**
      * 烹饪难度
      *
