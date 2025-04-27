@@ -36,8 +36,9 @@ public class RecipeRespVO {
     @DictFormat(DictTypeConstants.MEALS_RECIPE_TYPE)
     private Integer recipeType;
 
-    @Schema(description = "菜谱分类", requiredMode = Schema.RequiredMode.REQUIRED, example = "[11, 22]")
-    private List<Integer> recipeCategory;
+    @Schema(description = "菜谱分类", requiredMode = Schema.RequiredMode.REQUIRED, example = "11, 22")
+    @ExcelProperty("菜谱分类")
+    private List<Long> recipeCategory;
 
     @Schema(description = "烹饪难度", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @ExcelProperty(value = "烹饪难度", converter = DictConvert.class)

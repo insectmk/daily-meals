@@ -20,6 +20,11 @@ public class FoodSaveReqVO {
     @NotNull(message = "分类不能为空")
     private Integer foodType;
 
+    @Schema(description = "食材分类", requiredMode = Schema.RequiredMode.REQUIRED,
+            example = "[22, 11]")
+    @NotNull(message = "食材分类不能为空")
+    private List<Long> foodCategory;
+
     @Schema(description = "单位", example = "1")
     private Integer foodUnit;
 

@@ -28,6 +28,10 @@ public class FoodRespVO {
     @DictFormat(DictTypeConstants.MEALS_FOOD_TYPE)
     private Integer foodType;
 
+    @Schema(description = "食材分类", requiredMode = Schema.RequiredMode.REQUIRED, example = "11, 22")
+    @ExcelProperty("食材分类")
+    private List<Long> foodCategory;
+
     @Schema(description = "单位", example = "1")
     @ExcelProperty(value = "单位", converter = DictConvert.class)
     @DictFormat(DictTypeConstants.MEALS_FOOD_UNIT)
