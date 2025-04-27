@@ -18,6 +18,7 @@ import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeMapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
@@ -110,12 +111,20 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long createRecipe(AppRecipeSaveReqVO createReqVO) {
-        // 插入
+        // 插入基础数据
         RecipeDO recipe = BeanUtils.toBean(createReqVO, RecipeDO.class);
         recipeMapper.insert(recipe);
+        Long recipeId = recipe.getId();
+        // 插入菜谱食材数据
+        for (AppRecipeFoodSaveReqVO recipeFood : createReqVO.getRecipeFoods()) {
+            RecipeFoodDO recipeFoodDO = BeanUtils.toBean(recipeFood, RecipeFoodDO.class);
+            recipeFoodDO.setRecipeId(recipeId); // 设置菜谱ID
+            recipeFoodMapper.insert(recipeFoodDO);
+        }
         // 返回
-        return recipe.getId();
+        return recipeId;
     }
 
     /**
