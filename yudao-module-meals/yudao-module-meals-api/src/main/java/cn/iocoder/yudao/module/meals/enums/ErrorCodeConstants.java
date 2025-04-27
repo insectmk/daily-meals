@@ -29,4 +29,12 @@ public interface ErrorCodeConstants {
     ErrorCode RECIPE_CATEGORY_PARENT_ERROR = new ErrorCode(500_000_004, "不能设置自己为父菜谱分类");
     ErrorCode RECIPE_CATEGORY_NAME_DUPLICATE = new ErrorCode(500_000_005, "已经存在该分类名称的菜谱分类");
     ErrorCode RECIPE_CATEGORY_PARENT_IS_CHILD = new ErrorCode(500_000_006, "不能设置自己的子RecipeCategory为父RecipeCategory");
+
+    // ========== 食材分类 ==========
+    ErrorCode FOOD_CATEGORY_NOT_EXISTS = new ErrorCode(600_000_001, "食材分类不存在");
+    ErrorCode FOOD_CATEGORY_EXITS_CHILDREN = new ErrorCode(600_000_002, "存在存在子食材分类，无法删除");
+    ErrorCode FOOD_CATEGORY_PARENT_NOT_EXITS = new ErrorCode(600_000_003,"父级食材分类不存在");
+    ErrorCode FOOD_CATEGORY_PARENT_ERROR = new ErrorCode(600_000_004, "不能设置自己为父食材分类");
+    ErrorCode FOOD_CATEGORY_NAME_DUPLICATE = new ErrorCode(600_000_005, "已经存在该分类名称的食材分类");
+    ErrorCode FOOD_CATEGORY_PARENT_IS_CHILD = new ErrorCode(600_000_006, "不能设置自己的子FoodCategory为父FoodCategory");
 }

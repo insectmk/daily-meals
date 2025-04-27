@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `meals_daily_plan_item`
     `update_time` datetime NOT NULL                                            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `deleted`     bit(1)   NOT NULL                                            DEFAULT b'0' COMMENT '是否删除',
     `tenant_id`   bigint   NOT NULL                                            DEFAULT '0' COMMENT '租户编号',
-    CONSTRAINT `pk_meals_daily_plan_id` PRIMARY KEY (`id`) using btree
+    CONSTRAINT `pk_meals_daily_plan_item_id` PRIMARY KEY (`id`) using btree
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci COMMENT ='每日计划明细表，储存菜谱计划信息';
@@ -116,7 +116,28 @@ CREATE TABLE IF NOT EXISTS `meals_recipe_category`
     `update_time` datetime                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `deleted`     bit(1)                                                        NOT NULL DEFAULT b'0' COMMENT '是否删除',
     `tenant_id`   bigint                                                        NOT NULL DEFAULT '0' COMMENT '租户编号',
-    CONSTRAINT `pk_meals_daily_plan_id` PRIMARY KEY (`id`) using btree
+    CONSTRAINT `pk_meals_recipe_category_id` PRIMARY KEY (`id`) using btree
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci COMMENT ='菜谱分类';
+
+-- 食材分类
+CREATE TABLE IF NOT EXISTS `meals_food_category`
+(
+    `id`          bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '分类编号',
+    `parent_id`   bigint                                                        NOT NULL COMMENT '父分类编号',
+    `name`        varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '分类名称',
+    `pic_url`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '移动端分类图',
+    `sort`        int                                                                    DEFAULT '0' COMMENT '分类排序',
+    `status`      tinyint                                                       NOT NULL COMMENT '开启状态',
+    `memo`        varchar(2000)                                                          DEFAULT NULL COMMENT '备注',
+    `creator`     varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci           DEFAULT '' COMMENT '创建者',
+    `create_time` datetime                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updater`     varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci           DEFAULT '' COMMENT '更新者',
+    `update_time` datetime                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `deleted`     bit(1)                                                        NOT NULL DEFAULT b'0' COMMENT '是否删除',
+    `tenant_id`   bigint                                                        NOT NULL DEFAULT '0' COMMENT '租户编号',
+    CONSTRAINT `pk_meals_food_category_id` PRIMARY KEY (`id`) using btree
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci COMMENT ='食材分类';
