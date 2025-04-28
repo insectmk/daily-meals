@@ -117,6 +117,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long createRecipe(AppRecipeSaveReqVO createReqVO) {
+        createReqVO.setRecipeType(RecipeTypesEnum.USER.getType()); // 创建为用户类型菜谱
         // 插入基础数据
         RecipeDO recipe = BeanUtils.toBean(createReqVO, RecipeDO.class);
         recipeMapper.insert(recipe);

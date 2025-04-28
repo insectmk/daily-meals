@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.meals.controller.app.recipe;
 
+import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
@@ -62,7 +63,7 @@ public class AppRecipeController {
     @Operation(summary = "创建菜谱")
     public CommonResult<Long> createRecipe(@Valid @RequestBody AppRecipeSaveReqVO createReqVO) {
         createReqVO.setUserId(getLoginUserId()); // 设置用户ID
-        createReqVO.setStatus(0); // 设置状态
+        createReqVO.setStatus(CommonStatusEnum.ENABLE.getStatus()); // 设置状态
         return success(appRecipeService.createRecipe(createReqVO));
     }
 }
