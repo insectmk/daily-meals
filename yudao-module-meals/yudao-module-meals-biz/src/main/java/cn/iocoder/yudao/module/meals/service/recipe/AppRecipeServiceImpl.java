@@ -15,6 +15,7 @@ import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDetailDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.dailyplanitem.DailyPlanItemMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeFoodMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeMapper;
+import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     @Override
     public PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, AppRecipePageReqVO pageReqVO) {
         // 查询基础信息
+        pageReqVO.setRecipeType(RecipeTypesEnum.USER.getType()); // 获取用户菜谱
         PageResult<RecipeDO> pageResult = recipeMapper.selectPage(userId, pageReqVO);
         List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
         if (CollUtil.isEmpty(recipes)) {
@@ -80,7 +82,9 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     @Override
     public PageResult<AppRecipeRespVO> getPublicRecipeDetailPage(AppRecipePageReqVO pageReqVO) {
         // 查询基础信息
-        PageResult<RecipeDO> pageResult = recipeMapper.selectPublicPage(pageReqVO);
+        RecipePageReqVO pageReqVo1 = BeanUtils.toBean(pageReqVO, RecipePageReqVO.class);
+        pageReqVo1.setRecipeType(RecipeTypesEnum.SYSTEM.getType()); // 获取系统菜谱
+        PageResult<RecipeDO> pageResult = recipeMapper.selectPage(pageReqVo1);
         List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
         if (CollUtil.isEmpty(recipes)) {
             // 为空直接返回

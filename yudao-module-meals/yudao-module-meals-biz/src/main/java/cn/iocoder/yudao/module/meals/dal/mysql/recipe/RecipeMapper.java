@@ -49,20 +49,4 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
                 .betweenIfPresent(RecipeDO::getCreateTime, reqVO.getCreateTime())
                 .orderByDesc(RecipeDO::getId));
     }
-
-    /**
-     * 分页查询公共菜谱信息
-     * @param reqVO
-     * @return
-     */
-    default PageResult<RecipeDO> selectPublicPage(AppRecipePageReqVO reqVO) {
-        return selectPage(reqVO, new LambdaQueryWrapperX<RecipeDO>()
-                .likeIfPresent(RecipeDO::getName, reqVO.getName())
-                .eqIfPresent(RecipeDO::getRecipeType, reqVO.getRecipeType())
-                .eqIfPresent(RecipeDO::getRecipeLevel, reqVO.getRecipeLevel())
-                .eqIfPresent(RecipeDO::getStatus, reqVO.getStatus())
-                .betweenIfPresent(RecipeDO::getCreateTime, reqVO.getCreateTime())
-                .isNull(RecipeDO::getUserId) // 用户ID为空的则为公共菜谱
-                .orderByDesc(RecipeDO::getId));
-    }
 }

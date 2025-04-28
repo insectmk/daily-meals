@@ -31,11 +31,6 @@ public class RecipeRespVO {
     @ExcelProperty("教程")
     private String recipeStep;
 
-    @Schema(description = "菜谱类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
-    @ExcelProperty(value = "菜谱类型", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.MEALS_RECIPE_TYPE)
-    private Integer recipeType;
-
     @Schema(description = "菜谱分类", requiredMode = Schema.RequiredMode.REQUIRED, example = "11, 22")
     @ExcelProperty("菜谱分类")
     private List<Long> recipeCategory;

@@ -34,10 +34,6 @@ public class AppRecipeRespVO {
     @ExcelProperty("教程")
     private String recipeStep;
 
-    @Schema(description = "菜谱类型", example = "2")
-    @ExcelProperty("菜谱类型")
-    private Integer recipeType;
-
     @Schema(description = "菜谱分类", requiredMode = Schema.RequiredMode.REQUIRED,
             example = "[22, 11]")
     @ExcelProperty("菜谱分类")

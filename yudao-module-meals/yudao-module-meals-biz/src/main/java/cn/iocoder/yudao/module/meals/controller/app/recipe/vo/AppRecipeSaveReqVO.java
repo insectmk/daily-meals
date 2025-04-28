@@ -29,9 +29,6 @@ public class AppRecipeSaveReqVO {
     @NotNull(message = "教程不能为空")
     private String recipeStep;
 
-    @Schema(description = "菜谱类型", example = "2")
-    private Integer recipeType;
-
     @Schema(description = "菜谱分类", requiredMode = Schema.RequiredMode.REQUIRED,
             example = "[22, 11]")
     @NotNull(message = "菜谱分类不能为空")

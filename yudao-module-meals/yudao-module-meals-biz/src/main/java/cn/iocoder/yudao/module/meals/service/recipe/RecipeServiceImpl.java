@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.meals.service.recipe;
 
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
+import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -38,6 +39,7 @@ public class RecipeServiceImpl implements RecipeService {
     public Long createRecipe(RecipeSaveReqVO createReqVO) {
         // 插入
         RecipeDO recipe = BeanUtils.toBean(createReqVO, RecipeDO.class);
+        recipe.setRecipeType(RecipeTypesEnum.SYSTEM.getType()); // 设置为系统菜谱
         recipeMapper.insert(recipe);
         // 返回
         return recipe.getId();
@@ -59,7 +61,6 @@ public class RecipeServiceImpl implements RecipeService {
         validateRecipeExists(id);
         // 删除
         recipeMapper.deleteById(id);
-
         // 删除子表
         deleteRecipeFoodByRecipeId(id);
     }
@@ -77,6 +78,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public PageResult<RecipeDO> getRecipePage(RecipePageReqVO pageReqVO) {
+        pageReqVO.setRecipeType(RecipeTypesEnum.SYSTEM.getType()); // 查询系统菜谱
         return recipeMapper.selectPage(pageReqVO);
     }
 
