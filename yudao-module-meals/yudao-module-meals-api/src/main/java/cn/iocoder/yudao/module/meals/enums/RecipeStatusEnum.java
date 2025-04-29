@@ -8,16 +8,16 @@ import lombok.Getter;
 import java.util.Arrays;
 
 /**
- * 菜谱类型枚举
+ * 菜谱状态枚举
  *
  * @author InsectMk
  */
 @Getter
 @AllArgsConstructor
-public enum RecipeTypesEnum implements ArrayValuable<DictDataRespDTO> {
+public enum RecipeStatusEnum implements ArrayValuable<DictDataRespDTO> {
 
-    SYSTEM(0, "系统菜谱"),
-    USER(1, "用户菜谱");
+    PUBLIC(0, "公开"),
+    PRIVATE(1, "私有");
 
     public static final DictDataRespDTO[] ARRAYS = Arrays.stream(values())
             .map(e -> {
@@ -43,21 +43,21 @@ public enum RecipeTypesEnum implements ArrayValuable<DictDataRespDTO> {
     }
 
     /**
-     * 判断是否为系统菜谱
-     * @param type 菜谱类型值
+     * 判断是否公开
+     * @param type 菜谱状态值
      * @return 是否
      */
-    public static boolean isSystem(Integer type) {
-        return ObjUtil.equal(SYSTEM.type, type);
+    public static boolean isPublic(Integer type) {
+        return ObjUtil.equal(PUBLIC.type, type);
     }
 
     /**
-     * 判断是否为用户菜谱
-     * @param type 菜谱类型值
+     * 判断是否私有
+     * @param type 菜谱状态值
      * @return 是否
      */
-    public static boolean isUser(Integer type) {
-        return ObjUtil.equal(USER.type, type);
+    public static boolean isPrivate(Integer type) {
+        return ObjUtil.equal(PRIVATE.type, type);
     }
 
 }
