@@ -47,7 +47,15 @@ public class AppRecipeController {
     @Operation(summary = "获得公共菜谱分页")
     @PermitAll
     public CommonResult<PageResult<AppRecipeRespVO>> getPublicRecipePage(@Valid AppRecipePageReqVO pageReqVO) {
-        PageResult<AppRecipeRespVO> pageResult = appRecipeService.getPublicRecipeDetailPage(pageReqVO);
+        PageResult<AppRecipeRespVO> pageResult = appRecipeService.getPublicRecipeDetailPage(getLoginUserId(),pageReqVO);
+        return success(pageResult);
+    }
+
+    @GetMapping("/page/system")
+    @Operation(summary = "获得系统菜谱分页")
+    @PermitAll
+    public CommonResult<PageResult<AppRecipeRespVO>> getSystemRecipePage(@Valid AppRecipePageReqVO pageReqVO) {
+        PageResult<AppRecipeRespVO> pageResult = appRecipeService.getSystemRecipeDetailPage(pageReqVO);
         return success(pageResult);
     }
 

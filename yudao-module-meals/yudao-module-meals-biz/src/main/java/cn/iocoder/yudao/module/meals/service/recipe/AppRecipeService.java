@@ -5,7 +5,6 @@ import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePopularPublicReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeSaveReqVO;
-import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -32,11 +31,19 @@ public interface AppRecipeService {
     PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, @Valid AppRecipePageReqVO pageReqVO);
 
     /**
-     * 获取公共菜谱分页（没有用户ID的）
+     * 获取系统菜谱分页：菜谱类型为系统的
      * @param pageReqVO 分页信息
      * @return 详细信息分页
      */
-    PageResult<AppRecipeRespVO> getPublicRecipeDetailPage(@Valid AppRecipePageReqVO pageReqVO);
+    PageResult<AppRecipeRespVO> getSystemRecipeDetailPage(@Valid AppRecipePageReqVO pageReqVO);
+
+    /**
+     * 获取公共菜谱分页：菜谱类型为用户的，并且非当前用户的
+     * @param userId 用户ID
+     * @param pageReqVO 请求参数
+     * @return
+     */
+    PageResult<AppRecipeRespVO> getPublicRecipeDetailPage(Long userId, @Valid AppRecipePageReqVO pageReqVO);
 
     /**
      * 获得最热门的菜谱

@@ -15,6 +15,7 @@ import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDetailDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.dailyplanitem.DailyPlanItemMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeFoodMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeMapper;
+import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import jakarta.annotation.Resource;
@@ -80,11 +81,34 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     }
 
     @Override
-    public PageResult<AppRecipeRespVO> getPublicRecipeDetailPage(AppRecipePageReqVO pageReqVO) {
+    public PageResult<AppRecipeRespVO> getSystemRecipeDetailPage(AppRecipePageReqVO pageReqVO) {
         // 查询基础信息
         RecipePageReqVO pageReqVo1 = BeanUtils.toBean(pageReqVO, RecipePageReqVO.class);
         pageReqVo1.setRecipeType(RecipeTypesEnum.SYSTEM.getType()); // 获取系统菜谱
         PageResult<RecipeDO> pageResult = recipeMapper.selectPage(pageReqVo1);
+        List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
+        if (CollUtil.isEmpty(recipes)) {
+            // 为空直接返回
+            return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
+        }
+        // 查询菜谱食材信息
+        List<RecipeFoodDetailDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
+        // 装载信息
+        return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
+    }
+
+    @Override
+    public PageResult<AppRecipeRespVO> getPublicRecipeDetailPage(Long userId, AppRecipePageReqVO pageReqVO) {
+        // 查询基础信息
+        PageResult<RecipeDO> pageResult = recipeMapper.selectPage(pageReqVO, new LambdaQueryWrapperX<RecipeDO>()
+                .neIfPresent(RecipeDO::getUserId, userId) // 不为当前用户
+                .eqIfPresent(RecipeDO::getStatus, RecipeStatusEnum.PUBLIC.getType()) // 公开的菜谱
+                .likeIfPresent(RecipeDO::getName, pageReqVO.getName())
+                .eqIfPresent(RecipeDO::getRecipeType, RecipeTypesEnum.USER.getType()) // 用户菜谱
+                .eqIfPresent(RecipeDO::getRecipeLevel, pageReqVO.getRecipeLevel())
+                .eqIfPresent(RecipeDO::getStatus, pageReqVO.getStatus())
+                .betweenIfPresent(RecipeDO::getCreateTime, pageReqVO.getCreateTime())
+                .orderByDesc(RecipeDO::getId));
         List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
         if (CollUtil.isEmpty(recipes)) {
             // 为空直接返回
