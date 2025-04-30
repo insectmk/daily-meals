@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.meals.service.recipe;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
@@ -26,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 
@@ -65,7 +67,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     }
 
     @Override
-    public PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, AppRecipePageReqVO pageReqVO) {
+    public PageResult<AppRecipeRespVO> getSelfRecipeDetailPage(Long userId, AppRecipePageReqVO pageReqVO) {
         // 查询基础信息
         pageReqVO.setRecipeType(RecipeTypesEnum.USER.getType()); // 获取用户菜谱
         PageResult<RecipeDO> pageResult = recipeMapper.selectPage(userId, pageReqVO);
@@ -108,6 +110,53 @@ public class AppRecipeServiceImpl implements AppRecipeService {
                 .eqIfPresent(RecipeDO::getRecipeLevel, pageReqVO.getRecipeLevel())
                 .eqIfPresent(RecipeDO::getStatus, pageReqVO.getStatus())
                 .betweenIfPresent(RecipeDO::getCreateTime, pageReqVO.getCreateTime())
+                .orderByDesc(RecipeDO::getId));
+        List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
+        if (CollUtil.isEmpty(recipes)) {
+            // 为空直接返回
+            return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
+        }
+        // 查询菜谱食材信息
+        List<RecipeFoodDetailDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
+        // 装载信息
+        return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
+    }
+
+    @Override
+    public PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, AppRecipePageReqVO pageReqVO) {
+        // 处理 菜谱分类 recipeCategory 过滤条件
+        String recipeCategorySql = "";
+        if (CollUtil.isNotEmpty(pageReqVO.getRecipeCategory())) {
+            recipeCategorySql = pageReqVO.getRecipeCategory().stream()
+                    .map(recipeCategory -> "FIND_IN_SET(" + recipeCategory + ", recipe_category)")
+                    .collect(Collectors.joining(" OR "));
+        }
+        // 查询基础信息
+        PageResult<RecipeDO> pageResult = recipeMapper.selectPage(pageReqVO, new LambdaQueryWrapperX<RecipeDO>()
+                .likeIfPresent(RecipeDO::getName, pageReqVO.getName())
+                .eqIfPresent(RecipeDO::getRecipeLevel, pageReqVO.getRecipeLevel())
+                .eqIfPresent(RecipeDO::getStatus, pageReqVO.getStatus())
+                .betweenIfPresent(RecipeDO::getCreateTime, pageReqVO.getCreateTime())
+                // 组合分类筛选与可见性条件
+                .and(wrapper -> wrapper
+                        // 嵌套可见性OR条件组
+                        .and(subWrapper -> subWrapper
+                                // 情况1：系统菜谱
+                                .or(orWrapper -> orWrapper
+                                        .eq(RecipeDO::getRecipeType, RecipeTypesEnum.SYSTEM.getType())
+                                )
+                                // 情况2：当前用户菜谱
+                                .or(orWrapper -> orWrapper
+                                        .eq(RecipeDO::getUserId, userId)
+                                )
+                                // 情况3：公开的用户菜谱
+                                .or(orWrapper -> orWrapper
+                                        .eq(RecipeDO::getStatus, RecipeStatusEnum.PUBLIC.getType())
+                                )
+                        )
+                )
+                // 菜谱分类
+                .apply(StrUtil.isNotEmpty(recipeCategorySql), recipeCategorySql)
                 .orderByDesc(RecipeDO::getId));
         List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
         if (CollUtil.isEmpty(recipes)) {

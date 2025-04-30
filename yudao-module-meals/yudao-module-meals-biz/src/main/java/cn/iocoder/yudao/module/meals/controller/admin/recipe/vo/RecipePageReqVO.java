@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.meals.controller.admin.recipe.vo;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.util.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,6 +27,11 @@ public class RecipePageReqVO extends PageParam {
 
     @Schema(description = "状态", example = "1")
     private Integer status;
+
+    @Schema(description = "菜谱分类", requiredMode = Schema.RequiredMode.REQUIRED,
+            example = "[22, 11]")
+    private List<Long> recipeCategory;
+
 
     @Schema(description = "创建时间")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)

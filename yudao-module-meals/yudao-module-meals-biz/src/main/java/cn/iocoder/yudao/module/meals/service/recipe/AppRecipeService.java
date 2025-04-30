@@ -28,7 +28,7 @@ public interface AppRecipeService {
      * @param pageReqVO 分页信息
      * @return 详细信息分页
      */
-    PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, @Valid AppRecipePageReqVO pageReqVO);
+    PageResult<AppRecipeRespVO> getSelfRecipeDetailPage(Long userId, @Valid AppRecipePageReqVO pageReqVO);
 
     /**
      * 获取系统菜谱分页：菜谱类型为系统的
@@ -44,6 +44,14 @@ public interface AppRecipeService {
      * @return
      */
     PageResult<AppRecipeRespVO> getPublicRecipeDetailPage(Long userId, @Valid AppRecipePageReqVO pageReqVO);
+
+    /**
+     * 获得所有可见的菜谱分页
+     * @param userId
+     * @param pageReqVO
+     * @return
+     */
+    PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, @Valid AppRecipePageReqVO pageReqVO);
 
     /**
      * 获得最热门的菜谱

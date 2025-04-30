@@ -37,9 +37,16 @@ public class AppRecipeController {
     }
 
     @GetMapping("/page")
-    @Operation(summary = "获得菜谱分页")
+    @Operation(summary = "获得所有可见的菜谱分页")
     public CommonResult<PageResult<AppRecipeRespVO>> getRecipePage(@Valid AppRecipePageReqVO pageReqVO) {
         PageResult<AppRecipeRespVO> pageResult = appRecipeService.getRecipeDetailPage(getLoginUserId(),pageReqVO);
+        return success(pageResult);
+    }
+
+    @GetMapping("/page/self")
+    @Operation(summary = "获得自己的菜谱分页")
+    public CommonResult<PageResult<AppRecipeRespVO>> getSelfRecipePage(@Valid AppRecipePageReqVO pageReqVO) {
+        PageResult<AppRecipeRespVO> pageResult = appRecipeService.getSelfRecipeDetailPage(getLoginUserId(),pageReqVO);
         return success(pageResult);
     }
 
