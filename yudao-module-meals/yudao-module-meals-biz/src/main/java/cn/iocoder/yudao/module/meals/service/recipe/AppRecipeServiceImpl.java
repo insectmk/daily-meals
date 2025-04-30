@@ -131,6 +131,16 @@ public class AppRecipeServiceImpl implements AppRecipeService {
                     .map(recipeCategory -> "FIND_IN_SET(" + recipeCategory + ", recipe_category)")
                     .collect(Collectors.joining(" OR "));
         }
+        // 处理 食材分类 foodCategory 过滤条件
+        String foodCategorySql = "";
+        if (CollUtil.isNotEmpty(pageReqVO.getFoodCategory())) {
+            // 关联查询食材表
+            foodCategorySql = "exists(select 1 from meals_recipe_food rf left join meals_food f on rf.food_id = f.id where rf.recipe_id = meals_recipe.id and (%s) )";
+            // 拼接食材类型查询条件
+            foodCategorySql = String.format(foodCategorySql, pageReqVO.getFoodCategory().stream()
+                    .map(foodCategory -> "FIND_IN_SET(" + foodCategory + ", f.food_category)")
+                    .collect(Collectors.joining(" OR ")));
+        }
         // 查询基础信息
         PageResult<RecipeDO> pageResult = recipeMapper.selectPage(pageReqVO, new LambdaQueryWrapperX<RecipeDO>()
                 .likeIfPresent(RecipeDO::getName, pageReqVO.getName())
@@ -157,6 +167,8 @@ public class AppRecipeServiceImpl implements AppRecipeService {
                 )
                 // 菜谱分类
                 .apply(StrUtil.isNotEmpty(recipeCategorySql), recipeCategorySql)
+                // 食材分类
+                .apply(StrUtil.isNotEmpty(foodCategorySql), foodCategorySql)
                 .orderByDesc(RecipeDO::getId));
         List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
         if (CollUtil.isEmpty(recipes)) {

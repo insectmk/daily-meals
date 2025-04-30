@@ -34,6 +34,10 @@ public class AppRecipePageReqVO extends PageParam {
             example = "22, 11")
     private List<Long> recipeCategory;
 
+    @Schema(description = "食材分类", requiredMode = Schema.RequiredMode.REQUIRED,
+            example = "22, 11")
+    private List<Long> foodCategory;
+
     @Schema(description = "烹饪难度")
     private Integer recipeLevel;
 
