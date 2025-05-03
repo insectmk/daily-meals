@@ -44,7 +44,6 @@ public class RecipeSaveReqVO {
     private String memo;
 
     @Schema(description = "状态", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
-    @NotNull(message = "状态不能为空")
     private Integer status;
 
     @Schema(description = "菜谱封面图", requiredMode = Schema.RequiredMode.REQUIRED, example = "https://www.iocoder.cn/xx.png")
