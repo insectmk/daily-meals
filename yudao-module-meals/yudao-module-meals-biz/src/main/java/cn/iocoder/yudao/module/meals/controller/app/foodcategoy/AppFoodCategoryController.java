@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.module.meals.controller.app.recipecategory.recipecategory;
+package cn.iocoder.yudao.module.meals.controller.app.foodcategoy;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
@@ -9,6 +9,7 @@ import cn.iocoder.yudao.module.meals.service.foodcategory.FoodCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,7 @@ public class AppFoodCategoryController {
 
     @GetMapping("/list")
     @Operation(summary = "获得食材分类列表")
+    @PermitAll
     public CommonResult<List<FoodCategoryRespVO>> getFoodCategoryList(@Valid FoodCategoryListReqVO listReqVO) {
         List<FoodCategoryDO> list = foodCategoryService.getFoodCategoryList(listReqVO);
         return success(BeanUtils.toBean(list, FoodCategoryRespVO.class));
