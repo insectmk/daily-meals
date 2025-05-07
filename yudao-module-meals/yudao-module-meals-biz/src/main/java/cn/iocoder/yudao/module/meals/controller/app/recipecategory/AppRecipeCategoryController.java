@@ -9,6 +9,7 @@ import cn.iocoder.yudao.module.meals.service.recipecategory.RecipeCategoryServic
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ public class AppRecipeCategoryController {
 
     @GetMapping("/list")
     @Operation(summary = "获得菜谱分类列表")
+    @PermitAll
     public CommonResult<List<RecipeCategoryRespVO>> getRecipeCategoryList(@Valid RecipeCategoryListReqVO listReqVO) {
         List<RecipeCategoryDO> list = recipeCategoryService.getRecipeCategoryList(listReqVO);
         return success(BeanUtils.toBean(list, RecipeCategoryRespVO.class));

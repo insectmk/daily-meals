@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ public class AppFoodController {
     @GetMapping("/get")
     @Operation(summary = "获得食材")
     @Parameter(name = "id", description = "编号", required = true, example = "1024")
+    @PermitAll
     public CommonResult<AppFoodRespVO> getFood(@RequestParam("id") Long id) {
         FoodDO food = foodService.getFood(id);
         return success(BeanUtils.toBean(food, AppFoodRespVO.class));
@@ -39,6 +41,7 @@ public class AppFoodController {
 
     @GetMapping("/list-all-simple")
     @Operation(summary = "获取食材精简信息列表", description = "主要用于前端的下拉选项")
+    @PermitAll
     public CommonResult<List<FoodSimpleRespVO>> getSimpleFoodList() {
         // 获用户列表，只要开启状态的
         List<FoodDO> list = foodService.getFoodList();

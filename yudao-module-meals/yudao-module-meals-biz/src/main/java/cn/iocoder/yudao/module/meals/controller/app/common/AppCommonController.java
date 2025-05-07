@@ -6,6 +6,7 @@ import cn.iocoder.yudao.module.system.api.dict.dto.DictDataRespDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class AppCommonController {
 
     @GetMapping("/dict-data/type")
     @Operation(summary = "根据字典类型查询字典数据信息")
+    @PermitAll
     public CommonResult<List<DictDataRespDTO>> getDictDataListByType(@RequestParam("type") String type) {
         return success(commonService.getDictDataListByType(type));
     }

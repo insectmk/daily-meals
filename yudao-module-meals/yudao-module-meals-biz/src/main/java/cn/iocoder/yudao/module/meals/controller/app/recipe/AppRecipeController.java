@@ -38,6 +38,7 @@ public class AppRecipeController {
 
     @GetMapping("/page")
     @Operation(summary = "获得所有可见的菜谱分页")
+    @PermitAll
     public CommonResult<PageResult<AppRecipeRespVO>> getRecipePage(@Valid AppRecipePageReqVO pageReqVO) {
         PageResult<AppRecipeRespVO> pageResult = appRecipeService.getRecipeDetailPage(getLoginUserId(),pageReqVO);
         return success(pageResult);
