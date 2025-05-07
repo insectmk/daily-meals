@@ -37,4 +37,7 @@ public interface ErrorCodeConstants {
     ErrorCode FOOD_CATEGORY_PARENT_ERROR = new ErrorCode(600_000_004, "不能设置自己为父食材分类");
     ErrorCode FOOD_CATEGORY_NAME_DUPLICATE = new ErrorCode(600_000_005, "已经存在该分类名称的食材分类");
     ErrorCode FOOD_CATEGORY_PARENT_IS_CHILD = new ErrorCode(600_000_006, "不能设置自己的子FoodCategory为父FoodCategory");
+
+    // ========== 菜单 ==========
+    ErrorCode MENU_NOT_EXISTS = new ErrorCode(700_000_001, "菜单不存在");
 }
