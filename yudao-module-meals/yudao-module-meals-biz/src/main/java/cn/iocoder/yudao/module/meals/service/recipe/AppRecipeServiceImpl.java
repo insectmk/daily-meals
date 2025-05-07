@@ -156,7 +156,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
                                         .eq(RecipeDO::getRecipeType, RecipeTypesEnum.SYSTEM.getType())
                                 )
                                 // 情况2：当前用户菜谱
-                                .or(orWrapper -> orWrapper
+                                .or(userId != null,orWrapper -> orWrapper
                                         .eq(RecipeDO::getUserId, userId)
                                 )
                                 // 情况3：公开的用户菜谱
@@ -169,6 +169,8 @@ public class AppRecipeServiceImpl implements AppRecipeService {
                 .apply(StrUtil.isNotEmpty(recipeCategorySql), recipeCategorySql)
                 // 食材分类
                 .apply(StrUtil.isNotEmpty(foodCategorySql), foodCategorySql)
+                // 按照更新时间排序
+                .orderByDesc(RecipeDO::getUpdateTime)
                 .orderByDesc(RecipeDO::getId));
         List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
         if (CollUtil.isEmpty(recipes)) {
