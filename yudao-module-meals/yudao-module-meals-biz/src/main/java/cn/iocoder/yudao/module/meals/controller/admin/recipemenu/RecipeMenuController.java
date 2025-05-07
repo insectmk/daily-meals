@@ -45,7 +45,7 @@ public class RecipeMenuController {
     @Operation(summary = "创建菜谱菜单")
     @PreAuthorize("@ss.hasPermission('meals:recipe-menu:create')")
     public CommonResult<Long> createRecipeMenu(@Valid @RequestBody RecipeMenuSaveReqVO createReqVO) {
-        createReqVO.setId(getLoginUserId()); // 用户ID
+        createReqVO.setUserId(getLoginUserId()); // 用户ID
         createReqVO.setMenuType(RecipeTypesEnum.SYSTEM.getType()); // 菜单类型，系统
         createReqVO.setMenuStatus(RecipeStatusEnum.PUBLIC.getType()); // 菜单状态，公开
         return success(recipeMenuService.createRecipeMenu(createReqVO));

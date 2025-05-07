@@ -52,10 +52,6 @@ public class RecipeMenuDO extends BaseDO {
      */
     private String picUrl;
     /**
-     * 菜单菜谱ID集合
-     */
-    private String recipeIds;
-    /**
      * 备注
      */
     private String memo;

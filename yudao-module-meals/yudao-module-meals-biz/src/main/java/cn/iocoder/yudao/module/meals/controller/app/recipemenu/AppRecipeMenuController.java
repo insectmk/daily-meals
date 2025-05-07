@@ -33,7 +33,7 @@ public class AppRecipeMenuController {
     @PostMapping("/create")
     @Operation(summary = "创建菜谱菜单")
     public CommonResult<Long> createRecipeMenu(@Valid @RequestBody AppRecipeMenuSaveReqVO createReqVO) {
-        createReqVO.setId(getLoginUserId()); // 用户ID
+        createReqVO.setUserId(getLoginUserId()); // 用户ID
         createReqVO.setMenuType(RecipeTypesEnum.USER.getType()); // 菜单类型，用户
         return success(appRecipeMenuService.createRecipeMenu(createReqVO));
     }
