@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.module.meals.controller.admin.recipemenu;
 
+import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
+import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +26,7 @@ import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 
 import cn.iocoder.yudao.framework.apilog.core.annotation.ApiAccessLog;
 import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.*;
+import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 import cn.iocoder.yudao.module.meals.controller.admin.recipemenu.vo.*;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
@@ -42,6 +45,9 @@ public class RecipeMenuController {
     @Operation(summary = "创建菜谱菜单")
     @PreAuthorize("@ss.hasPermission('meals:recipe-menu:create')")
     public CommonResult<Long> createRecipeMenu(@Valid @RequestBody RecipeMenuSaveReqVO createReqVO) {
+        createReqVO.setId(getLoginUserId()); // 用户ID
+        createReqVO.setMenuType(RecipeTypesEnum.SYSTEM.getType()); // 菜单类型，系统
+        createReqVO.setMenuStatus(RecipeStatusEnum.PUBLIC.getType()); // 菜单状态，公开
         return success(recipeMenuService.createRecipeMenu(createReqVO));
     }
 

@@ -30,6 +30,12 @@ public class RecipeMenuSaveReqVO {
     @Schema(description = "菜单菜谱ID集合")
     private List<Long> recipeIds;
 
+    @Schema(description = "菜单类型")
+    private Integer menuType;
+
+    @Schema(description = "菜单状态")
+    private Integer menuStatus;
+
     @Schema(description = "备注", example = "你猜")
     private String memo;
 

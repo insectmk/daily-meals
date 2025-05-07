@@ -7,6 +7,8 @@ import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuP
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSaveReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
+import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
+import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import cn.iocoder.yudao.module.meals.service.recipemenu.AppRecipeMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,6 +33,8 @@ public class AppRecipeMenuController {
     @PostMapping("/create")
     @Operation(summary = "创建菜谱菜单")
     public CommonResult<Long> createRecipeMenu(@Valid @RequestBody AppRecipeMenuSaveReqVO createReqVO) {
+        createReqVO.setId(getLoginUserId()); // 用户ID
+        createReqVO.setMenuType(RecipeTypesEnum.USER.getType()); // 菜单类型，用户
         return success(appRecipeMenuService.createRecipeMenu(createReqVO));
     }
 
