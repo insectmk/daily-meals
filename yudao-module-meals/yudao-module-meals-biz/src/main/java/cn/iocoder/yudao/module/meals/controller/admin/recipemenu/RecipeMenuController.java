@@ -12,6 +12,8 @@ import cn.iocoder.yudao.module.meals.controller.admin.recipemenu.vo.RecipeMenuRe
 import cn.iocoder.yudao.module.meals.controller.admin.recipemenu.vo.RecipeMenuSaveReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.menurecipe.MenuRecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
+import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
+import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import cn.iocoder.yudao.module.meals.service.recipemenu.RecipeMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,6 +30,7 @@ import java.util.List;
 
 import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.EXPORT;
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 @Tag(name = "管理后台 - 菜谱菜单")
 @RestController
@@ -42,6 +45,9 @@ public class RecipeMenuController {
     @Operation(summary = "创建菜谱菜单")
     @PreAuthorize("@ss.hasPermission('meals:recipe-menu:create')")
     public CommonResult<Long> createRecipeMenu(@Valid @RequestBody RecipeMenuSaveReqVO createReqVO) {
+        createReqVO.setId(getLoginUserId()); // 用户ID
+        createReqVO.setMenuType(RecipeTypesEnum.SYSTEM.getType()); // 菜单类型，系统
+        createReqVO.setMenuStatus(RecipeStatusEnum.PUBLIC.getType()); // 菜单状态，公开
         return success(recipeMenuService.createRecipeMenu(createReqVO));
     }
 

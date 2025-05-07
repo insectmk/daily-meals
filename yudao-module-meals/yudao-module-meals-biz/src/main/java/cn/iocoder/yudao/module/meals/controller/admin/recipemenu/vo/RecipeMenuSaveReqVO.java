@@ -28,6 +28,12 @@ public class RecipeMenuSaveReqVO {
     @Schema(description = "菜单封面图", example = "https://www.iocoder.cn")
     private String picUrl;
 
+    @Schema(description = "菜单类型")
+    private Integer menuType;
+
+    @Schema(description = "菜单状态")
+    private Integer menuStatus;
+
     @Schema(description = "备注", example = "你猜")
     private String memo;
 
