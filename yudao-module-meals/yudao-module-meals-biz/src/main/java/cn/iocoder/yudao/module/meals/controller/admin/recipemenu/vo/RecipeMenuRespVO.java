@@ -36,10 +36,6 @@ public class RecipeMenuRespVO {
     @ExcelProperty("菜单封面图")
     private String picUrl;
 
-    @Schema(description = "菜单菜谱ID集合")
-    @ExcelProperty("菜单菜谱ID集合")
-    private List<Long> recipeIds;
-
     @Schema(description = "备注", example = "你猜")
     @ExcelProperty("备注")
     private String memo;

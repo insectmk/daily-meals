@@ -27,9 +27,6 @@ public class AppRecipeMenuSaveReqVO {
     @Schema(description = "菜单封面图", example = "https://www.iocoder.cn")
     private String picUrl;
 
-    @Schema(description = "菜单菜谱ID集合")
-    private List<Long> recipeIds;
-
     @Schema(description = "菜单类型")
     private Integer menuType;
 

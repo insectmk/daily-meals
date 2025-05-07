@@ -1,36 +1,33 @@
 package cn.iocoder.yudao.module.meals.controller.admin.recipemenu;
 
-import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
-import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
-import org.springframework.web.bind.annotation.*;
-import jakarta.annotation.Resource;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.security.access.prepost.PreAuthorize;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Operation;
-
-import jakarta.validation.constraints.*;
-import jakarta.validation.*;
-import jakarta.servlet.http.*;
-import java.util.*;
-import java.io.IOException;
-
+import cn.iocoder.yudao.framework.apilog.core.annotation.ApiAccessLog;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
-
-import cn.iocoder.yudao.framework.apilog.core.annotation.ApiAccessLog;
-import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.*;
-import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
-
-import cn.iocoder.yudao.module.meals.controller.admin.recipemenu.vo.*;
+import cn.iocoder.yudao.module.meals.controller.admin.menurecipe.vo.MenuRecipePageReqVO;
+import cn.iocoder.yudao.module.meals.controller.admin.recipemenu.vo.RecipeMenuPageReqVO;
+import cn.iocoder.yudao.module.meals.controller.admin.recipemenu.vo.RecipeMenuRespVO;
+import cn.iocoder.yudao.module.meals.controller.admin.recipemenu.vo.RecipeMenuSaveReqVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.menurecipe.MenuRecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
 import cn.iocoder.yudao.module.meals.service.recipemenu.RecipeMenuService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
+
+import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.EXPORT;
+import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 菜谱菜单")
 @RestController
@@ -45,9 +42,6 @@ public class RecipeMenuController {
     @Operation(summary = "创建菜谱菜单")
     @PreAuthorize("@ss.hasPermission('meals:recipe-menu:create')")
     public CommonResult<Long> createRecipeMenu(@Valid @RequestBody RecipeMenuSaveReqVO createReqVO) {
-        createReqVO.setId(getLoginUserId()); // 用户ID
-        createReqVO.setMenuType(RecipeTypesEnum.SYSTEM.getType()); // 菜单类型，系统
-        createReqVO.setMenuStatus(RecipeStatusEnum.PUBLIC.getType()); // 菜单状态，公开
         return success(recipeMenuService.createRecipeMenu(createReqVO));
     }
 
@@ -97,5 +91,48 @@ public class RecipeMenuController {
         ExcelUtils.write(response, "菜谱菜单.xls", "数据", RecipeMenuRespVO.class,
                         BeanUtils.toBean(list, RecipeMenuRespVO.class));
     }
+
+    // ==================== 子表（菜单菜谱） ====================
+
+    @GetMapping("/menu-recipe/page")
+    @Operation(summary = "获得菜单菜谱分页")
+    @Parameter(name = "recipeMenuId", description = "菜谱菜单编号")
+    @PreAuthorize("@ss.hasPermission('meals:recipe-menu:query')")
+    public CommonResult<PageResult<MenuRecipeDO>> getMenuRecipePage(MenuRecipePageReqVO pageReqVO,
+                                                                    @RequestParam("recipeMenuId") Long recipeMenuId) {
+        return success(recipeMenuService.getMenuRecipePage(pageReqVO, recipeMenuId));
+    }
+
+    @PostMapping("/menu-recipe/create")
+    @Operation(summary = "创建菜单菜谱")
+    @PreAuthorize("@ss.hasPermission('meals:recipe-menu:create')")
+    public CommonResult<Long> createMenuRecipe(@Valid @RequestBody MenuRecipeDO menuRecipe) {
+        return success(recipeMenuService.createMenuRecipe(menuRecipe));
+    }
+
+    @PutMapping("/menu-recipe/update")
+    @Operation(summary = "更新菜单菜谱")
+    @PreAuthorize("@ss.hasPermission('meals:recipe-menu:update')")
+    public CommonResult<Boolean> updateMenuRecipe(@Valid @RequestBody MenuRecipeDO menuRecipe) {
+        recipeMenuService.updateMenuRecipe(menuRecipe);
+        return success(true);
+    }
+
+    @DeleteMapping("/menu-recipe/delete")
+    @Parameter(name = "id", description = "编号", required = true)
+    @Operation(summary = "删除菜单菜谱")
+    @PreAuthorize("@ss.hasPermission('meals:recipe-menu:delete')")
+    public CommonResult<Boolean> deleteMenuRecipe(@RequestParam("id") Long id) {
+        recipeMenuService.deleteMenuRecipe(id);
+        return success(true);
+    }
+
+	@GetMapping("/menu-recipe/get")
+	@Operation(summary = "获得菜单菜谱")
+	@Parameter(name = "id", description = "编号", required = true)
+    @PreAuthorize("@ss.hasPermission('meals:recipe-menu:query')")
+	public CommonResult<MenuRecipeDO> getMenuRecipe(@RequestParam("id") Long id) {
+	    return success(recipeMenuService.getMenuRecipe(id));
+	}
 
 }
