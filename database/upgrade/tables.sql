@@ -142,3 +142,28 @@ CREATE TABLE IF NOT EXISTS `meals_food_category`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci COMMENT ='食材分类';
+
+-- 菜单表
+CREATE TABLE IF NOT EXISTS `meals_menu`
+(
+    `id`          bigint   NOT NULL AUTO_INCREMENT COMMENT '编号',
+    `user_id`     bigint                                                       DEFAULT NULL COMMENT '用户编号',
+    `title`       varchar(255)                                                 DEFAULT NULL COMMENT '标题',
+    `subtitle`    varchar(255)                                                 DEFAULT NULL COMMENT '副标题',
+    `menu_desc`   text                                                         DEFAULT NULL COMMENT '菜单描述',
+    `menu_type`   tinyint                                                      DEFAULT NULL COMMENT '菜单类型',
+    `pic_url`     varchar(256)                                                 DEFAULT NULL COMMENT '菜单封面图',
+    `recipe_ids`  varchar(2000)                                                DEFAULT NULL COMMENT '菜单菜谱ID集合',
+    `memo`        varchar(2000)                                                DEFAULT NULL COMMENT '备注',
+    `menu_status` tinyint  NOT NULL COMMENT '菜单状态',
+    `creator`     varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '创建者',
+    `create_time` datetime NOT NULL                                            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updater`     varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '更新者',
+    `update_time` datetime NOT NULL                                            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `deleted`     bit(1)   NOT NULL                                            DEFAULT b'0' COMMENT '是否删除',
+    `tenant_id`   bigint   NOT NULL                                            DEFAULT '0' COMMENT '租户编号',
+    CONSTRAINT `pk_meals_menu_id` PRIMARY KEY (`id`) using btree
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci COMMENT ='菜单表';
+
