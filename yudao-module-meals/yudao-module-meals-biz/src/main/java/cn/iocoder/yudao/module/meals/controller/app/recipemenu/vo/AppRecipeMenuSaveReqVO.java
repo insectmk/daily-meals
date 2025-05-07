@@ -3,6 +3,8 @@ package cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.util.List;
+
 @Schema(description = "管理后台 - 菜谱菜单新增/修改 Request VO")
 @Data
 public class AppRecipeMenuSaveReqVO {
@@ -26,7 +28,7 @@ public class AppRecipeMenuSaveReqVO {
     private String picUrl;
 
     @Schema(description = "菜单菜谱ID集合")
-    private String recipeIds;
+    private List<Long> recipeIds;
 
     @Schema(description = "备注", example = "你猜")
     private String memo;

@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu;
 
+import cn.iocoder.yudao.framework.mybatis.core.type.LongListTypeHandler;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.*;
 import java.util.*;
 import java.time.LocalDateTime;
@@ -12,7 +14,7 @@ import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
  *
  * @author InsectMk
  */
-@TableName("meals_recipe_menu")
+@TableName(value = "meals_recipe_menu", autoResultMap = true)
 @KeySequence("meals_recipe_menu_seq") // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -54,7 +56,8 @@ public class RecipeMenuDO extends BaseDO {
     /**
      * 菜单菜谱ID集合
      */
-    private String recipeIds;
+    @TableField(typeHandler = LongListTypeHandler.class)
+    private List<Long> recipeIds;
     /**
      * 备注
      */

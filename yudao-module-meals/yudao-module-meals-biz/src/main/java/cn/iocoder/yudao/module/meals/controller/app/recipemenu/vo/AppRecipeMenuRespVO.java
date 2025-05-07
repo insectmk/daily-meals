@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Schema(description = "管理后台 - 菜谱菜单 Response VO")
 @Data
@@ -38,7 +39,7 @@ public class AppRecipeMenuRespVO {
 
     @Schema(description = "菜单菜谱ID集合")
     @ExcelProperty("菜单菜谱ID集合")
-    private String recipeIds;
+    private List<Long> recipeIds;
 
     @Schema(description = "备注", example = "你猜")
     @ExcelProperty("备注")

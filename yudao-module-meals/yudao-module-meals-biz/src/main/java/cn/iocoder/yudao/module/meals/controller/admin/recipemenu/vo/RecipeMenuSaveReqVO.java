@@ -28,7 +28,7 @@ public class RecipeMenuSaveReqVO {
     private String picUrl;
 
     @Schema(description = "菜单菜谱ID集合")
-    private String recipeIds;
+    private List<Long> recipeIds;
 
     @Schema(description = "备注", example = "你猜")
     private String memo;
