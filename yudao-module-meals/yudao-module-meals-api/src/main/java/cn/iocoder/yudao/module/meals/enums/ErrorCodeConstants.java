@@ -40,5 +40,8 @@ public interface ErrorCodeConstants {
 
     // ========== 菜谱菜单 ==========
     ErrorCode RECIPE_MENU_NOT_EXISTS = new ErrorCode(700_000_001, "菜单不存在");
+
+    // ========== 菜单菜谱 ==========
     ErrorCode MENU_RECIPE_NOT_EXISTS = new ErrorCode(700_000_002, "菜单菜谱不存在");
+    ErrorCode MENU_RECIPE_ALREADY_EXISTS = new ErrorCode(700_000_003, "菜单菜谱已存在");
 }
