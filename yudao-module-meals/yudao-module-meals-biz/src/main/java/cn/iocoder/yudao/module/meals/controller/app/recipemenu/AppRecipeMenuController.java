@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -63,6 +64,7 @@ public class AppRecipeMenuController {
 
     @GetMapping("/page")
     @Operation(summary = "获得用户可见菜谱菜单分页")
+    @PermitAll
     public CommonResult<PageResult<AppRecipeMenuRespVO>> getRecipeMenuPage(@Valid AppRecipeMenuPageReqVO pageReqVO) {
         PageResult<RecipeMenuDO> pageResult = appRecipeMenuService.getUserViewableRecipeMenuPage(getLoginUserId(), pageReqVO);
         return success(BeanUtils.toBean(pageResult, AppRecipeMenuRespVO.class));
