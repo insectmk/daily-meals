@@ -6,10 +6,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
-import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeFoodRespVO;
-import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipePageReqVO;
-import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeRespVO;
-import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeSaveReqVO;
+import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.*;
 import cn.iocoder.yudao.module.meals.convert.recipe.RecipeConvert;
 import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
@@ -96,6 +93,13 @@ public class RecipeController {
         // 导出 Excel
         ExcelUtils.write(response, "菜谱.xls", "数据", RecipeRespVO.class,
                         BeanUtils.toBean(list, RecipeRespVO.class));
+    }
+
+    @GetMapping("/list-all-simple")
+    @Operation(summary = "获取精简信息列表", description = "主要用于前端的下拉选项")
+    public CommonResult<List<RecipeSimpleRespVO>> getSimpleRecipeList() {
+        List<RecipeDO> list = recipeService.getRecipeList();
+        return success(RecipeConvert.INSTANCE.convertSimpleList(list));
     }
 
     // ==================== 子表（菜谱食材） ====================

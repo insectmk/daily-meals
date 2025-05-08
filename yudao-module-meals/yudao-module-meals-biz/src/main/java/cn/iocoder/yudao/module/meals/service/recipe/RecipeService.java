@@ -1,11 +1,14 @@
 package cn.iocoder.yudao.module.meals.service.recipe;
 
-import jakarta.validation.*;
-import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.*;
+import cn.iocoder.yudao.framework.common.pojo.PageParam;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipePageReqVO;
+import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeSaveReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.pojo.PageParam;
+import jakarta.validation.Valid;
+
+import java.util.List;
 
 /**
  * 菜谱 Service 接口
@@ -51,6 +54,13 @@ public interface RecipeService {
      * @return 菜谱分页
      */
     PageResult<RecipeDO> getRecipePage(RecipePageReqVO pageReqVO);
+
+
+    /**
+     * 获得所有菜谱
+     * @return
+     */
+    List<RecipeDO> getRecipeList();
 
     // ==================== 子表（菜谱食材） ====================
 

@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.meals.convert.recipe;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeFoodRespVO;
+import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeSimpleRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeFoodDetailRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
@@ -11,6 +12,7 @@ import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDetailDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
 import java.util.List;
 import java.util.Map;
 
@@ -99,4 +101,11 @@ public interface RecipeConvert {
         result.setFoodUnit(food.getFoodUnit()); // 食材单位
         return result;
     }
+
+    /**
+     * 将菜谱信息转为菜谱精简信息列表
+     * @param list
+     * @return
+     */
+    List<RecipeSimpleRespVO> convertSimpleList(List<RecipeDO> list);
 }

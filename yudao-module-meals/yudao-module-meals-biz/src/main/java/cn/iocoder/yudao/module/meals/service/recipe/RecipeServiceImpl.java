@@ -82,6 +82,11 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeMapper.selectPage(pageReqVO);
     }
 
+    @Override
+    public List<RecipeDO> getRecipeList() {
+        return recipeMapper.selectList();
+    }
+
     // ==================== 子表（菜谱食材） ====================
 
     @Override
