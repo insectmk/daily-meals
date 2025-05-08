@@ -104,8 +104,9 @@ public class RecipeMenuController {
     @Operation(summary = "获得菜单菜谱分页")
     @Parameter(name = "recipeMenuId", description = "菜谱菜单编号")
     @PreAuthorize("@ss.hasPermission('meals:recipe-menu:query')")
-    public CommonResult<PageResult<MenuRecipeDO>> getMenuRecipePage(MenuRecipePageReqVO pageReqVO,
-                                                                    @RequestParam("recipeMenuId") Long recipeMenuId) {
+    public CommonResult<PageResult<MenuRecipeDO>> getMenuRecipePage(
+            MenuRecipePageReqVO pageReqVO,
+            @RequestParam("recipeMenuId") Long recipeMenuId) {
         return success(recipeMenuService.getMenuRecipePage(pageReqVO, recipeMenuId));
     }
 

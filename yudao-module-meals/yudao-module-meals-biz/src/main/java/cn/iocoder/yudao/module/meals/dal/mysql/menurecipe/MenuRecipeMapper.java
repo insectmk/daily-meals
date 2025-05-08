@@ -54,9 +54,17 @@ public interface MenuRecipeMapper extends BaseMapperX<MenuRecipeDO> {
      * @return
      */
     default PageResult<MenuRecipeDO> selectPage(MenuRecipePageReqVO reqVO, Long recipeMenuId) {
-        return selectPage(reqVO, new LambdaQueryWrapperX<MenuRecipeDO>()
+        return this.selectJoinPage(reqVO, MenuRecipeDO.class, new MPJLambdaWrapperX<MenuRecipeDO>()
+                // 查询所有真字段
+                .selectAll(MenuRecipeDO.class)
+                // 匹配对应的菜谱菜单ID
                 .eq(MenuRecipeDO::getRecipeMenuId, recipeMenuId)
-                .orderByDesc(MenuRecipeDO::getId));
+                // 菜谱名称
+                .selectAs(RecipeDO::getName, MenuRecipeDO::getRecipeName)
+                // 菜谱图片
+                .selectAs(RecipeDO::getPicUrl, MenuRecipeDO::getRecipePicUrl)
+                // 关联
+                .leftJoin(RecipeDO.class, RecipeDO::getId, MenuRecipeDO::getRecipeId));
     }
 
     /**
