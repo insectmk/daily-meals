@@ -2,6 +2,7 @@ package cn.iocoder.yudao.module.meals.service.recipemenu;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.module.meals.controller.admin.menurecipe.vo.MenuRecipePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.admin.recipemenu.vo.RecipeMenuPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.admin.recipemenu.vo.RecipeMenuSaveReqVO;
@@ -14,9 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.Objects;
+
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.MENU_RECIPE_NOT_EXISTS;
-import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.RECIPE_MENU_NOT_EXISTS;
+import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.*;
 
 /**
  * 菜谱菜单 Service 实现类
@@ -87,6 +89,13 @@ public class RecipeMenuServiceImpl implements RecipeMenuService {
 
     @Override
     public Long createMenuRecipe(MenuRecipeDO menuRecipe) {
+        // 判断是否已经存在
+        if (menuRecipeMapper.selectCount(new LambdaQueryWrapperX<MenuRecipeDO>()
+                .eqIfPresent(MenuRecipeDO::getRecipeId, menuRecipe.getRecipeId())
+                .eqIfPresent(MenuRecipeDO::getRecipeMenuId, menuRecipe.getRecipeMenuId())) > 0) {
+            // 存在则报错
+            throw exception(MENU_RECIPE_ALREADY_EXISTS);
+        }
         menuRecipeMapper.insert(menuRecipe);
         return menuRecipe.getId();
     }

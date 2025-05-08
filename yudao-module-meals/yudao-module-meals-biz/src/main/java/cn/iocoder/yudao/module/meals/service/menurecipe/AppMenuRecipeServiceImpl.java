@@ -34,9 +34,9 @@ public class AppMenuRecipeServiceImpl implements AppMenuRecipeService {
     @Override
     public Long createMenuRecipe(AppMenuRecipeSaveReqVO createReqVO) {
         // 判断是否已经存在
-        if (!Objects.isNull(menuRecipeMapper.selectOne(new LambdaQueryWrapperX<MenuRecipeDO>()
+        if (menuRecipeMapper.selectCount(new LambdaQueryWrapperX<MenuRecipeDO>()
                 .eqIfPresent(MenuRecipeDO::getRecipeId, createReqVO.getRecipeId())
-                .eqIfPresent(MenuRecipeDO::getRecipeMenuId, createReqVO.getRecipeMenuId())))) {
+                .eqIfPresent(MenuRecipeDO::getRecipeMenuId, createReqVO.getRecipeMenuId())) > 0) {
             // 存在则报错
             throw exception(MENU_RECIPE_ALREADY_EXISTS);
         }
