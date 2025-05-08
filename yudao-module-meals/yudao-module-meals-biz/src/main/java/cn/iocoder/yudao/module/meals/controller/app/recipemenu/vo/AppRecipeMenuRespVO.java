@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo;
 
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,4 +46,8 @@ public class AppRecipeMenuRespVO {
     @ExcelProperty("创建时间")
     private LocalDateTime createTime;
 
+    // *********详细信息**********
+
+    @Schema(description = "菜谱信息列表")
+    private List<AppRecipeRespVO> recipes;
 }

@@ -65,8 +65,8 @@ public class AppRecipeMenuController {
     @Operation(summary = "获得菜谱菜单")
     @Parameter(name = "id", description = "编号", required = true, example = "1024")
     public CommonResult<AppRecipeMenuRespVO> getRecipeMenu(@RequestParam("id") Long id) {
-        RecipeMenuDO recipeMenu = appRecipeMenuService.getRecipeMenu(id);
-        return success(BeanUtils.toBean(recipeMenu, AppRecipeMenuRespVO.class));
+        AppRecipeMenuRespVO recipeMenu = appRecipeMenuService.getRecipeMenuDetail(id);
+        return success(recipeMenu);
     }
 
     @GetMapping("/page")

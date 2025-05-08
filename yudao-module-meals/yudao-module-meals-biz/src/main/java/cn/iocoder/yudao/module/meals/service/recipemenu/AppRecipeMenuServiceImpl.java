@@ -3,16 +3,23 @@ package cn.iocoder.yudao.module.meals.service.recipemenu;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuPageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSaveReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSimpleRespVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.menurecipe.MenuRecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
+import cn.iocoder.yudao.module.meals.dal.mysql.menurecipe.MenuRecipeMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipemenu.RecipeMenuMapper;
+import cn.iocoder.yudao.module.meals.service.recipe.AppRecipeService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.RECIPE_MENU_NOT_EXISTS;
@@ -28,6 +35,10 @@ public class AppRecipeMenuServiceImpl implements AppRecipeMenuService {
 
     @Resource
     private RecipeMenuMapper recipeMenuMapper;
+    @Resource
+    private AppRecipeService appRecipeService;
+    @Resource
+    private MenuRecipeMapper menuRecipeMapper;
 
     @Override
     public Long createRecipeMenu(AppRecipeMenuSaveReqVO createReqVO) {
@@ -75,6 +86,27 @@ public class AppRecipeMenuServiceImpl implements AppRecipeMenuService {
     public List<RecipeMenuDO> getSelfRecipeMenuList(Long userId) {
         return recipeMenuMapper.selectList(new LambdaQueryWrapperX<RecipeMenuDO>()
                 .eq(RecipeMenuDO::getUserId, userId));
+    }
+
+    @Override
+    public AppRecipeMenuRespVO getRecipeMenuDetail(Long id) {
+        // 查询菜谱菜单基础信息
+        AppRecipeMenuRespVO result = BeanUtils.toBean(recipeMenuMapper.selectById(id), AppRecipeMenuRespVO.class);
+        if (Objects.isNull(result)) {
+            // 菜谱菜单不存在
+            throw exception(RECIPE_MENU_NOT_EXISTS);
+        }
+        // 查询菜单菜谱信息
+        List<MenuRecipeDO> menuRecipeDOS = menuRecipeMapper.selectList(new LambdaQueryWrapperX<MenuRecipeDO>()
+                .eqIfPresent(MenuRecipeDO::getRecipeMenuId, id));
+        // 查询并装载菜谱信息
+        List<AppRecipeRespVO> recipes = new ArrayList<>(menuRecipeDOS.size());
+        for (MenuRecipeDO menuRecipeDO : menuRecipeDOS) {
+            recipes.add(appRecipeService.getRecipeDetail(menuRecipeDO.getRecipeId()));
+        }
+        result.setRecipes(recipes);
+
+        return result;
     }
 
 }
