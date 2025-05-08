@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.module.meals.dal.mysql.recipe;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
@@ -7,6 +9,9 @@ import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDetailDO;
+import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
+import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,6 +19,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 菜谱 Mapper
@@ -30,6 +36,63 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
                 .eqIfPresent(RecipeDO::getStatus, reqVO.getStatus())
                 .betweenIfPresent(RecipeDO::getCreateTime, reqVO.getCreateTime())
                 .orderByDesc(RecipeDO::getId));
+    }
+
+    /**
+     * 分页查询用户可见的菜谱数据
+     * @param userId 用户ID
+     * @param pageReqVO 分页查询对象
+     */
+    default PageResult<RecipeDO> getUserViewableRecipePage(Long userId, AppRecipePageReqVO pageReqVO) {
+        // 处理 菜谱分类 recipeCategory 过滤条件
+        String recipeCategorySql = "";
+        if (CollUtil.isNotEmpty(pageReqVO.getRecipeCategory())) {
+            recipeCategorySql = pageReqVO.getRecipeCategory().stream()
+                    .map(recipeCategory -> "FIND_IN_SET(" + recipeCategory + ", recipe_category)")
+                    .collect(Collectors.joining(" OR "));
+        }
+        // 处理 食材分类 foodCategory 过滤条件
+        String foodCategorySql = "";
+        if (CollUtil.isNotEmpty(pageReqVO.getFoodCategory())) {
+            // 关联查询食材表
+            foodCategorySql = "exists(select 1 from meals_recipe_food rf left join meals_food f on rf.food_id = f.id where rf.recipe_id = meals_recipe.id and (%s) )";
+            // 拼接食材类型查询条件
+            foodCategorySql = String.format(foodCategorySql, pageReqVO.getFoodCategory().stream()
+                    .map(foodCategory -> "FIND_IN_SET(" + foodCategory + ", f.food_category)")
+                    .collect(Collectors.joining(" OR ")));
+        }
+        // 查询条件
+        LambdaQueryWrapper<RecipeDO> queryWrapper = new LambdaQueryWrapperX<RecipeDO>()
+                .likeIfPresent(RecipeDO::getName, pageReqVO.getName())
+                .eqIfPresent(RecipeDO::getRecipeLevel, pageReqVO.getRecipeLevel())
+                .eqIfPresent(RecipeDO::getStatus, pageReqVO.getStatus())
+                .betweenIfPresent(RecipeDO::getCreateTime, pageReqVO.getCreateTime())
+                // 组合分类筛选与可见性条件
+                .and(wrapper -> wrapper
+                        // 嵌套可见性OR条件组
+                        .and(subWrapper -> subWrapper
+                                // 情况1：系统菜谱
+                                .or(orWrapper -> orWrapper
+                                        .eq(RecipeDO::getRecipeType, RecipeTypesEnum.SYSTEM.getType())
+                                )
+                                // 情况2：当前用户菜谱
+                                .or(userId != null, orWrapper -> orWrapper
+                                        .eq(RecipeDO::getUserId, userId)
+                                )
+                                // 情况3：公开的用户菜谱
+                                .or(orWrapper -> orWrapper
+                                        .eq(RecipeDO::getStatus, RecipeStatusEnum.PUBLIC.getType())
+                                )
+                        )
+                )
+                // 菜谱分类
+                .apply(StrUtil.isNotEmpty(recipeCategorySql), recipeCategorySql)
+                // 食材分类
+                .apply(StrUtil.isNotEmpty(foodCategorySql), foodCategorySql)
+                // 按照更新时间排序
+                .orderByDesc(RecipeDO::getUpdateTime)
+                .orderByDesc(RecipeDO::getId);
+        return selectPage(pageReqVO, queryWrapper);
     }
 
     /**

@@ -102,15 +102,9 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     @Override
     public PageResult<AppRecipeRespVO> getPublicRecipeDetailPage(Long userId, AppRecipePageReqVO pageReqVO) {
         // 查询基础信息
-        PageResult<RecipeDO> pageResult = recipeMapper.selectPage(pageReqVO, new LambdaQueryWrapperX<RecipeDO>()
-                .neIfPresent(RecipeDO::getUserId, userId) // 不为当前用户
-                .eqIfPresent(RecipeDO::getStatus, RecipeStatusEnum.PUBLIC.getType()) // 公开的菜谱
-                .likeIfPresent(RecipeDO::getName, pageReqVO.getName())
-                .eqIfPresent(RecipeDO::getRecipeType, RecipeTypesEnum.USER.getType()) // 用户菜谱
-                .eqIfPresent(RecipeDO::getRecipeLevel, pageReqVO.getRecipeLevel())
-                .eqIfPresent(RecipeDO::getStatus, pageReqVO.getStatus())
-                .betweenIfPresent(RecipeDO::getCreateTime, pageReqVO.getCreateTime())
-                .orderByDesc(RecipeDO::getId));
+        pageReqVO.setStatus(RecipeStatusEnum.PUBLIC.getType()); // 公开的菜谱
+        pageReqVO.setRecipeType(RecipeTypesEnum.USER.getType()); // 用户菜谱
+        PageResult<RecipeDO> pageResult = recipeMapper.selectPage(userId, pageReqVO);
         List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
         if (CollUtil.isEmpty(recipes)) {
             // 为空直接返回
@@ -124,54 +118,8 @@ public class AppRecipeServiceImpl implements AppRecipeService {
 
     @Override
     public PageResult<AppRecipeRespVO> getRecipeDetailPage(Long userId, AppRecipePageReqVO pageReqVO) {
-        // 处理 菜谱分类 recipeCategory 过滤条件
-        String recipeCategorySql = "";
-        if (CollUtil.isNotEmpty(pageReqVO.getRecipeCategory())) {
-            recipeCategorySql = pageReqVO.getRecipeCategory().stream()
-                    .map(recipeCategory -> "FIND_IN_SET(" + recipeCategory + ", recipe_category)")
-                    .collect(Collectors.joining(" OR "));
-        }
-        // 处理 食材分类 foodCategory 过滤条件
-        String foodCategorySql = "";
-        if (CollUtil.isNotEmpty(pageReqVO.getFoodCategory())) {
-            // 关联查询食材表
-            foodCategorySql = "exists(select 1 from meals_recipe_food rf left join meals_food f on rf.food_id = f.id where rf.recipe_id = meals_recipe.id and (%s) )";
-            // 拼接食材类型查询条件
-            foodCategorySql = String.format(foodCategorySql, pageReqVO.getFoodCategory().stream()
-                    .map(foodCategory -> "FIND_IN_SET(" + foodCategory + ", f.food_category)")
-                    .collect(Collectors.joining(" OR ")));
-        }
         // 查询基础信息
-        PageResult<RecipeDO> pageResult = recipeMapper.selectPage(pageReqVO, new LambdaQueryWrapperX<RecipeDO>()
-                .likeIfPresent(RecipeDO::getName, pageReqVO.getName())
-                .eqIfPresent(RecipeDO::getRecipeLevel, pageReqVO.getRecipeLevel())
-                .eqIfPresent(RecipeDO::getStatus, pageReqVO.getStatus())
-                .betweenIfPresent(RecipeDO::getCreateTime, pageReqVO.getCreateTime())
-                // 组合分类筛选与可见性条件
-                .and(wrapper -> wrapper
-                        // 嵌套可见性OR条件组
-                        .and(subWrapper -> subWrapper
-                                // 情况1：系统菜谱
-                                .or(orWrapper -> orWrapper
-                                        .eq(RecipeDO::getRecipeType, RecipeTypesEnum.SYSTEM.getType())
-                                )
-                                // 情况2：当前用户菜谱
-                                .or(userId != null,orWrapper -> orWrapper
-                                        .eq(RecipeDO::getUserId, userId)
-                                )
-                                // 情况3：公开的用户菜谱
-                                .or(orWrapper -> orWrapper
-                                        .eq(RecipeDO::getStatus, RecipeStatusEnum.PUBLIC.getType())
-                                )
-                        )
-                )
-                // 菜谱分类
-                .apply(StrUtil.isNotEmpty(recipeCategorySql), recipeCategorySql)
-                // 食材分类
-                .apply(StrUtil.isNotEmpty(foodCategorySql), foodCategorySql)
-                // 按照更新时间排序
-                .orderByDesc(RecipeDO::getUpdateTime)
-                .orderByDesc(RecipeDO::getId));
+        PageResult<RecipeDO> pageResult = recipeMapper.getUserViewableRecipePage(userId, pageReqVO);
         List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
         if (CollUtil.isEmpty(recipes)) {
             // 为空直接返回
