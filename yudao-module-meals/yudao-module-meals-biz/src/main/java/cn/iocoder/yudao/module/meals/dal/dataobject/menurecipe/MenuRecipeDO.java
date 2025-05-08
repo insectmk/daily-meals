@@ -40,4 +40,15 @@ public class MenuRecipeDO extends BaseDO {
      */
     private String memo;
 
+    // ***********菜谱信息（假列）************
+    /**
+     * 菜单名称
+     */
+    @TableField(exist = false)
+    private String recipeName;
+    /**
+     * 菜单封面图URL
+     */
+    @TableField(exist = false)
+    private String recipePicUrl;
 }
