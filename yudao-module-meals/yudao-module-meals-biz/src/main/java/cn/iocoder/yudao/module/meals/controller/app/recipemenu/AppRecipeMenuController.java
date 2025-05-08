@@ -3,9 +3,14 @@ package cn.iocoder.yudao.module.meals.controller.app.recipemenu;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.module.meals.controller.admin.food.vo.FoodSimpleRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSaveReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSimpleRespVO;
+import cn.iocoder.yudao.module.meals.convert.food.FoodConvert;
+import cn.iocoder.yudao.module.meals.convert.recipemenu.RecipeMenuConvert;
+import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
 import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
@@ -18,6 +23,8 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
@@ -68,5 +75,12 @@ public class AppRecipeMenuController {
     public CommonResult<PageResult<AppRecipeMenuRespVO>> getRecipeMenuPage(@Valid AppRecipeMenuPageReqVO pageReqVO) {
         PageResult<RecipeMenuDO> pageResult = appRecipeMenuService.getUserViewableRecipeMenuPage(getLoginUserId(), pageReqVO);
         return success(BeanUtils.toBean(pageResult, AppRecipeMenuRespVO.class));
+    }
+
+    @GetMapping("/list-self-simple")
+    @Operation(summary = "获取自己的菜单精简信息列表", description = "主要用于前端的下拉选项")
+    public CommonResult<List<AppRecipeMenuSimpleRespVO>> getSelfRecipeMenuList() {
+        List<RecipeMenuDO> list = appRecipeMenuService.getSelfRecipeMenuList(getLoginUserId());
+        return success(RecipeMenuConvert.INSTANCE.convertSimpleList(list));
     }
 }

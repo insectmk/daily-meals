@@ -3,8 +3,11 @@ package cn.iocoder.yudao.module.meals.service.recipemenu;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSaveReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSimpleRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
 import jakarta.validation.Valid;
+
+import java.util.List;
 
 /**
  * 菜谱菜单 Service 接口
@@ -52,4 +55,11 @@ public interface AppRecipeMenuService {
      */
     PageResult<RecipeMenuDO> getUserViewableRecipeMenuPage(Long userId, AppRecipeMenuPageReqVO pageReqVO);
 
+    /**
+     * 获取自己菜谱菜单精简信息列表
+     *
+     * @param userId 用户ID
+     * @return 自己菜谱菜单精简信息列表
+     */
+    List<RecipeMenuDO> getSelfRecipeMenuList(Long userId);
 }

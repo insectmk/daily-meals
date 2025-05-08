@@ -2,13 +2,17 @@ package cn.iocoder.yudao.module.meals.service.recipemenu;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSaveReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSimpleRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipemenu.RecipeMenuMapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.RECIPE_MENU_NOT_EXISTS;
@@ -65,6 +69,12 @@ public class AppRecipeMenuServiceImpl implements AppRecipeMenuService {
     @Override
     public PageResult<RecipeMenuDO> getUserViewableRecipeMenuPage(Long userId, AppRecipeMenuPageReqVO pageReqVO) {
         return recipeMenuMapper.selectUserViewablePage(userId, pageReqVO);
+    }
+
+    @Override
+    public List<RecipeMenuDO> getSelfRecipeMenuList(Long userId) {
+        return recipeMenuMapper.selectList(new LambdaQueryWrapperX<RecipeMenuDO>()
+                .eq(RecipeMenuDO::getUserId, userId));
     }
 
 }

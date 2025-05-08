@@ -43,7 +43,6 @@ public class AppFoodController {
     @Operation(summary = "获取食材精简信息列表", description = "主要用于前端的下拉选项")
     @PermitAll
     public CommonResult<List<FoodSimpleRespVO>> getSimpleFoodList() {
-        // 获用户列表，只要开启状态的
         List<FoodDO> list = foodService.getFoodList();
         return success(FoodConvert.INSTANCE.convertSimpleList(list));
     }
