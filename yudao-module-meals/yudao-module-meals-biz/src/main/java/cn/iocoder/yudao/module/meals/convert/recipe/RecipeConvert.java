@@ -3,7 +3,7 @@ package cn.iocoder.yudao.module.meals.convert.recipe;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipeSimpleRespVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeFoodDetailRespVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeFoodRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
@@ -41,7 +41,7 @@ public interface RecipeConvert {
         Map<Long, List<RecipeFoodDO>> recipeFoodDetailDOMap = convertMultiMap(recipeFoods, RecipeFoodDO::getRecipeId); // key：食谱ID，value：食材信息集合
         recipes.forEach(recipe -> {
             // 将食材信息装载到菜谱上
-            recipe.setFoods(BeanUtils.toBean(recipeFoodDetailDOMap.get(recipe.getId()), AppRecipeFoodDetailRespVO.class));
+            recipe.setFoods(BeanUtils.toBean(recipeFoodDetailDOMap.get(recipe.getId()), AppRecipeFoodRespVO.class));
         });
         return result;
     }
@@ -59,7 +59,7 @@ public interface RecipeConvert {
         Map<Long, List<RecipeFoodDO>> recipeFoodDetailDOMap = convertMultiMap(recipeFoods, RecipeFoodDO::getRecipeId); // key：食谱ID，value：食材信息集合
         resultList.forEach(recipe -> {
             // 将食材信息装载到菜谱上
-            recipe.setFoods(BeanUtils.toBean(recipeFoodDetailDOMap.get(recipe.getId()), AppRecipeFoodDetailRespVO.class));
+            recipe.setFoods(BeanUtils.toBean(recipeFoodDetailDOMap.get(recipe.getId()), AppRecipeFoodRespVO.class));
         });
         return resultList;
     }

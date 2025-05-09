@@ -10,7 +10,7 @@ import lombok.Data;
 @Schema(description = "用户 APP - 菜谱食材详情 Response VO")
 @Data
 @ExcelIgnoreUnannotated
-public class AppRecipeFoodDetailRespVO {
+public class AppRecipeFoodRespVO {
     @Schema(description = "编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "23107")
     @ExcelProperty("编号")
     private Long id;
@@ -34,7 +34,7 @@ public class AppRecipeFoodDetailRespVO {
     @Schema(description = "单位", example = "1")
     @ExcelProperty(value = "单位", converter = DictConvert.class)
     @DictFormat("meals_food_unit")
-    private Long foodUnit;
+    private String foodUnit;
 
     @Schema(description = "备注", example = "你说的对")
     @ExcelProperty("备注")

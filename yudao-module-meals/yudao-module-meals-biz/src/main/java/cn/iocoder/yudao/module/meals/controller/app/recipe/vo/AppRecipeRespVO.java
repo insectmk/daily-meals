@@ -3,7 +3,6 @@ package cn.iocoder.yudao.module.meals.controller.app.recipe.vo;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -67,6 +66,6 @@ public class AppRecipeRespVO {
     private List<String> sliderPicUrls;
 
     // ========== 食谱食材信息 ==========
-    List<AppRecipeFoodDetailRespVO> foods;
+    List<AppRecipeFoodRespVO> foods;
 
 }

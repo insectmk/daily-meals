@@ -51,7 +51,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         List<RecipeFoodDO> recipeFoods = recipeFoodMapper.selectList(new LambdaQueryWrapperX<RecipeFoodDO>()
                 .eqIfPresent(RecipeFoodDO::getRecipeId, id));
         // 拼装信息
-        appRecipeRespVO.setFoods(BeanUtils.toBean(recipeFoods, AppRecipeFoodDetailRespVO.class));
+        appRecipeRespVO.setFoods(BeanUtils.toBean(recipeFoods, AppRecipeFoodRespVO.class));
         return appRecipeRespVO;
     }
 
