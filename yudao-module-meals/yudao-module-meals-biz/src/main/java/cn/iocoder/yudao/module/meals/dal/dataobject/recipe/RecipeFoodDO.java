@@ -1,5 +1,9 @@
 package cn.iocoder.yudao.module.meals.dal.dataobject.recipe;
 
+import cn.iocoder.yudao.framework.excel.core.annotations.DictFormat;
+import cn.iocoder.yudao.module.meals.enums.DictTypeConstants;
+import com.alibaba.excel.annotation.ExcelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import java.time.LocalDateTime;
@@ -43,5 +47,12 @@ public class RecipeFoodDO extends BaseDO {
      * 备注
      */
     private String memo;
-
+    /**
+     * 食材名称
+     */
+    private String foodName;
+    /**
+     * 食材单位
+     */
+    private String foodUnit;
 }

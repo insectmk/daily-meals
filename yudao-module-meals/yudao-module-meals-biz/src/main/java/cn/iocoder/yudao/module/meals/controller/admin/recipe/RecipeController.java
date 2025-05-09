@@ -112,14 +112,8 @@ public class RecipeController {
                                                                                         @RequestParam("recipeId") Long recipeId) {
         // 查询基础信息
         PageResult<RecipeFoodDO> recipeFoodPage = recipeService.getRecipeFoodPage(pageReqVO, recipeId);
-        if (recipeFoodPage.getList().isEmpty()) {
-            // 为空直接返回
-            return success(BeanUtils.toBean(recipeFoodPage, RecipeFoodRespVO.class));
-        }
-        // 处理食材名称，单位反显
-        List<FoodDO> foods = foodService.getFoodList(convertSet(recipeFoodPage.getList(), RecipeFoodDO::getFoodId));
         // 拼接数据并返回
-        return success(RecipeConvert.INSTANCE.convertRecipeFoodPage(recipeFoodPage,foods));
+        return success(BeanUtils.toBean(recipeFoodPage, RecipeFoodRespVO.class));
     }
 
     @PostMapping("/recipe-food/create")
@@ -153,10 +147,7 @@ public class RecipeController {
 	public CommonResult<RecipeFoodRespVO> getRecipeFood(@RequestParam("id") Long id) {
         // 查询基础信息
         RecipeFoodDO recipeFood = recipeService.getRecipeFood(id);
-        // 查询食材信息
-        FoodDO food = foodService.getFood(recipeFood.getFoodId());
-        // 拼接食谱食材信息并返回
-	    return success(RecipeConvert.INSTANCE.convertRecipeFood(recipeFood, food));
+	    return success(BeanUtils.toBean(recipeFood, RecipeFoodRespVO.class));
 	}
 
 }

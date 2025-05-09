@@ -38,7 +38,6 @@ public class RecipeFoodRespVO {
     @ExcelProperty("创建时间")
     private LocalDateTime createTime;
 
-    // ***************附加字段**************
     @Schema(description = "食材名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "870")
     @ExcelProperty("食材名称")
     private String foodName;
@@ -46,6 +45,6 @@ public class RecipeFoodRespVO {
     @Schema(description = "食材单位", requiredMode = Schema.RequiredMode.REQUIRED, example = "870")
     @ExcelProperty("食材单位")
     @DictFormat(DictTypeConstants.MEALS_FOOD_UNIT)
-    private Integer foodUnit;
+    private String foodUnit;
 
 }

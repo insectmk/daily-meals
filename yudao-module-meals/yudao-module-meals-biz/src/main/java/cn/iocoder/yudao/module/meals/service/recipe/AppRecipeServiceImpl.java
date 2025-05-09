@@ -1,7 +1,6 @@
 package cn.iocoder.yudao.module.meals.service.recipe;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
@@ -9,16 +8,13 @@ import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.*;
 import cn.iocoder.yudao.module.meals.convert.recipe.RecipeConvert;
 import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplanitem.PopularPublicRecipeDO;
-import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
-import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDetailDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.dailyplanitem.DailyPlanItemMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeFoodMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeMapper;
 import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
-import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +23,6 @@ import org.springframework.validation.annotation.Validated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 
@@ -53,14 +48,8 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         RecipeDO recipeDO = recipeMapper.selectById(id);
         AppRecipeRespVO appRecipeRespVO = BeanUtils.toBean(recipeDO, AppRecipeRespVO.class);
         // 查询食材信息
-        List<RecipeFoodDetailDO> recipeFoods = recipeFoodMapper.selectJoinList(
-                RecipeFoodDetailDO.class,
-                new MPJLambdaWrapper<RecipeFoodDO>()
-                        .selectAll(RecipeFoodDO.class) // 查询所有基础字段
-                        .selectAs(FoodDO::getName, RecipeFoodDetailDO::getFoodName) // 食物的名称作为详细信息名称
-                        .selectAs(FoodDO::getFoodUnit, RecipeFoodDetailDO::getFoodUnit) // 食物的单位作为详细信息单位
-                        .leftJoin(FoodDO.class, FoodDO::getId, RecipeFoodDO::getFoodId) // 联表 WHERE meals_recipe_food.food_id = meals_food.id
-                        .eq(RecipeFoodDO::getRecipeId, id));
+        List<RecipeFoodDO> recipeFoods = recipeFoodMapper.selectList(new LambdaQueryWrapperX<RecipeFoodDO>()
+                .eqIfPresent(RecipeFoodDO::getRecipeId, id));
         // 拼装信息
         appRecipeRespVO.setFoods(BeanUtils.toBean(recipeFoods, AppRecipeFoodDetailRespVO.class));
         return appRecipeRespVO;
@@ -77,7 +66,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
             return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
         }
         // 查询菜谱食材信息
-        List<RecipeFoodDetailDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
+        List<RecipeFoodDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
         // 装载信息
         return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
     }
@@ -94,7 +83,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
             return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
         }
         // 查询菜谱食材信息
-        List<RecipeFoodDetailDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
+        List<RecipeFoodDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
         // 装载信息
         return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
     }
@@ -111,7 +100,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
             return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
         }
         // 查询菜谱食材信息
-        List<RecipeFoodDetailDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
+        List<RecipeFoodDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
         // 装载信息
         return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
     }
@@ -126,7 +115,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
             return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
         }
         // 查询菜谱食材信息
-        List<RecipeFoodDetailDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
+        List<RecipeFoodDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
         // 装载信息
         return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
     }
@@ -144,7 +133,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         List<RecipeDO> recipeList = recipeMapper.selectList(new LambdaQueryWrapperX<RecipeDO>()
                 .in(RecipeDO::getId, recipeIds));
         // 查询菜谱食材信息
-        List<RecipeFoodDetailDO> recipeFoods = getRecipeFoodsByRecipeIds(recipeIds);
+        List<RecipeFoodDO> recipeFoods = getRecipeFoodsByRecipeIds(recipeIds);
         // 装载信息
         return RecipeConvert.INSTANCE.convertList(recipeList,recipeFoods);
     }
@@ -172,15 +161,9 @@ public class AppRecipeServiceImpl implements AppRecipeService {
      * @param recipeIds 菜谱ID
      * @return 菜谱食材集合
      */
-    private List<RecipeFoodDetailDO> getRecipeFoodsByRecipeIds(Set<Long> recipeIds) {
-        return recipeFoodMapper.selectJoinList(
-                RecipeFoodDetailDO.class,
-                new MPJLambdaWrapper<RecipeFoodDO>()
-                        .selectAll(RecipeFoodDO.class) // 查询所有基础字段
-                        .selectAs(FoodDO::getName, RecipeFoodDetailDO::getFoodName) // 食物的名称作为详细信息名称
-                        .selectAs(FoodDO::getFoodUnit, RecipeFoodDetailDO::getFoodUnit) // 食物的单位作为详细信息单位
-                        .leftJoin(FoodDO.class, FoodDO::getId, RecipeFoodDO::getFoodId) // 联表 WHERE meals_recipe_food.food_id = meals_food.id
-                        // 查询所有分页菜谱的食材信息
-                        .in(RecipeFoodDO::getRecipeId, recipeIds));
+    private List<RecipeFoodDO> getRecipeFoodsByRecipeIds(Set<Long> recipeIds) {
+        return recipeFoodMapper.selectList(new LambdaQueryWrapperX<RecipeFoodDO>()
+                // 查询所有分页菜谱的食材信息
+                .in(RecipeFoodDO::getRecipeId, recipeIds));
     }
 }
