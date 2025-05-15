@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.meals.service.common;
 
-import cn.iocoder.yudao.module.system.api.dict.dto.DictDataRespDTO;
+
+import cn.iocoder.yudao.framework.common.biz.system.dict.dto.DictDataRespDTO;
 
 import java.util.List;
 

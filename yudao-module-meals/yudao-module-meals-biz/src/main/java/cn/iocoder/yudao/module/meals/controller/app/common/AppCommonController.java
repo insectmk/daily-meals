@@ -1,8 +1,8 @@
 package cn.iocoder.yudao.module.meals.controller.app.common;
 
+import cn.iocoder.yudao.framework.common.biz.system.dict.dto.DictDataRespDTO;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.module.meals.service.common.CommonService;
-import cn.iocoder.yudao.module.system.api.dict.dto.DictDataRespDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;

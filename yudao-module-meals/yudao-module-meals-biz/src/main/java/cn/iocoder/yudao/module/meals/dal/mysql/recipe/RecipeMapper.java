@@ -57,6 +57,7 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
         }
         // 查询条件
         LambdaQueryWrapper<RecipeDO> queryWrapper = new LambdaQueryWrapperX<RecipeDO>()
+                // 菜谱名称
                 .likeIfPresent(RecipeDO::getName, pageReqVO.getName())
                 .eqIfPresent(RecipeDO::getRecipeLevel, pageReqVO.getRecipeLevel())
                 .eqIfPresent(RecipeDO::getStatus, pageReqVO.getStatus())

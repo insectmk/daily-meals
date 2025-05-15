@@ -1,8 +1,8 @@
 package cn.iocoder.yudao.module.meals.enums;
 
 import cn.hutool.core.util.ObjUtil;
+import cn.iocoder.yudao.framework.common.biz.system.dict.dto.DictDataRespDTO;
 import cn.iocoder.yudao.framework.common.core.ArrayValuable;
-import cn.iocoder.yudao.module.system.api.dict.dto.DictDataRespDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.util.Arrays;
