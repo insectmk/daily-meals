@@ -62,4 +62,21 @@ public interface RecipeMenuMapper extends BaseMapperX<RecipeMenuDO> {
                 )
                 .orderByDesc(RecipeMenuDO::getId));
     }
+
+    /**
+     * 获取用户自己的菜谱
+     * @param userId 用户ID
+     * @param reqVO 分页请求
+     * @return 用户自己的菜谱菜单分页信息
+     */
+    default PageResult<RecipeMenuDO> selectUserSelfPage(Long userId, AppRecipeMenuPageReqVO reqVO) {
+        return selectPage(reqVO, new LambdaQueryWrapperX<RecipeMenuDO>()
+                // 用户自己的
+                .eqIfPresent(RecipeMenuDO::getUserId, userId)
+                .eqIfPresent(RecipeMenuDO::getMenuType, RecipeTypesEnum.USER.getType())
+                .likeIfPresent(RecipeMenuDO::getTitle, reqVO.getTitle())
+                .likeIfPresent(RecipeMenuDO::getSubtitle, reqVO.getSubtitle())
+                .betweenIfPresent(RecipeMenuDO::getCreateTime, reqVO.getCreateTime())
+                .orderByDesc(RecipeMenuDO::getId));
+    }
 }

@@ -57,6 +57,14 @@ public interface AppRecipeMenuService {
     PageResult<RecipeMenuDO> getUserViewableRecipeMenuPage(Long userId, AppRecipeMenuPageReqVO pageReqVO);
 
     /**
+     * 获得用户自己的菜谱菜单分页
+     * @param userId 用户ID
+     * @param pageReqVO 分页对象
+     * @return 菜谱菜单分页
+     */
+    PageResult<RecipeMenuDO> getUserSelfRecipeMenuPage(Long userId, @Valid AppRecipeMenuPageReqVO pageReqVO);
+
+    /**
      * 获取自己菜谱菜单精简信息列表
      *
      * @param userId 用户ID

@@ -77,6 +77,14 @@ public class AppRecipeMenuController {
         return success(BeanUtils.toBean(pageResult, AppRecipeMenuRespVO.class));
     }
 
+    @GetMapping("/page-self")
+    @Operation(summary = "获得用户可见菜谱菜单分页")
+    @PermitAll
+    public CommonResult<PageResult<AppRecipeMenuRespVO>> getSelfRecipeMenuPage(@Valid AppRecipeMenuPageReqVO pageReqVO) {
+        PageResult<RecipeMenuDO> pageResult = appRecipeMenuService.getUserSelfRecipeMenuPage(getLoginUserId(), pageReqVO);
+        return success(BeanUtils.toBean(pageResult, AppRecipeMenuRespVO.class));
+    }
+
     @GetMapping("/list-self-simple")
     @Operation(summary = "获取自己的菜单精简信息列表", description = "主要用于前端的下拉选项")
     public CommonResult<List<AppRecipeMenuSimpleRespVO>> getSelfRecipeMenuList() {

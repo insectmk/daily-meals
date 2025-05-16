@@ -84,6 +84,11 @@ public class AppRecipeMenuServiceImpl implements AppRecipeMenuService {
     }
 
     @Override
+    public PageResult<RecipeMenuDO> getUserSelfRecipeMenuPage(Long userId, AppRecipeMenuPageReqVO pageReqVO) {
+        return recipeMenuMapper.selectUserSelfPage(userId, pageReqVO);
+    }
+
+    @Override
     public List<RecipeMenuDO> getSelfRecipeMenuList(Long userId) {
         return recipeMenuMapper.selectList(new LambdaQueryWrapperX<RecipeMenuDO>()
                 .eq(RecipeMenuDO::getUserId, userId));
