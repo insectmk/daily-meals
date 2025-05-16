@@ -17,5 +17,9 @@ public class AppRecipeFoodSaveReqVO {
     private Double amount;
     @Schema(description = "备注", requiredMode = Schema.RequiredMode.REQUIRED, example = "这是一个 备注")
     private String memo;
+    @Schema(description = "食材名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "西红柿")
+    private String foodName;
+    @Schema(description = "食材单位", requiredMode = Schema.RequiredMode.REQUIRED, example = "g")
+    private String foodUnit;
 
 }

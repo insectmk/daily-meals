@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
+import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.RECIPE_NOT_EXISTS;
 
 /**
  * APP菜谱 Service 实现类
@@ -169,17 +171,29 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long createOrUpdateRecipe(Long userId, AppRecipeSaveReqVO createReqVO) {
+        Long recipeId = createReqVO.getId();
         // 根据id判断新增还是修改
-        if (Objects.isNull(createReqVO.getId())) {
+        if (Objects.isNull(recipeId)) {
             // 为空：新增
             createReqVO.setUserId(userId); // 设置用户ID
             return this.createRecipe(createReqVO);
         }
-        // todo 更新菜谱
+        // 更新菜谱
         // 1. 更新基础数据
+        validateRecipeExists(createReqVO.getId()); // 校验存在
+        RecipeDO updateObj = BeanUtils.toBean(createReqVO, RecipeDO.class); // 更新
+        recipeMapper.updateById(updateObj);
         // 2. 清空菜谱食材数据
+        recipeFoodMapper.deleteByRecipeId(recipeId);
         // 3. 插入菜谱食材数据
-        return 0L;
+        // 插入菜谱食材数据
+        for (AppRecipeFoodSaveReqVO recipeFood : createReqVO.getFoods()) {
+            RecipeFoodDO recipeFoodDO = BeanUtils.toBean(recipeFood, RecipeFoodDO.class);
+            recipeFoodDO.setRecipeId(recipeId); // 设置菜谱ID
+            recipeFoodMapper.insert(recipeFoodDO);
+        }
+        // 返回
+        return recipeId;
     }
 
     /**
@@ -191,5 +205,11 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         return recipeFoodMapper.selectList(new LambdaQueryWrapperX<RecipeFoodDO>()
                 // 查询所有分页菜谱的食材信息
                 .in(RecipeFoodDO::getRecipeId, recipeIds));
+    }
+
+    private void validateRecipeExists(Long id) {
+        if (recipeMapper.selectById(id) == null) {
+            throw exception(RECIPE_NOT_EXISTS);
+        }
     }
 }
