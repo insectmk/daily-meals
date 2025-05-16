@@ -67,4 +67,12 @@ public interface AppRecipeService {
      * @return
      */
     Long createRecipe(@Valid AppRecipeSaveReqVO createReqVO);
+
+    /**
+     * 创建或者更新菜谱
+     * @param userId 登录用户
+     * @param createReqVO 菜谱数据
+     * @return
+     */
+    Long createOrUpdateRecipe(Long userId, @Valid AppRecipeSaveReqVO createReqVO);
 }

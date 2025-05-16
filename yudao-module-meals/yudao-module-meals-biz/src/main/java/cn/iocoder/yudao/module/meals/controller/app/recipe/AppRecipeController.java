@@ -82,4 +82,10 @@ public class AppRecipeController {
         createReqVO.setStatus(CommonStatusEnum.ENABLE.getStatus()); // 设置状态
         return success(appRecipeService.createRecipe(createReqVO));
     }
+
+    @PostMapping("/create-or-update")
+    @Operation(summary = "创建或更新菜谱")
+    public CommonResult<Long> createOrUpdateRecipe(@Valid @RequestBody AppRecipeSaveReqVO createReqVO) {
+        return success(appRecipeService.createOrUpdateRecipe(getLoginUserId(), createReqVO));
+    }
 }

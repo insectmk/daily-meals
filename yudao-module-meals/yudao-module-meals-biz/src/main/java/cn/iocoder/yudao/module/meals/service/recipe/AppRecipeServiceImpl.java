@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.meals.service.recipe;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
@@ -149,19 +150,36 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long createRecipe(AppRecipeSaveReqVO createReqVO) {
+        createReqVO.setStatus(CommonStatusEnum.ENABLE.getStatus()); // 设置状态
         createReqVO.setRecipeType(RecipeTypesEnum.USER.getType()); // 创建为用户类型菜谱
         // 插入基础数据
         RecipeDO recipe = BeanUtils.toBean(createReqVO, RecipeDO.class);
         recipeMapper.insert(recipe);
         Long recipeId = recipe.getId();
         // 插入菜谱食材数据
-        for (AppRecipeFoodSaveReqVO recipeFood : createReqVO.getRecipeFoods()) {
+        for (AppRecipeFoodSaveReqVO recipeFood : createReqVO.getFoods()) {
             RecipeFoodDO recipeFoodDO = BeanUtils.toBean(recipeFood, RecipeFoodDO.class);
             recipeFoodDO.setRecipeId(recipeId); // 设置菜谱ID
             recipeFoodMapper.insert(recipeFoodDO);
         }
         // 返回
         return recipeId;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Long createOrUpdateRecipe(Long userId, AppRecipeSaveReqVO createReqVO) {
+        // 根据id判断新增还是修改
+        if (Objects.isNull(createReqVO.getId())) {
+            // 为空：新增
+            createReqVO.setUserId(userId); // 设置用户ID
+            return this.createRecipe(createReqVO);
+        }
+        // todo 更新菜谱
+        // 1. 更新基础数据
+        // 2. 清空菜谱食材数据
+        // 3. 插入菜谱食材数据
+        return 0L;
     }
 
     /**

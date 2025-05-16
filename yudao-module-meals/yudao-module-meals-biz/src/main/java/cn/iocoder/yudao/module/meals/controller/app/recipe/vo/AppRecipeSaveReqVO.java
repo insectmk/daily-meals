@@ -56,5 +56,5 @@ public class AppRecipeSaveReqVO {
     private List<String> sliderPicUrls;
 
     @Schema(description = "菜谱食材", requiredMode = Schema.RequiredMode.REQUIRED, example = "[{id: 1, recipeId: 1, foodId: 1, amount: 0.2, memo: '测试'},{id: 1, recipeId: 1, foodId: 1, amount: 0.2, memo: '测试'}]")
-    private List<AppRecipeFoodSaveReqVO> recipeFoods;
+    private List<AppRecipeFoodSaveReqVO> foods;
 }
