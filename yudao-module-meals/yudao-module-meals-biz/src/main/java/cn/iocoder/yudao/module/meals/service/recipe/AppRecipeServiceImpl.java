@@ -190,6 +190,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         for (AppRecipeFoodSaveReqVO recipeFood : createReqVO.getFoods()) {
             RecipeFoodDO recipeFoodDO = BeanUtils.toBean(recipeFood, RecipeFoodDO.class);
             recipeFoodDO.setRecipeId(recipeId); // 设置菜谱ID
+            recipeFoodDO.setId(null); // 清空ID，防止主键冲突
             recipeFoodMapper.insert(recipeFoodDO);
         }
         // 返回
