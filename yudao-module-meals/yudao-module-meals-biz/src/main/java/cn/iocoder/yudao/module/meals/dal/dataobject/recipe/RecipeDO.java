@@ -32,7 +32,7 @@ public class RecipeDO extends BaseDO {
     /**
      * 用户ID
      */
-    private String userId;
+    private Long userId;
     /**
      * 名称
      */
