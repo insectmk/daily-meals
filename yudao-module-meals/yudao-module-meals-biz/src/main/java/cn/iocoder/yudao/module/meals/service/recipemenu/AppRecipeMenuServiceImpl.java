@@ -102,7 +102,7 @@ public class AppRecipeMenuServiceImpl implements AppRecipeMenuService {
         // 查询并装载菜谱信息
         List<AppRecipeRespVO> recipes = new ArrayList<>(menuRecipeDOS.size());
         for (MenuRecipeDO menuRecipeDO : menuRecipeDOS) {
-            recipes.add(appRecipeService.getRecipeDetail(menuRecipeDO.getRecipeId()));
+            recipes.add(appRecipeService.getRecipeDetail(null, menuRecipeDO.getRecipeId()));
         }
         result.setRecipes(recipes);
 

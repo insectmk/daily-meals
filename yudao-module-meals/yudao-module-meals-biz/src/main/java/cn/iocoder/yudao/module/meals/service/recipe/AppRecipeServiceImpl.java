@@ -22,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
@@ -43,10 +44,21 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     private DailyPlanItemMapper dailyPlanItemMapper;
 
     @Override
-    public AppRecipeRespVO getRecipeDetail(Long id) {
+    public AppRecipeRespVO getRecipeDetail(Long userId, Long id) {
         // 查询基础信息并判断是否在今日计划中
         RecipeDO recipeDO = recipeMapper.selectById(id);
+        if (recipeDO == null) {
+            return null;
+        }
         AppRecipeRespVO appRecipeRespVO = BeanUtils.toBean(recipeDO, AppRecipeRespVO.class);
+        // 判断是否是用户自己的菜谱
+        if (!Objects.isNull(userId)
+            && Objects.equals(userId, recipeDO.getUserId())
+            && RecipeTypesEnum.USER.getType().equals(recipeDO.getRecipeType())) {
+            appRecipeRespVO.setSelfRecipe(true);
+        } else {
+            appRecipeRespVO.setSelfRecipe(false);
+        }
         // 查询食材信息
         List<RecipeFoodDO> recipeFoods = recipeFoodMapper.selectList(new LambdaQueryWrapperX<RecipeFoodDO>()
                 .eqIfPresent(RecipeFoodDO::getRecipeId, id));

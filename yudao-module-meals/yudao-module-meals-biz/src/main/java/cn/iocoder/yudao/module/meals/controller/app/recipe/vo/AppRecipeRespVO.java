@@ -68,4 +68,7 @@ public class AppRecipeRespVO {
     // ========== 食谱食材信息 ==========
     List<AppRecipeFoodRespVO> foods;
 
+    // ========== 其他附加信息 ==========
+    @Schema(description = "是否属于自己", requiredMode = Schema.RequiredMode.REQUIRED, example = "[https://www.iocoder.cn/xx.png, https://www.iocoder.cn/xxx.png]")
+    private Boolean selfRecipe;
 }

@@ -32,7 +32,7 @@ public class AppRecipeController {
     @GetMapping("/get")
     @Operation(summary = "获取菜谱")
     public CommonResult<AppRecipeRespVO> createRecipe(@RequestParam("id") Long id) {
-        AppRecipeRespVO recipe = appRecipeService.getRecipeDetail(id);
+        AppRecipeRespVO recipe = appRecipeService.getRecipeDetail(getLoginUserId(), id);
         return success(recipe);
     }
 

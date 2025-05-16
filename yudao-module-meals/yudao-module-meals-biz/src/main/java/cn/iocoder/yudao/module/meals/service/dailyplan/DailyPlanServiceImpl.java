@@ -170,7 +170,7 @@ public class DailyPlanServiceImpl implements DailyPlanService {
         List<AppDailyPlanItemDetailRespVO> planItemVOs = BeanUtils.toBean(planItems, AppDailyPlanItemDetailRespVO.class);
         // 查询菜谱信息装载到计划明细中
         planItemVOs.forEach(planItemVO -> {
-            planItemVO.setRecipeInfo(appRecipeService.getRecipeDetail(planItemVO.getRecipeId()));
+            planItemVO.setRecipeInfo(appRecipeService.getRecipeDetail(null, planItemVO.getRecipeId()));
         });
         // 拼装信息
         detailRespVO.setItems(planItemVOs);

@@ -17,10 +17,11 @@ import java.util.List;
 public interface AppRecipeService {
     /**
      * 获取菜谱的详细信息
+     * @param userId 用户
      * @param id 菜谱ID
      * @return 详细信息
      */
-    AppRecipeRespVO getRecipeDetail(Long id);
+    AppRecipeRespVO getRecipeDetail(Long userId, Long id);
 
     /**
      * 获取菜谱的详细信息分页
