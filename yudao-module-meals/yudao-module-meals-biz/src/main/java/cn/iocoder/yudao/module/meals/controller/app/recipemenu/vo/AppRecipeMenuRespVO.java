@@ -50,4 +50,7 @@ public class AppRecipeMenuRespVO {
 
     @Schema(description = "菜谱信息列表")
     private List<AppRecipeRespVO> recipes;
+
+    @Schema(description = "是否为自己的菜单")
+    private Boolean selfMenu;
 }

@@ -52,13 +52,9 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         }
         AppRecipeRespVO appRecipeRespVO = BeanUtils.toBean(recipeDO, AppRecipeRespVO.class);
         // 判断是否是用户自己的菜谱
-        if (!Objects.isNull(userId)
-            && Objects.equals(userId, recipeDO.getUserId())
-            && RecipeTypesEnum.USER.getType().equals(recipeDO.getRecipeType())) {
-            appRecipeRespVO.setSelfRecipe(true);
-        } else {
-            appRecipeRespVO.setSelfRecipe(false);
-        }
+        appRecipeRespVO.setSelfRecipe(!Objects.isNull(userId)
+                && Objects.equals(userId, recipeDO.getUserId())
+                && RecipeTypesEnum.USER.getType().equals(recipeDO.getRecipeType()));
         // 查询食材信息
         List<RecipeFoodDO> recipeFoods = recipeFoodMapper.selectList(new LambdaQueryWrapperX<RecipeFoodDO>()
                 .eqIfPresent(RecipeFoodDO::getRecipeId, id));

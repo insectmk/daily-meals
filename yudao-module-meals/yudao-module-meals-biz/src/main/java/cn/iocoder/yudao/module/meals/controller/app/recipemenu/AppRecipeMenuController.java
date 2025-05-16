@@ -65,7 +65,7 @@ public class AppRecipeMenuController {
     @Operation(summary = "获得菜谱菜单")
     @Parameter(name = "id", description = "编号", required = true, example = "1024")
     public CommonResult<AppRecipeMenuRespVO> getRecipeMenu(@RequestParam("id") Long id) {
-        AppRecipeMenuRespVO recipeMenu = appRecipeMenuService.getRecipeMenuDetail(id);
+        AppRecipeMenuRespVO recipeMenu = appRecipeMenuService.getRecipeMenuDetail(getLoginUserId(), id);
         return success(recipeMenu);
     }
 

@@ -12,6 +12,7 @@ import cn.iocoder.yudao.module.meals.dal.dataobject.menurecipe.MenuRecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.menurecipe.MenuRecipeMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipemenu.RecipeMenuMapper;
+import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import cn.iocoder.yudao.module.meals.service.recipe.AppRecipeService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -89,20 +90,25 @@ public class AppRecipeMenuServiceImpl implements AppRecipeMenuService {
     }
 
     @Override
-    public AppRecipeMenuRespVO getRecipeMenuDetail(Long id) {
+    public AppRecipeMenuRespVO getRecipeMenuDetail(Long userId, Long id) {
+        RecipeMenuDO recipeMenuDO = recipeMenuMapper.selectById(id);
         // 查询菜谱菜单基础信息
-        AppRecipeMenuRespVO result = BeanUtils.toBean(recipeMenuMapper.selectById(id), AppRecipeMenuRespVO.class);
+        AppRecipeMenuRespVO result = BeanUtils.toBean(recipeMenuDO, AppRecipeMenuRespVO.class);
         if (Objects.isNull(result)) {
             // 菜谱菜单不存在
             throw exception(RECIPE_MENU_NOT_EXISTS);
         }
+        // 判断是否为用户的菜谱菜单
+        result.setSelfMenu(!Objects.isNull(userId)
+                && Objects.equals(userId, recipeMenuDO.getUserId())
+                && RecipeTypesEnum.USER.getType().equals(recipeMenuDO.getMenuType()));
         // 查询菜单菜谱信息
         List<MenuRecipeDO> menuRecipeDOS = menuRecipeMapper.selectList(new LambdaQueryWrapperX<MenuRecipeDO>()
                 .eqIfPresent(MenuRecipeDO::getRecipeMenuId, id));
         // 查询并装载菜谱信息
         List<AppRecipeRespVO> recipes = new ArrayList<>(menuRecipeDOS.size());
         for (MenuRecipeDO menuRecipeDO : menuRecipeDOS) {
-            recipes.add(appRecipeService.getRecipeDetail(null, menuRecipeDO.getRecipeId()));
+            recipes.add(appRecipeService.getRecipeDetail(userId, menuRecipeDO.getRecipeId()));
         }
         result.setRecipes(recipes);
 

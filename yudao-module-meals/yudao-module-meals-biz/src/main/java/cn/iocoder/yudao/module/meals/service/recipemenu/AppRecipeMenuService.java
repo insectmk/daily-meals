@@ -66,8 +66,9 @@ public interface AppRecipeMenuService {
 
     /**
      * 获取菜谱菜单详细信息
+     * @param userId 用户ID
      * @param id 菜谱菜单ID
      * @return 详细信息
      */
-    AppRecipeMenuRespVO getRecipeMenuDetail(Long id);
+    AppRecipeMenuRespVO getRecipeMenuDetail(Long userId, Long id);
 }
