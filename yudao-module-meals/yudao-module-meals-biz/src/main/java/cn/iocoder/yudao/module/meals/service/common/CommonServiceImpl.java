@@ -1,8 +1,8 @@
 package cn.iocoder.yudao.module.meals.service.common;
 
+import cn.iocoder.yudao.framework.common.biz.system.dict.DictDataCommonApi;
 import cn.iocoder.yudao.framework.common.biz.system.dict.dto.DictDataRespDTO;
 import cn.iocoder.yudao.module.meals.dal.redis.staticdict.StaticDictDAO;
-import cn.iocoder.yudao.module.system.api.dict.DictDataApi;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +20,7 @@ import java.util.List;
 @Validated
 public class CommonServiceImpl implements CommonService {
     @Resource
-    private DictDataApi dictDataApi;
+    private DictDataCommonApi dictDataApi;
     @Resource
     private StaticDictDAO staticDictDAO;
 
