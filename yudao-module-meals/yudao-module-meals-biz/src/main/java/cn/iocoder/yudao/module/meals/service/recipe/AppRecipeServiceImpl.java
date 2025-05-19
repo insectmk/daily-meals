@@ -197,6 +197,23 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         return recipeId;
     }
 
+    @Override
+    public void deleteRecipe(Long userId, Long id) {
+        // 查看菜谱是否为用户菜谱
+        if ( recipeMapper.selectOne(new LambdaQueryWrapperX<RecipeDO>()
+                // 该用户
+                .eq(RecipeDO::getUserId, userId)
+                // 类型为：用户菜谱
+                .eq(RecipeDO::getRecipeType, RecipeTypesEnum.USER.getType())
+                // 该菜谱
+                .eq(RecipeDO::getId, id)) == null) {
+            // 菜谱不存在
+            throw exception(RECIPE_NOT_EXISTS);
+        }
+        // 删除菜谱
+        recipeMapper.deleteById(id);
+    }
+
     /**
      * 通过菜谱ID集合获取所有菜谱的食材信息
      * @param recipeIds 菜谱ID

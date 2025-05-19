@@ -9,10 +9,12 @@ import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeSaveReqVO;
 import cn.iocoder.yudao.module.meals.service.recipe.AppRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -87,5 +89,13 @@ public class AppRecipeController {
     @Operation(summary = "创建或更新菜谱")
     public CommonResult<Long> createOrUpdateRecipe(@Valid @RequestBody AppRecipeSaveReqVO createReqVO) {
         return success(appRecipeService.createOrUpdateRecipe(getLoginUserId(), createReqVO));
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "删除菜谱")
+    @Parameter(name = "id", description = "编号", required = true)
+    public CommonResult<Boolean> deleteRecipe(@RequestParam("id") Long id) {
+        appRecipeService.deleteRecipe(getLoginUserId(), id);
+        return success(true);
     }
 }

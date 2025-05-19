@@ -75,4 +75,11 @@ public interface AppRecipeService {
      * @return
      */
     Long createOrUpdateRecipe(Long userId, @Valid AppRecipeSaveReqVO createReqVO);
+
+    /**
+     * 删除菜谱
+     * @param userId 用户ID
+     * @param id 菜谱ID
+     */
+    void deleteRecipe(Long userId, Long id);
 }
