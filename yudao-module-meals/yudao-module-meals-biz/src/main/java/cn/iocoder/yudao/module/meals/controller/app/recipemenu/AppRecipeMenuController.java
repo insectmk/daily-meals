@@ -4,6 +4,7 @@ import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.meals.controller.admin.food.vo.FoodSimpleRespVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeSaveReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSaveReqVO;
@@ -37,6 +38,12 @@ public class AppRecipeMenuController {
 
     @Resource
     private AppRecipeMenuService appRecipeMenuService;
+
+    @PostMapping("/create-or-update")
+    @Operation(summary = "创建或更新菜谱菜单")
+    public CommonResult<Long> createOrUpdateRecipe(@Valid @RequestBody AppRecipeMenuSaveReqVO createReqVO) {
+        return success(appRecipeMenuService.createOrUpdateRecipe(getLoginUserId(), createReqVO));
+    }
 
     @PostMapping("/create")
     @Operation(summary = "创建菜谱菜单")

@@ -7,7 +7,6 @@ import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSaveReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSimpleRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.menurecipe.MenuRecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.menurecipe.MenuRecipeMapper;
@@ -120,4 +119,18 @@ public class AppRecipeMenuServiceImpl implements AppRecipeMenuService {
         return result;
     }
 
+    @Override
+    public Long createOrUpdateRecipe(Long userId, AppRecipeMenuSaveReqVO createReqVO) {
+        Long recipeMenuId = createReqVO.getId();
+        // 根据id判断新增还是修改
+        if (Objects.isNull(recipeMenuId)) {
+            // 为空：新增
+            createReqVO.setUserId(userId); // 设置用户ID
+            return this.createRecipeMenu(createReqVO);
+        }
+        // 更新菜谱菜单
+        this.updateRecipeMenu(createReqVO);
+        // 返回
+        return recipeMenuId;
+    }
 }

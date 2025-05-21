@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.meals.service.recipemenu;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeSaveReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSaveReqVO;
@@ -79,4 +80,12 @@ public interface AppRecipeMenuService {
      * @return 详细信息
      */
     AppRecipeMenuRespVO getRecipeMenuDetail(Long userId, Long id);
+
+    /**
+     * 创建或者更新菜谱菜单
+     * @param userId 用户ID
+     * @param createReqVO 参数
+     * @return
+     */
+    Long createOrUpdateRecipe(Long userId, @Valid AppRecipeMenuSaveReqVO createReqVO);
 }
