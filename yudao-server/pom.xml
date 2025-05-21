@@ -24,7 +24,7 @@
         <!--每日饭菜模块-->
         <dependency>
             <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-module-meals-biz</artifactId>
+            <artifactId>yudao-module-meals</artifactId>
             <version>${revision}</version>
         </dependency>
 
