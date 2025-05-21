@@ -8,6 +8,7 @@ import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuP
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSaveReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.menurecipe.MenuRecipeDO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.menurecipe.MenuRecipeMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipemenu.RecipeMenuMapper;
@@ -23,6 +24,7 @@ import java.util.Objects;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.RECIPE_MENU_NOT_EXISTS;
+import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.RECIPE_NOT_EXISTS;
 
 /**
  * 菜谱菜单 Service 实现类
@@ -132,5 +134,24 @@ public class AppRecipeMenuServiceImpl implements AppRecipeMenuService {
         this.updateRecipeMenu(createReqVO);
         // 返回
         return recipeMenuId;
+    }
+
+    @Override
+    public void deleteRecipeMenu(Long userId, Long id) {
+        // 查看菜谱是否为用户菜谱
+        if ( recipeMenuMapper.selectOne(new LambdaQueryWrapperX<RecipeMenuDO>()
+                // 该用户
+                .eq(RecipeMenuDO::getUserId, userId)
+                // 类型为：用户菜谱菜单
+                .eq(RecipeMenuDO::getMenuType, RecipeTypesEnum.USER.getType())
+                // 该菜谱菜单
+                .eq(RecipeMenuDO::getId, id)) == null) {
+            // 菜谱不存在
+            throw exception(RECIPE_MENU_NOT_EXISTS);
+        }
+        // 删除菜谱
+        recipeMenuMapper.deleteById(id);
+        // 删除菜单的菜谱信息
+        menuRecipeMapper.deleteByRecipeMenuId(id);
     }
 }

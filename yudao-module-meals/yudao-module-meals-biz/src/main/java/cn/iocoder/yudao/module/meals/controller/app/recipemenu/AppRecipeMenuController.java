@@ -3,17 +3,12 @@ package cn.iocoder.yudao.module.meals.controller.app.recipemenu;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import cn.iocoder.yudao.module.meals.controller.admin.food.vo.FoodSimpleRespVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeSaveReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSaveReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuSimpleRespVO;
-import cn.iocoder.yudao.module.meals.convert.food.FoodConvert;
 import cn.iocoder.yudao.module.meals.convert.recipemenu.RecipeMenuConvert;
-import cn.iocoder.yudao.module.meals.dal.dataobject.food.FoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
-import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import cn.iocoder.yudao.module.meals.service.recipemenu.AppRecipeMenuService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,9 +34,17 @@ public class AppRecipeMenuController {
     @Resource
     private AppRecipeMenuService appRecipeMenuService;
 
+    @DeleteMapping("/delete")
+    @Operation(summary = "删除菜谱菜单")
+    @Parameter(name = "id", description = "编号", required = true)
+    public CommonResult<Boolean> deleteRecipeMenu(@RequestParam("id") Long id) {
+        appRecipeMenuService.deleteRecipeMenu(getLoginUserId(), id);
+        return success(true);
+    }
+
     @PostMapping("/create-or-update")
     @Operation(summary = "创建或更新菜谱菜单")
-    public CommonResult<Long> createOrUpdateRecipe(@Valid @RequestBody AppRecipeMenuSaveReqVO createReqVO) {
+    public CommonResult<Long> createOrUpdateRecipeMenu(@Valid @RequestBody AppRecipeMenuSaveReqVO createReqVO) {
         return success(appRecipeMenuService.createOrUpdateRecipe(getLoginUserId(), createReqVO));
     }
 
@@ -57,14 +60,6 @@ public class AppRecipeMenuController {
     @Operation(summary = "更新菜谱菜单")
     public CommonResult<Boolean> updateRecipeMenu(@Valid @RequestBody AppRecipeMenuSaveReqVO updateReqVO) {
         appRecipeMenuService.updateRecipeMenu(updateReqVO);
-        return success(true);
-    }
-
-    @DeleteMapping("/delete")
-    @Operation(summary = "删除菜谱菜单")
-    @Parameter(name = "id", description = "编号", required = true)
-    public CommonResult<Boolean> deleteRecipeMenu(@RequestParam("id") Long id) {
-        appRecipeMenuService.deleteRecipeMenu(id);
         return success(true);
     }
 

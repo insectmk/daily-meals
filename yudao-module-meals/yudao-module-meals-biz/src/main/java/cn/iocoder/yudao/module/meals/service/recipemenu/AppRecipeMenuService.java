@@ -88,4 +88,11 @@ public interface AppRecipeMenuService {
      * @return
      */
     Long createOrUpdateRecipe(Long userId, @Valid AppRecipeMenuSaveReqVO createReqVO);
+
+    /**
+     * 删除菜谱菜单
+     * @param userId 用户ID
+     * @param id 菜谱菜单ID
+     */
+    void deleteRecipeMenu(Long userId, Long id);
 }
