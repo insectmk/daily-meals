@@ -1,0 +1,63 @@
+package cn.iocoder.yudao.module.meals.service.userfavor;
+
+import java.util.*;
+
+import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorSaveReqVO;
+import jakarta.validation.*;
+import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+
+/**
+ * 用户收藏 Service 接口
+ *
+ * @author InsectMk
+ */
+public interface AppUserFavorService {
+
+    /**
+     * 创建用户收藏
+     *
+     * @param createReqVO 创建信息
+     * @return 编号
+     */
+    Long createUserFavor(@Valid AppUserFavorSaveReqVO createReqVO);
+
+    /**
+     * 更新用户收藏
+     *
+     * @param updateReqVO 更新信息
+     */
+    void updateUserFavor(@Valid AppUserFavorSaveReqVO updateReqVO);
+
+    /**
+     * 删除用户收藏
+     *
+     * @param id 编号
+     */
+    void deleteUserFavor(Long id);
+
+    /**
+    * 批量删除用户收藏
+    *
+    * @param ids 编号
+    */
+    void deleteUserFavorListByIds(List<Long> ids);
+
+    /**
+     * 获得用户收藏
+     *
+     * @param id 编号
+     * @return 用户收藏
+     */
+    UserFavorDO getUserFavor(Long id);
+
+    /**
+     * 获得用户收藏分页
+     *
+     * @param pageReqVO 分页查询
+     * @return 用户收藏分页
+     */
+    PageResult<UserFavorDO> getUserFavorPage(AppUserFavorPageReqVO pageReqVO);
+
+}

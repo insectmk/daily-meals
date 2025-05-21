@@ -1,0 +1,96 @@
+package cn.iocoder.yudao.module.meals.controller.app.userfavor;
+
+import org.springframework.web.bind.annotation.*;
+import jakarta.annotation.Resource;
+import org.springframework.validation.annotation.Validated;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Operation;
+
+import jakarta.validation.*;
+import jakarta.servlet.http.*;
+import java.util.*;
+import java.io.IOException;
+
+import cn.iocoder.yudao.framework.common.pojo.PageParam;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+
+import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
+
+import cn.iocoder.yudao.framework.apilog.core.annotation.ApiAccessLog;
+import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.*;
+
+import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.*;
+import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
+import cn.iocoder.yudao.module.meals.service.userfavor.AppUserFavorService;
+
+@Tag(name = "用户 APP - 用户收藏")
+@RestController
+@RequestMapping("/meals/user-favor")
+@Validated
+public class AppUserFavorController {
+
+    @Resource
+    private AppUserFavorService appUserFavorService;
+
+    @PostMapping("/create")
+    @Operation(summary = "创建用户收藏")
+    public CommonResult<Long> createUserFavor(@Valid @RequestBody AppUserFavorSaveReqVO createReqVO) {
+        return success(appUserFavorService.createUserFavor(createReqVO));
+    }
+
+    @PutMapping("/update")
+    @Operation(summary = "更新用户收藏")
+    public CommonResult<Boolean> updateUserFavor(@Valid @RequestBody AppUserFavorSaveReqVO updateReqVO) {
+        appUserFavorService.updateUserFavor(updateReqVO);
+        return success(true);
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "删除用户收藏")
+    @Parameter(name = "id", description = "编号", required = true)
+    public CommonResult<Boolean> deleteUserFavor(@RequestParam("id") Long id) {
+        appUserFavorService.deleteUserFavor(id);
+        return success(true);
+    }
+
+    @DeleteMapping("/delete-list")
+    @Parameter(name = "ids", description = "编号", required = true)
+    @Operation(summary = "批量删除用户收藏")
+    public CommonResult<Boolean> deleteUserFavorList(@RequestParam("ids") List<Long> ids) {
+        appUserFavorService.deleteUserFavorListByIds(ids);
+        return success(true);
+    }
+
+    @GetMapping("/get")
+    @Operation(summary = "获得用户收藏")
+    @Parameter(name = "id", description = "编号", required = true, example = "1024")
+    public CommonResult<AppUserFavorRespVO> getUserFavor(@RequestParam("id") Long id) {
+        UserFavorDO userFavor = appUserFavorService.getUserFavor(id);
+        return success(BeanUtils.toBean(userFavor, AppUserFavorRespVO.class));
+    }
+
+    @GetMapping("/page")
+    @Operation(summary = "获得用户收藏分页")
+    public CommonResult<PageResult<AppUserFavorRespVO>> getUserFavorPage(@Valid AppUserFavorPageReqVO pageReqVO) {
+        PageResult<UserFavorDO> pageResult = appUserFavorService.getUserFavorPage(pageReqVO);
+        return success(BeanUtils.toBean(pageResult, AppUserFavorRespVO.class));
+    }
+
+    @GetMapping("/export-excel")
+    @Operation(summary = "导出用户收藏 Excel")
+    @ApiAccessLog(operateType = EXPORT)
+    public void exportUserFavorExcel(@Valid AppUserFavorPageReqVO pageReqVO,
+              HttpServletResponse response) throws IOException {
+        pageReqVO.setPageSize(PageParam.PAGE_SIZE_NONE);
+        List<UserFavorDO> list = appUserFavorService.getUserFavorPage(pageReqVO).getList();
+        // 导出 Excel
+        ExcelUtils.write(response, "用户收藏.xls", "数据", AppUserFavorRespVO.class,
+                        BeanUtils.toBean(list, AppUserFavorRespVO.class));
+    }
+
+}
