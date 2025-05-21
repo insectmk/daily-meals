@@ -29,7 +29,7 @@ import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.USER_COLLEC
  */
 @Service
 @Validated
-public class AppUserCollectServiceImpl implements UserCollectService {
+public class AppUserCollectServiceImpl implements AppUserCollectService {
 
     @Resource
     private UserCollectMapper userCollectMapper;
