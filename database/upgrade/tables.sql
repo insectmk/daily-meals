@@ -196,6 +196,7 @@ CREATE TABLE IF NOT EXISTS `meals_user_collect`
     `pic_url`        varchar(256)                                                 NOT NULL DEFAULT '' COMMENT '封面图',
     `collect_desc`   varchar(2000)                                                NOT NULL DEFAULT '' COMMENT '简介',
     `collect_status` tinyint                                                      NOT NULL DEFAULT 0 COMMENT '收藏夹状态',
+    `default_flag`   bit(1)                                                       NOT NULL DEFAULT b'0' COMMENT '是否默认',
     `creator`        varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '创建者',
     `create_time`    datetime                                                     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updater`        varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '更新者',

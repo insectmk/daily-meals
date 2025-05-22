@@ -31,6 +31,9 @@ public class AppUserCollectPageReqVO extends PageParam {
     @Schema(description = "收藏夹状态", example = "1")
     private Integer collectStatus;
 
+    @Schema(description = "是否默认收藏夹", example = "true")
+    private Boolean defaultFlag;
+
     @Schema(description = "创建时间")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime[] createTime;

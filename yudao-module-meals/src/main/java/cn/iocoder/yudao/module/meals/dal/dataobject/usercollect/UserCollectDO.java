@@ -51,6 +51,8 @@ public class UserCollectDO extends BaseDO {
      * 收藏夹状态
      */
     private Integer collectStatus;
-
-
+    /**
+     * 是否默认收藏夹
+     */
+    private Boolean defaultFlag;
 }

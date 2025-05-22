@@ -40,6 +40,10 @@ public class AppUserCollectRespVO {
     @ExcelProperty("收藏夹状态")
     private Integer collectStatus;
 
+    @Schema(description = "是否默认收藏夹", example = "true")
+    @ExcelProperty("是否默认收藏夹")
+    private Boolean defaultFlag;
+
     @Schema(description = "创建时间", requiredMode = Schema.RequiredMode.REQUIRED)
     @ExcelProperty("创建时间")
     private LocalDateTime createTime;

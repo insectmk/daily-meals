@@ -36,6 +36,9 @@ public class AppUserCollectSaveReqVO {
     @NotNull(message = "收藏夹状态不能为空")
     private Integer collectStatus;
 
+    @Schema(description = "是否默认收藏夹", example = "1")
+    private Boolean defaultFlag;
+
     @Schema(description = "用户收藏列表")
     private List<UserFavorDO> userFavors;
 
