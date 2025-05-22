@@ -11,9 +11,12 @@ import cn.iocoder.yudao.module.meals.convert.recipe.RecipeConvert;
 import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplanitem.PopularPublicRecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.dailyplanitem.DailyPlanItemMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeFoodMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeMapper;
+import cn.iocoder.yudao.module.meals.dal.mysql.userfavor.UserFavorMapper;
+import cn.iocoder.yudao.module.meals.enums.ContentTypesEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import jakarta.annotation.Resource;
@@ -45,6 +48,8 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     private RecipeFoodMapper recipeFoodMapper;
     @Resource
     private DailyPlanItemMapper dailyPlanItemMapper;
+    @Resource
+    private UserFavorMapper userFavorMapper;
 
     @Override
     public AppRecipeRespVO getRecipeDetail(Long userId, Long id) {
@@ -58,6 +63,12 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         appRecipeRespVO.setSelfRecipe(!Objects.isNull(userId)
                 && Objects.equals(userId, recipeDO.getUserId())
                 && RecipeTypesEnum.USER.getType().equals(recipeDO.getRecipeType()));
+        // 判断是否收藏
+        appRecipeRespVO.setFavor(userFavorMapper.exists(new LambdaQueryWrapperX<UserFavorDO>()
+                .eq(UserFavorDO::getUserId, userId) // 该用户
+                .eq(UserFavorDO::getContentType, ContentTypesEnum.RECIPE.getType()) // 菜谱内容
+                .eq(UserFavorDO::getContentId, id) // 内容ID为菜谱ID
+        ));
         // 查询食材信息
         List<RecipeFoodDO> recipeFoods = recipeFoodMapper.selectList(new LambdaQueryWrapperX<RecipeFoodDO>()
                 .eqIfPresent(RecipeFoodDO::getRecipeId, id));
