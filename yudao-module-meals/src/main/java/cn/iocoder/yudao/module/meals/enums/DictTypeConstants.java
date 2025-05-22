@@ -17,4 +17,5 @@ public interface DictTypeConstants {
     // *********静态字典**********
     String MEALS_STATIC_RECIPE_STATUS = "meals_static_recipe_status"; // 菜谱状态
     String MEALS_STATIC_RECIPE_TYPES = "meals_static_recipe_types"; // 菜谱类型
+    String MEALS_STATIC_CONTENT_TYPES = "meals_static_content_types"; // 内容类型枚举
 }

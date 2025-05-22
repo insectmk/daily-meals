@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.meals.framework.app;
 
 import cn.iocoder.yudao.module.meals.dal.redis.staticdict.StaticDictDAO;
+import cn.iocoder.yudao.module.meals.enums.ContentTypesEnum;
 import cn.iocoder.yudao.module.meals.enums.DictTypeConstants;
 import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
@@ -32,5 +33,6 @@ public class StaticDictConfig implements CommandLineRunner {
         // 将自定义的静态字典加入到redis缓存中
         staticDictDAO.set(DictTypeConstants.MEALS_STATIC_RECIPE_STATUS, RecipeStatusEnum.ARRAYS); // 菜谱状态
         staticDictDAO.set(DictTypeConstants.MEALS_STATIC_RECIPE_TYPES, RecipeTypesEnum.ARRAYS); // 菜谱类型
+        staticDictDAO.set(DictTypeConstants.MEALS_STATIC_CONTENT_TYPES, ContentTypesEnum.ARRAYS); // 菜谱类型
     }
 }
