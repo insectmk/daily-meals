@@ -26,6 +26,7 @@ import java.util.List;
 
 import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.EXPORT;
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.framework.web.core.util.WebFrameworkUtils.getLoginUserId;
 
 @Tag(name = "用户 APP - 用户收藏夹")
 @RestController
@@ -36,17 +37,10 @@ public class AppUserCollectController {
     @Resource
     private AppUserCollectService appUserCollectService;
 
-    @PostMapping("/create")
-    @Operation(summary = "创建用户收藏夹")
-    public CommonResult<Long> createUserCollect(@Valid @RequestBody AppUserCollectSaveReqVO createReqVO) {
-        return success(appUserCollectService.createUserCollect(createReqVO));
-    }
-
-    @PutMapping("/update")
-    @Operation(summary = "更新用户收藏夹")
-    public CommonResult<Boolean> updateUserCollect(@Valid @RequestBody AppUserCollectSaveReqVO updateReqVO) {
-        appUserCollectService.updateUserCollect(updateReqVO);
-        return success(true);
+    @PostMapping("/create-or-update")
+    @Operation(summary = "创建或更新用户收藏夹")
+    public CommonResult<Long> createOrUpdateUserCollect(@Valid @RequestBody AppUserCollectSaveReqVO createReqVO) {
+        return success(appUserCollectService.createOrUpdateUserCollect(getLoginUserId(), createReqVO));
     }
 
     @DeleteMapping("/delete")

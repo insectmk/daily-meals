@@ -4,8 +4,11 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeFoodSaveReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSaveReqVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.usercollect.UserCollectMapper;
@@ -16,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Objects;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertList;
@@ -114,6 +118,24 @@ public class AppUserCollectServiceImpl implements AppUserCollectService {
     @Override
     public List<UserFavorDO> getUserFavorListByCollectId(Long collectId) {
         return userFavorMapper.selectListByCollectId(collectId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Long createOrUpdateUserCollect(Long userId, AppUserCollectSaveReqVO createReqVO) {
+        Long collectId = createReqVO.getId();
+        // 根据id判断新增还是修改
+        if (Objects.isNull(collectId)) {
+            // 为空：新增
+            createReqVO.setUserId(userId); // 设置用户ID
+            return this.createUserCollect(createReqVO);
+        }
+        // 更新
+        // 1. 更新基础数据
+        validateUserCollectExists(collectId); // 校验存在
+        this.updateUserCollect(createReqVO);
+        // 返回
+        return collectId;
     }
 
     private void createUserFavorList(Long collectId, List<UserFavorDO> list) {

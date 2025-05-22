@@ -71,4 +71,11 @@ public interface AppUserCollectService {
      */
     List<UserFavorDO> getUserFavorListByCollectId(Long collectId);
 
+    /**
+     * 创建或更新用户收藏夹
+     * @param userId 用户ID
+     * @param createReqVO 收藏夹信息
+     * @return 收藏夹ID
+     */
+    Long createOrUpdateUserCollect(Long userId, @Valid AppUserCollectSaveReqVO createReqVO);
 }
