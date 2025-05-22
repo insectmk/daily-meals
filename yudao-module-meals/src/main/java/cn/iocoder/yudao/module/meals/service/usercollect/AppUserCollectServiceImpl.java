@@ -63,7 +63,7 @@ public class AppUserCollectServiceImpl implements AppUserCollectService {
         userCollectMapper.updateById(updateObj);
 
         // 更新子表
-        updateUserFavorList(updateReqVO.getId(), updateReqVO.getUserFavors());
+        //updateUserFavorList(updateReqVO.getId(), updateReqVO.getUserFavors());
     }
 
     @Override
