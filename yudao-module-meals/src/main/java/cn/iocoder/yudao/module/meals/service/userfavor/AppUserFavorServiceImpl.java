@@ -5,13 +5,19 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorSaveReqVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
+import cn.iocoder.yudao.module.meals.dal.mysql.usercollect.UserCollectMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.userfavor.UserFavorMapper;
+import cn.iocoder.yudao.module.meals.enums.ContentTypesEnum;
+import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Objects;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.USER_FAVOR_NOT_EXISTS;
@@ -27,11 +33,36 @@ public class AppUserFavorServiceImpl implements AppUserFavorService {
 
     @Resource
     private UserFavorMapper userFavorMapper;
+    @Resource
+    private UserCollectMapper userCollectMapper;
 
     @Override
-    public Long createUserFavor(AppUserFavorSaveReqVO createReqVO) {
-        // 插入
+    public Long createUserFavor(Long userId, AppUserFavorSaveReqVO createReqVO) {
+        // 判断是否传入收藏夹id
+        Long collectId = createReqVO.getCollectId();
         UserFavorDO userFavor = BeanUtils.toBean(createReqVO, UserFavorDO.class);
+        if (collectId == null) {
+            // 加入到默认中
+            UserCollectDO userCollectDO = userCollectMapper.selectFirstOne(
+                    UserCollectDO::getUserId, userId, // 该用户
+                    UserCollectDO::getContentType, ContentTypesEnum.RECIPE, // 菜谱内容
+                    UserCollectDO::getDefaultFlag, true // 默认内容
+            );
+            if (Objects.isNull(userCollectDO)) {
+                // 创建一个默认菜谱
+                userCollectDO = new UserCollectDO();
+                userCollectDO.setUserId(userId); // 用户
+                userCollectDO.setContentType(ContentTypesEnum.RECIPE.getType()); // 内容类型
+                userCollectDO.setCollectName("默认收藏夹"); // 收藏夹名称
+                userCollectDO.setCollectDesc("默认收藏夹"); // 简介
+                userCollectDO.setCollectStatus(RecipeStatusEnum.PRIVATE.getType()); // 状态 - 私有
+                userCollectDO.setDefaultFlag(true); // 是否为默认收藏夹
+                userCollectMapper.insert(userCollectDO);
+                userFavor.setCollectId(userCollectDO.getId());
+            }
+            userFavor.setCollectId(userCollectDO.getId()); // 设置收藏夹
+        }
+        // 插入
         userFavorMapper.insert(userFavor);
         // 返回
         return userFavor.getId();

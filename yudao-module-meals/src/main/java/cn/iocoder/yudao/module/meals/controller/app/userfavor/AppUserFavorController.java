@@ -25,6 +25,7 @@ import java.util.List;
 
 import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.EXPORT;
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.framework.web.core.util.WebFrameworkUtils.getLoginUserId;
 
 @Tag(name = "用户 APP - 用户收藏")
 @RestController
@@ -38,7 +39,7 @@ public class AppUserFavorController {
     @PostMapping("/create")
     @Operation(summary = "创建用户收藏")
     public CommonResult<Long> createUserFavor(@Valid @RequestBody AppUserFavorSaveReqVO createReqVO) {
-        return success(appUserFavorService.createUserFavor(createReqVO));
+        return success(appUserFavorService.createUserFavor(getLoginUserId(), createReqVO));
     }
 
     @PutMapping("/update")
