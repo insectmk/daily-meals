@@ -1,10 +1,7 @@
 package cn.iocoder.yudao.module.meals.framework.app;
 
 import cn.iocoder.yudao.module.meals.dal.redis.staticdict.StaticDictDAO;
-import cn.iocoder.yudao.module.meals.enums.ContentTypesEnum;
-import cn.iocoder.yudao.module.meals.enums.DictTypeConstants;
-import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
-import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
+import cn.iocoder.yudao.module.meals.enums.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -34,5 +31,6 @@ public class StaticDictConfig implements CommandLineRunner {
         staticDictDAO.set(DictTypeConstants.MEALS_STATIC_RECIPE_STATUS, RecipeStatusEnum.ARRAYS); // 菜谱状态
         staticDictDAO.set(DictTypeConstants.MEALS_STATIC_RECIPE_TYPES, RecipeTypesEnum.ARRAYS); // 菜谱类型
         staticDictDAO.set(DictTypeConstants.MEALS_STATIC_CONTENT_TYPES, ContentTypesEnum.ARRAYS); // 菜谱类型
+        staticDictDAO.set(DictTypeConstants.MEALS_STATIC_TRUE_FALSE, TrueFalseEnum.ARRAYS); // 是否
     }
 }
