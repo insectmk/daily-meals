@@ -29,4 +29,21 @@ public interface UserCollectMapper extends BaseMapperX<UserCollectDO> {
                 .orderByDesc(UserCollectDO::getId));
     }
 
+    /**
+     * 获取用户自己的分页信息
+     * @param userId 用户ID
+     * @param reqVO 分页参数
+     * @return 分页信息
+     */
+    default PageResult<UserCollectDO> selectSelfPage(Long userId, AppUserCollectPageReqVO reqVO){
+        return selectPage(reqVO, new LambdaQueryWrapperX<UserCollectDO>()
+                .eqIfPresent(UserCollectDO::getUserId, userId)
+                .eqIfPresent(UserCollectDO::getContentType, reqVO.getContentType())
+                .likeIfPresent(UserCollectDO::getCollectName, reqVO.getCollectName())
+                .eqIfPresent(UserCollectDO::getPicUrl, reqVO.getPicUrl())
+                .eqIfPresent(UserCollectDO::getCollectDesc, reqVO.getCollectDesc())
+                .eqIfPresent(UserCollectDO::getCollectStatus, reqVO.getCollectStatus())
+                .betweenIfPresent(UserCollectDO::getCreateTime, reqVO.getCreateTime())
+                .orderByDesc(UserCollectDO::getId));
+    }
 }

@@ -78,4 +78,12 @@ public interface AppUserCollectService {
      * @return 收藏夹ID
      */
     Long createOrUpdateUserCollect(Long userId, @Valid AppUserCollectSaveReqVO createReqVO);
+
+    /**
+     * 获取用户自己的收藏夹分页
+     * @param userId 用户ID
+     * @param pageReqVO 请求参数
+     * @return
+     */
+    PageResult<UserCollectDO> getSelfUserCollectPage(Long userId, @Valid AppUserCollectPageReqVO pageReqVO);
 }

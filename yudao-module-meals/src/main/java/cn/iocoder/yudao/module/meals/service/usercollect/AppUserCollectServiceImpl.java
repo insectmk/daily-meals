@@ -113,13 +113,6 @@ public class AppUserCollectServiceImpl implements AppUserCollectService {
         return userCollectMapper.selectPage(pageReqVO);
     }
 
-    // ==================== 子表（用户收藏） ====================
-
-    @Override
-    public List<UserFavorDO> getUserFavorListByCollectId(Long collectId) {
-        return userFavorMapper.selectListByCollectId(collectId);
-    }
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long createOrUpdateUserCollect(Long userId, AppUserCollectSaveReqVO createReqVO) {
@@ -136,6 +129,18 @@ public class AppUserCollectServiceImpl implements AppUserCollectService {
         this.updateUserCollect(createReqVO);
         // 返回
         return collectId;
+    }
+
+    @Override
+    public PageResult<UserCollectDO> getSelfUserCollectPage(Long userId, AppUserCollectPageReqVO pageReqVO) {
+        return userCollectMapper.selectSelfPage(userId, pageReqVO);
+    }
+
+    // ==================== 子表（用户收藏） ====================
+
+    @Override
+    public List<UserFavorDO> getUserFavorListByCollectId(Long collectId) {
+        return userFavorMapper.selectListByCollectId(collectId);
     }
 
     private void createUserFavorList(Long collectId, List<UserFavorDO> list) {

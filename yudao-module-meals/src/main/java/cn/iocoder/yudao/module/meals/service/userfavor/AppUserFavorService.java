@@ -1,12 +1,12 @@
 package cn.iocoder.yudao.module.meals.service.userfavor;
 
-import java.util.*;
-
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorSaveReqVO;
-import jakarta.validation.*;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import jakarta.validation.Valid;
+
+import java.util.List;
 
 /**
  * 用户收藏 Service 接口
@@ -58,6 +58,5 @@ public interface AppUserFavorService {
      * @param pageReqVO 分页查询
      * @return 用户收藏分页
      */
-    PageResult<UserFavorDO> getUserFavorPage(AppUserFavorPageReqVO pageReqVO);
-
+    PageResult<UserFavorDO> getUserFavorPage(AppUserFavorPageReqVO pageReqVO);;
 }

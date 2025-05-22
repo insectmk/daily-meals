@@ -9,6 +9,8 @@ import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSaveReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import cn.iocoder.yudao.module.meals.service.usercollect.AppUserCollectService;
@@ -36,6 +38,13 @@ public class AppUserCollectController {
 
     @Resource
     private AppUserCollectService appUserCollectService;
+
+    @GetMapping("/page-self")
+    @Operation(summary = "获得用户自己的收藏夹分页")
+    public CommonResult<PageResult<AppUserCollectRespVO>> getSelfUserCollectPage(@Valid AppUserCollectPageReqVO pageReqVO) {
+        PageResult<UserCollectDO> pageResult = appUserCollectService.getSelfUserCollectPage(getLoginUserId(),pageReqVO);
+        return success(BeanUtils.toBean(pageResult, AppUserCollectRespVO.class));
+    }
 
     @PostMapping("/create-or-update")
     @Operation(summary = "创建或更新用户收藏夹")
