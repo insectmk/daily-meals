@@ -47,8 +47,8 @@ public class AppUserCollectServiceImpl implements AppUserCollectService {
         UserCollectDO userCollect = BeanUtils.toBean(createReqVO, UserCollectDO.class);
         userCollectMapper.insert(userCollect);
 
-        // 插入子表
-        createUserFavorList(userCollect.getId(), createReqVO.getUserFavors());
+        // 插入子表（无需插入子表）
+        //createUserFavorList(userCollect.getId(), createReqVO.getUserFavors());
         // 返回
         return userCollect.getId();
     }

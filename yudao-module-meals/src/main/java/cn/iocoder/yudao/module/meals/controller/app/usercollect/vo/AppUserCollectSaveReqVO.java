@@ -14,7 +14,6 @@ public class AppUserCollectSaveReqVO {
     private Long id;
 
     @Schema(description = "用户编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "28613")
-    @NotNull(message = "用户编号不能为空")
     private Long userId;
 
     @Schema(description = "内容类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "2")
