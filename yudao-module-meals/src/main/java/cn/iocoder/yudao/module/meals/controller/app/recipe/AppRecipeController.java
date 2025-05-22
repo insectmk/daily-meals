@@ -31,6 +31,13 @@ public class AppRecipeController {
     @Resource
     private AppRecipeService appRecipeService;
 
+    @GetMapping("/page-self-by-collect")
+    @Operation(summary = "获得自己某个收藏夹下的菜谱分页")
+    public CommonResult<PageResult<AppRecipeRespVO>> getSelfRecipePageByCollect(@Valid AppRecipePageReqVO pageReqVO) {
+        PageResult<AppRecipeRespVO> pageResult = appRecipeService.getSelfRecipeDetailPageByCollect(getLoginUserId(),pageReqVO);
+        return success(pageResult);
+    }
+
     @GetMapping("/get")
     @Operation(summary = "获取菜谱")
     public CommonResult<AppRecipeRespVO> createRecipe(@RequestParam("id") Long id) {

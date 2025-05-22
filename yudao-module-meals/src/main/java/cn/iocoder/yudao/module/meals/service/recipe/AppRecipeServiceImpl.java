@@ -214,6 +214,22 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         recipeMapper.deleteById(id);
     }
 
+    @Override
+    public PageResult<AppRecipeRespVO> getSelfRecipeDetailPageByCollect(Long userId, AppRecipePageReqVO pageReqVO) {
+        // 查询基础信息
+        pageReqVO.setRecipeType(RecipeTypesEnum.USER.getType()); // 获取用户菜谱
+        PageResult<RecipeDO> pageResult = recipeMapper.selectPage(userId, pageReqVO);
+        List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
+        if (CollUtil.isEmpty(recipes)) {
+            // 为空直接返回
+            return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
+        }
+        // 查询菜谱食材信息
+        List<RecipeFoodDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
+        // 装载信息
+        return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
+    }
+
     /**
      * 通过菜谱ID集合获取所有菜谱的食材信息
      * @param recipeIds 菜谱ID

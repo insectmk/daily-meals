@@ -13,6 +13,7 @@ import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +39,12 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
      * @param pageReqVO 分页查询对象
      */
     default PageResult<RecipeDO> getUserViewableRecipePage(Long userId, AppRecipePageReqVO pageReqVO) {
+        // 处理 收藏夹 collectId 过滤条件
+        String collectSql = "";
+        if (!Objects.isNull(pageReqVO.getCollectId())) {
+            // 关联查询收藏夹
+            collectSql = String.format("exists(select 1 from meals_user_favor uf where uf.content_id = meals_recipe.id and uf.collect_id = '%s')", pageReqVO.getCollectId());
+        }
         // 处理 菜谱分类 recipeCategory 过滤条件
         String recipeCategorySql = "";
         if (CollUtil.isNotEmpty(pageReqVO.getRecipeCategory())) {
@@ -80,6 +87,8 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
                                 )
                         )
                 )
+                // 收藏夹
+                .apply(StrUtil.isNotEmpty(collectSql), collectSql)
                 // 菜谱分类
                 .apply(StrUtil.isNotEmpty(recipeCategorySql), recipeCategorySql)
                 // 食材分类

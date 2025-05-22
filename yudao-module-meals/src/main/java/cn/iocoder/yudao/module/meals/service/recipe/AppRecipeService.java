@@ -82,4 +82,12 @@ public interface AppRecipeService {
      * @param id 菜谱ID
      */
     void deleteRecipe(Long userId, Long id);
+
+    /**
+     * 获取自己某个收藏夹下的菜谱分页
+     * @param userId 用户ID
+     * @param pageReqVO 分页信息
+     * @return 分页信息
+     */
+    PageResult<AppRecipeRespVO> getSelfRecipeDetailPageByCollect(Long userId, @Valid AppRecipePageReqVO pageReqVO);
 }
