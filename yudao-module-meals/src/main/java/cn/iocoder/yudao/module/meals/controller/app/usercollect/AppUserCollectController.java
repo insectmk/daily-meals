@@ -6,12 +6,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
-import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectPageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectRespVO;
-import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSaveReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSimpleRespVO;
-import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorRespVO;
+import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.*;
 import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import cn.iocoder.yudao.module.meals.service.usercollect.AppUserCollectService;
@@ -42,8 +37,8 @@ public class AppUserCollectController {
 
     @GetMapping("/list-self-all-simple")
     @Operation(summary = "展示自己所有的收藏夹精简信息")
-    public CommonResult<List<AppUserCollectSimpleRespVO>> getSelfUserCollectAllSimpleList(@RequestParam("contentType") Integer contentType) {
-        return success(appUserCollectService.getSelfUserCollectAllSimpleList(getLoginUserId(), contentType));
+    public CommonResult<List<AppUserCollectSimpleRespVO>> getSelfUserCollectAllSimpleList(@Valid AppUserCollectSimpleListReqVO reqVO) {
+        return success(appUserCollectService.getSelfUserCollectAllSimpleList(getLoginUserId(), reqVO));
     }
 
     @GetMapping("/page-self")

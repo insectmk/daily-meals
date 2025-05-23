@@ -26,4 +26,7 @@ public class AppUserCollectSimpleRespVO {
     @ExcelProperty("收藏夹状态")
     private Integer collectStatus;
 
+    @Schema(description = "是否选中", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @ExcelProperty("是否选中")
+    private Boolean selected;
 }

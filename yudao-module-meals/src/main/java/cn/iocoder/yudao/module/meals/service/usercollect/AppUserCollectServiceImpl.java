@@ -5,13 +5,11 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeFoodSaveReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSaveReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSimpleListReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSimpleRespVO;
 import cn.iocoder.yudao.module.meals.convert.usercollect.UserCollectConvert;
-import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
-import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.usercollect.UserCollectMapper;
@@ -140,13 +138,8 @@ public class AppUserCollectServiceImpl implements AppUserCollectService {
     }
 
     @Override
-    public List<AppUserCollectSimpleRespVO> getSelfUserCollectAllSimpleList(Long userId, Integer contentType) {
-        return UserCollectConvert.INSTANCE.convertSimpleList(
-                userCollectMapper.selectList(new LambdaQueryWrapperX<UserCollectDO>()
-                        .eq(UserCollectDO::getUserId, userId) // 该用户
-                        .eq(UserCollectDO::getContentType, contentType) // 该内容下的收藏夹
-                )
-        );
+    public List<AppUserCollectSimpleRespVO> getSelfUserCollectAllSimpleList(Long userId, AppUserCollectSimpleListReqVO reqVO) {
+        return userCollectMapper.selectUserListByContent(userId, reqVO);
     }
 
     // ==================== 子表（用户收藏） ====================
