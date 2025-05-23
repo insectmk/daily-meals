@@ -37,6 +37,13 @@ public class AppUserFavorController {
     @Resource
     private AppUserFavorService appUserFavorService;
 
+    @PostMapping("/add-to-default")
+    @Operation(summary = "添加到默认收藏夹")
+    public CommonResult<Boolean> addToDefaultCollect(@Valid @RequestBody AppUserFavorSaveReqVO createReqVO) {
+        appUserFavorService.addToDefaultCollect(getLoginUserId(), createReqVO);
+        return success(true);
+    }
+
     @PostMapping("/create")
     @Operation(summary = "创建用户收藏")
     public CommonResult<Boolean> createUserFavor(@Valid @RequestBody AppUserFavorSaveReqVO createReqVO) {

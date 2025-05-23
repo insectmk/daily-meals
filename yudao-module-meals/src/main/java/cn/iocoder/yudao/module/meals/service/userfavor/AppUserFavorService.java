@@ -67,4 +67,11 @@ public interface AppUserFavorService {
      * @param delReqVO 内容
      */
     void cancelUserFavor(Long userId, @Valid AppUserFavorDelReqVO delReqVO);
+
+    /**
+     * 添加到默认收藏夹
+     * @param userId 用户ID
+     * @param createReqVO 收藏信息
+     */
+    void addToDefaultCollect(Long userId, @Valid AppUserFavorSaveReqVO createReqVO);
 }

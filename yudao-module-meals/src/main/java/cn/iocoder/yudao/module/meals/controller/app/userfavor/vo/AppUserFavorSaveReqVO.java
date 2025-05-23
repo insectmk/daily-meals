@@ -12,10 +12,6 @@ public class AppUserFavorSaveReqVO {
     @Schema(description = "编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "5241")
     private Long id;
 
-    @Schema(description = "用户编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "24330")
-    @NotNull(message = "用户编号不能为空")
-    private Long userId;
-
     @Schema(description = "内容编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "30819")
     @NotNull(message = "内容编号不能为空")
     private Long contentId;
