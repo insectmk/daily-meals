@@ -50,4 +50,5 @@ public interface ErrorCodeConstants {
 
     // ========== 用户收藏 ==========
     ErrorCode USER_FAVOR_NOT_EXISTS = new ErrorCode(200_011_001, "用户收藏不存在");
+    ErrorCode USER_FAVOR_ALREADY_CANCEL = new ErrorCode(200_011_002, "已取消收藏");
 }

@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.meals.service.userfavor;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorDelReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorSaveReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
@@ -59,4 +60,11 @@ public interface AppUserFavorService {
      * @return 用户收藏分页
      */
     PageResult<UserFavorDO> getUserFavorPage(AppUserFavorPageReqVO pageReqVO);;
+
+    /**
+     * 取消收藏
+     * @param userId 用户ID
+     * @param delReqVO 内容
+     */
+    void cancelUserFavor(Long userId, @Valid AppUserFavorDelReqVO delReqVO);
 }

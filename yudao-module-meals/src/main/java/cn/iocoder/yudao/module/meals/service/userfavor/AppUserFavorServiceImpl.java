@@ -3,6 +3,8 @@ package cn.iocoder.yudao.module.meals.service.userfavor;
 import cn.hutool.core.collection.CollUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
+import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorDelReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorSaveReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.USER_FAVOR_ALREADY_CANCEL;
 import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.USER_FAVOR_NOT_EXISTS;
 
 /**
@@ -120,6 +123,21 @@ public class AppUserFavorServiceImpl implements AppUserFavorService {
     @Override
     public PageResult<UserFavorDO> getUserFavorPage(AppUserFavorPageReqVO pageReqVO) {
         return userFavorMapper.selectPage(pageReqVO);
+    }
+
+    @Override
+    public void cancelUserFavor(Long userId, AppUserFavorDelReqVO delReqVO) {
+        LambdaQueryWrapperX<UserFavorDO> delQueryWrapper = new LambdaQueryWrapperX<UserFavorDO>()
+                .eq(UserFavorDO::getUserId, userId)
+                .eq(UserFavorDO::getContentType, delReqVO.getContentType())
+                .eq(UserFavorDO::getContentId, delReqVO.getContentId());
+        // 校验存在
+        if (userFavorMapper.exists(delQueryWrapper)) {
+            // 删除
+            userFavorMapper.delete(delQueryWrapper);
+        } else {
+            throw exception(USER_FAVOR_ALREADY_CANCEL);
+        }
     }
 
 }

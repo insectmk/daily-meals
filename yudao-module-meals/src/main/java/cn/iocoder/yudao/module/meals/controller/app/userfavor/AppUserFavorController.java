@@ -6,6 +6,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
+import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorDelReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorSaveReqVO;
@@ -43,18 +44,11 @@ public class AppUserFavorController {
         return success(true);
     }
 
-    @PutMapping("/update")
-    @Operation(summary = "更新用户收藏")
-    public CommonResult<Boolean> updateUserFavor(@Valid @RequestBody AppUserFavorSaveReqVO updateReqVO) {
-        appUserFavorService.updateUserFavor(updateReqVO);
-        return success(true);
-    }
-
-    @DeleteMapping("/delete")
-    @Operation(summary = "删除用户收藏")
+    @DeleteMapping("/cancel")
+    @Operation(summary = "取消用户收藏")
     @Parameter(name = "id", description = "编号", required = true)
-    public CommonResult<Boolean> deleteUserFavor(@RequestParam("id") Long id) {
-        appUserFavorService.deleteUserFavor(id);
+    public CommonResult<Boolean> deleteUserFavor(@Valid AppUserFavorDelReqVO delReqVO) {
+        appUserFavorService.cancelUserFavor(getLoginUserId() ,delReqVO);
         return success(true);
     }
 
