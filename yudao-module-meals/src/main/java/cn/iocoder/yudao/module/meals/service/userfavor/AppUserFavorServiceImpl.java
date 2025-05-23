@@ -16,6 +16,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,35 +38,40 @@ public class AppUserFavorServiceImpl implements AppUserFavorService {
     private UserCollectMapper userCollectMapper;
 
     @Override
-    public Long createUserFavor(Long userId, AppUserFavorSaveReqVO createReqVO) {
+    public void createUserFavor(Long userId, AppUserFavorSaveReqVO createReqVO) {
         // 判断是否传入收藏夹id
-        Long collectId = createReqVO.getCollectId();
+        List<Long> collectIds = createReqVO.getCollectIds();
         UserFavorDO userFavor = BeanUtils.toBean(createReqVO, UserFavorDO.class);
-        if (collectId == null) {
+        if (CollUtil.isEmpty(collectIds)) {
+            collectIds = new ArrayList<>();
             // 加入到默认中
             UserCollectDO userCollectDO = userCollectMapper.selectFirstOne(
                     UserCollectDO::getUserId, userId, // 该用户
-                    UserCollectDO::getContentType, ContentTypesEnum.RECIPE, // 菜谱内容
+                    UserCollectDO::getContentType, userFavor.getContentType(), // 内容类型
                     UserCollectDO::getDefaultFlag, true // 默认内容
             );
             if (Objects.isNull(userCollectDO)) {
                 // 创建一个默认菜谱
                 userCollectDO = new UserCollectDO();
                 userCollectDO.setUserId(userId); // 用户
-                userCollectDO.setContentType(ContentTypesEnum.RECIPE.getType()); // 内容类型
+                userCollectDO.setContentType(userFavor.getContentType()); // 内容类型
                 userCollectDO.setCollectName("默认收藏夹"); // 收藏夹名称
                 userCollectDO.setCollectDesc("默认收藏夹"); // 简介
                 userCollectDO.setCollectStatus(RecipeStatusEnum.PRIVATE.getType()); // 状态 - 私有
                 userCollectDO.setDefaultFlag(true); // 是否为默认收藏夹
                 userCollectMapper.insert(userCollectDO);
-                userFavor.setCollectId(userCollectDO.getId());
-            }
-            userFavor.setCollectId(userCollectDO.getId()); // 设置收藏夹
+            }// 设置收藏夹
+            collectIds.add(userCollectDO.getId());
         }
+        // 设置用户
+        userFavor.setUserId(userId);
         // 插入
-        userFavorMapper.insert(userFavor);
-        // 返回
-        return userFavor.getId();
+        for (Long collectId : collectIds) {
+            UserFavorDO userFavorInsertDO = new UserFavorDO();
+            BeanUtils.copyProperties(userFavorInsertDO, userFavor); // 复制树形
+            userFavorInsertDO.setCollectId(collectId); // 设置收藏夹
+            userFavorMapper.insert(userFavorInsertDO);
+        }
     }
 
     @Override

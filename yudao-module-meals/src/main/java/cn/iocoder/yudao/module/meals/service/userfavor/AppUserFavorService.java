@@ -20,9 +20,8 @@ public interface AppUserFavorService {
      *
      * @param userId 用户ID
      * @param createReqVO 创建信息
-     * @return 编号
      */
-    Long createUserFavor(Long userId, @Valid AppUserFavorSaveReqVO createReqVO);
+    void createUserFavor(Long userId, @Valid AppUserFavorSaveReqVO createReqVO);
 
     /**
      * 更新用户收藏

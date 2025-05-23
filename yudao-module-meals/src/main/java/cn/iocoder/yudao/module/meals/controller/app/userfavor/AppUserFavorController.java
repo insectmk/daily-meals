@@ -38,8 +38,9 @@ public class AppUserFavorController {
 
     @PostMapping("/create")
     @Operation(summary = "创建用户收藏")
-    public CommonResult<Long> createUserFavor(@Valid @RequestBody AppUserFavorSaveReqVO createReqVO) {
-        return success(appUserFavorService.createUserFavor(getLoginUserId(), createReqVO));
+    public CommonResult<Boolean> createUserFavor(@Valid @RequestBody AppUserFavorSaveReqVO createReqVO) {
+        appUserFavorService.createUserFavor(getLoginUserId(), createReqVO);
+        return success(true);
     }
 
     @PutMapping("/update")
