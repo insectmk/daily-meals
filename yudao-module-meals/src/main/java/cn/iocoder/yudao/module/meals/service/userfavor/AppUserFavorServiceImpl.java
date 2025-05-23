@@ -42,39 +42,30 @@ public class AppUserFavorServiceImpl implements AppUserFavorService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void createUserFavor(Long userId, AppUserFavorSaveReqVO createReqVO) {
+        // 删除所有的收藏
+        userFavorMapper.delete(new LambdaQueryWrapperX<UserFavorDO>()
+                .eq(UserFavorDO::getUserId, userId) // 该用户
+                .eq(UserFavorDO::getContentType, createReqVO.getContentType()) // 指定内容类型
+                .eq(UserFavorDO::getContentId, createReqVO.getContentId()) // 指定内容
+        );
         // 判断是否传入收藏夹id
         List<Long> collectIds = createReqVO.getCollectIds();
         UserFavorDO userFavor = BeanUtils.toBean(createReqVO, UserFavorDO.class);
         if (CollUtil.isEmpty(collectIds)) {
-            collectIds = new ArrayList<>();
-            // 加入到默认中
-            UserCollectDO userCollectDO = userCollectMapper.selectFirstOne(
-                    UserCollectDO::getUserId, userId, // 该用户
-                    UserCollectDO::getContentType, userFavor.getContentType(), // 内容类型
-                    UserCollectDO::getDefaultFlag, true // 默认内容
-            );
-            if (Objects.isNull(userCollectDO)) {
-                // 创建一个默认菜谱
-                userCollectDO = new UserCollectDO();
-                userCollectDO.setUserId(userId); // 用户
-                userCollectDO.setContentType(userFavor.getContentType()); // 内容类型
-                userCollectDO.setCollectName("默认收藏夹"); // 收藏夹名称
-                userCollectDO.setCollectDesc("默认收藏夹"); // 简介
-                userCollectDO.setCollectStatus(RecipeStatusEnum.PRIVATE.getType()); // 状态 - 私有
-                userCollectDO.setDefaultFlag(true); // 是否为默认收藏夹
-                userCollectMapper.insert(userCollectDO);
-            }// 设置收藏夹
-            collectIds.add(userCollectDO.getId());
+            addToDefaultCollect(userId, createReqVO); // 加入到默认收藏夹中
+            return;
         }
-        // 设置用户
-        userFavor.setUserId(userId);
         // 插入
+        List<UserFavorDO> userFavors = new ArrayList<>(collectIds.size());
         for (Long collectId : collectIds) {
             UserFavorDO userFavorInsertDO = new UserFavorDO();
-            BeanUtils.copyProperties(userFavorInsertDO, userFavor); // 复制到新对象
+            BeanUtils.copyProperties(userFavor, userFavorInsertDO); // 复制到新对象
             userFavorInsertDO.setCollectId(collectId); // 设置收藏夹
-            userFavorMapper.insert(userFavorInsertDO);
+            userFavorInsertDO.setUserId(userId); // 设置用户ID
+            userFavors.add(userFavorInsertDO);
         }
+        userFavorMapper.insertBatch(userFavors); // 批量插入
+
     }
 
     @Override
