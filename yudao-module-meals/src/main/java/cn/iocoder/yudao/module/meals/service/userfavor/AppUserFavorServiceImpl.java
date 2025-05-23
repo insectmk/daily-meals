@@ -11,9 +11,7 @@ import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.usercollect.UserCollectMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.userfavor.UserFavorMapper;
-import cn.iocoder.yudao.module.meals.enums.ContentTypesEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -143,7 +141,7 @@ public class AppUserFavorServiceImpl implements AppUserFavorService {
     }
 
     @Override
-    public void addToDefaultCollect(Long userId, AppUserFavorSaveReqVO createReqVO) {
+    public UserCollectDO addToDefaultCollect(Long userId, AppUserFavorSaveReqVO createReqVO) {
         UserFavorDO userFavor = BeanUtils.toBean(createReqVO, UserFavorDO.class);
         // 加入到默认中
         UserCollectDO userCollectDO = userCollectMapper.selectFirstOne(
@@ -167,6 +165,6 @@ public class AppUserFavorServiceImpl implements AppUserFavorService {
         // 设置用户
         userFavor.setUserId(userId);
         userFavorMapper.insert(userFavor);
+        return userCollectDO;
     }
-
 }

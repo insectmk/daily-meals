@@ -4,6 +4,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorDelReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorSaveReqVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import jakarta.validation.Valid;
 
@@ -72,6 +73,7 @@ public interface AppUserFavorService {
      * 添加到默认收藏夹
      * @param userId 用户ID
      * @param createReqVO 收藏信息
+     * @return 加入的收藏夹信息
      */
-    void addToDefaultCollect(Long userId, @Valid AppUserFavorSaveReqVO createReqVO);
+    UserCollectDO addToDefaultCollect(Long userId, @Valid AppUserFavorSaveReqVO createReqVO);
 }

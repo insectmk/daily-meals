@@ -10,6 +10,7 @@ import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorDel
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorSaveReqVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import cn.iocoder.yudao.module.meals.service.userfavor.AppUserFavorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,9 +40,8 @@ public class AppUserFavorController {
 
     @PostMapping("/add-to-default")
     @Operation(summary = "添加到默认收藏夹")
-    public CommonResult<Boolean> addToDefaultCollect(@Valid @RequestBody AppUserFavorSaveReqVO createReqVO) {
-        appUserFavorService.addToDefaultCollect(getLoginUserId(), createReqVO);
-        return success(true);
+    public CommonResult<UserCollectDO> addToDefaultCollect(@Valid @RequestBody AppUserFavorSaveReqVO createReqVO) {
+        return success(appUserFavorService.addToDefaultCollect(getLoginUserId(), createReqVO));
     }
 
     @PostMapping("/create")
@@ -54,7 +54,7 @@ public class AppUserFavorController {
     @DeleteMapping("/cancel")
     @Operation(summary = "取消用户收藏")
     @Parameter(name = "id", description = "编号", required = true)
-    public CommonResult<Boolean> deleteUserFavor(@Valid AppUserFavorDelReqVO delReqVO) {
+    public CommonResult<Boolean> cancelUserFavor(@Valid AppUserFavorDelReqVO delReqVO) {
         appUserFavorService.cancelUserFavor(getLoginUserId() ,delReqVO);
         return success(true);
     }

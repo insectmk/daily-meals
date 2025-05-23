@@ -21,7 +21,6 @@ public class AppUserFavorSaveReqVO {
     private Integer contentType;
 
     @Schema(description = "收藏夹ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "[26100,2343]")
-    @NotNull(message = "收藏夹ID不能为空")
     private List<Long> collectIds;
 
 }
