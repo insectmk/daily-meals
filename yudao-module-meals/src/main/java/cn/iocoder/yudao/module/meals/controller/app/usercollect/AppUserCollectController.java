@@ -9,6 +9,7 @@ import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSaveReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSimpleRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userfavor.vo.AppUserFavorRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
@@ -38,6 +39,12 @@ public class AppUserCollectController {
 
     @Resource
     private AppUserCollectService appUserCollectService;
+
+    @GetMapping("/list-self-all-simple")
+    @Operation(summary = "展示自己所有的收藏夹精简信息")
+    public CommonResult<List<AppUserCollectSimpleRespVO>> getSelfUserCollectAllSimpleList(@RequestParam("contentType") Integer contentType) {
+        return success(appUserCollectService.getSelfUserCollectAllSimpleList(getLoginUserId(), contentType));
+    }
 
     @GetMapping("/page-self")
     @Operation(summary = "获得用户自己的收藏夹分页")

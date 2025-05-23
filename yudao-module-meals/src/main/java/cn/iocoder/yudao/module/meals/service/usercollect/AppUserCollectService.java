@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.meals.service.usercollect;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSaveReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.usercollect.vo.AppUserCollectSimpleRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import jakarta.validation.Valid;
@@ -86,4 +87,12 @@ public interface AppUserCollectService {
      * @return
      */
     PageResult<UserCollectDO> getSelfUserCollectPage(Long userId, @Valid AppUserCollectPageReqVO pageReqVO);
+
+    /**
+     * 展示自己所有的收藏夹精简信息
+     * @param userId 用户ID
+     * @param contentType 内容类型
+     * @return 用户收藏夹精简信息
+     */
+    List<AppUserCollectSimpleRespVO> getSelfUserCollectAllSimpleList(Long userId, Integer contentType);
 }
