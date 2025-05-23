@@ -43,7 +43,7 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
         String collectSql = "";
         if (!Objects.isNull(pageReqVO.getCollectId())) {
             // 关联查询收藏夹
-            collectSql = String.format("exists(select 1 from meals_user_favor uf where uf.content_id = meals_recipe.id and uf.collect_id = '%s')", pageReqVO.getCollectId());
+            collectSql = String.format("exists(select 1 from meals_user_favor uf where uf.content_id = meals_recipe.id and uf.deleted = 0 and uf.collect_id = '%s')", pageReqVO.getCollectId());
         }
         // 处理 菜谱分类 recipeCategory 过滤条件
         String recipeCategorySql = "";
