@@ -19,4 +19,5 @@ public interface DictTypeConstants {
     String MEALS_STATIC_RECIPE_TYPES = "meals_static_recipe_types"; // 菜谱类型
     String MEALS_STATIC_CONTENT_TYPES = "meals_static_content_types"; // 内容类型枚举
     String MEALS_STATIC_TRUE_FALSE = "meals_static_true_false"; // 是否枚举
+    String MEALS_STATIC_MEAL_TYPES = "meals_static_meal_types"; // 餐次类型枚举
 }

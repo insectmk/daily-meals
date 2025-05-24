@@ -32,5 +32,6 @@ public class StaticDictConfig implements CommandLineRunner {
         staticDictDAO.set(DictTypeConstants.MEALS_STATIC_RECIPE_TYPES, RecipeTypesEnum.ARRAYS); // 菜谱类型
         staticDictDAO.set(DictTypeConstants.MEALS_STATIC_CONTENT_TYPES, ContentTypesEnum.ARRAYS); // 菜谱类型
         staticDictDAO.set(DictTypeConstants.MEALS_STATIC_TRUE_FALSE, TrueFalseEnum.ARRAYS); // 是否
+        staticDictDAO.set(DictTypeConstants.MEALS_STATIC_MEAL_TYPES, MealTypesEnum.ARRAYS); // 餐次类型
     }
 }
