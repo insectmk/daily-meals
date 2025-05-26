@@ -54,7 +54,12 @@ public class AppRecipePageReqVO extends PageParam {
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime[] createTime;
 
+    // ***********附加查询条件
+
     @Schema(description = "收藏夹编号", example = "1")
     private Long collectId;
+
+    @Schema(description = "食材名称", example = "['番茄','鸡蛋']")
+    private List<String> foodNames;
 
 }

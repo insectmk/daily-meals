@@ -39,6 +39,14 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
      * @param pageReqVO 分页查询对象
      */
     default PageResult<RecipeDO> getUserViewableRecipePage(Long userId, AppRecipePageReqVO pageReqVO) {
+        // 处理 食材名称 foodNames 过滤条件
+        String foodNameSql = "";
+        if (CollUtil.isNotEmpty(pageReqVO.getFoodNames())) {
+            // 关联查询食材
+            foodNameSql = pageReqVO.getFoodNames().stream()
+                    .map(foodName -> String.format("exists(select 1 from meals_recipe_food rf where rf.recipe_id = meals_recipe.id and rf.deleted = 0 and rf.food_name like '%%%s%%')", foodName))
+                    .collect(Collectors.joining(" AND "));
+        }
         // 处理 收藏夹 collectId 过滤条件
         String collectSql = "";
         if (!Objects.isNull(pageReqVO.getCollectId())) {
@@ -93,6 +101,8 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
                 .apply(StrUtil.isNotEmpty(recipeCategorySql), recipeCategorySql)
                 // 食材分类
                 .apply(StrUtil.isNotEmpty(foodCategorySql), foodCategorySql)
+                // 食材名称
+                .apply(StrUtil.isNotEmpty(foodNameSql), foodNameSql)
                 // 按照更新时间排序
                 .orderByDesc(RecipeDO::getUpdateTime)
                 .orderByDesc(RecipeDO::getId);
