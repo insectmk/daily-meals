@@ -64,7 +64,15 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
         String foodCategorySql = "";
         if (CollUtil.isNotEmpty(pageReqVO.getFoodCategory())) {
             // 关联查询食材表
-            foodCategorySql = "exists(select 1 from meals_recipe_food rf left join meals_food f on rf.food_id = f.id where rf.recipe_id = meals_recipe.id and (%s) )";
+            foodCategorySql = "exists(select 1 from meals_recipe_food rf\n" +
+                    "  where rf.recipe_id = meals_recipe.id\n" +
+                    "    and rf.deleted = 0\n" +
+                    "    and rf.food_name REGEXP (\n" +
+                    "      SELECT GROUP_CONCAT(f.name SEPARATOR '|') \n" +
+                    "      FROM meals_food f\n" +
+                    "      where %s \n" +
+                    "    )\n" +
+                    ")";
             // 拼接食材类型查询条件
             foodCategorySql = String.format(foodCategorySql, pageReqVO.getFoodCategory().stream()
                     .map(foodCategory -> "FIND_IN_SET(" + foodCategory + ", f.food_category)")
