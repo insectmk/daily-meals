@@ -227,3 +227,28 @@ CREATE TABLE IF NOT EXISTS `meals_user_favor`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci COMMENT ='用户收藏表';
 
+-- 评论表
+CREATE TABLE IF NOT EXISTS `meals_comment`
+(
+    `id`                  bigint                                                         NOT NULL AUTO_INCREMENT COMMENT '评论编号，主键自增',
+    `user_id`             bigint                                                         NOT NULL COMMENT '评论人编号',
+    `user_nickname`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL     DEFAULT NULL COMMENT '评价人名称',
+    `user_avatar`         varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL     DEFAULT NULL COMMENT '评价人头像',
+    `content_id`          bigint                                                         NOT NULL DEFAULT 0 COMMENT '内容编号',
+    `content_type`        tinyint                                                        NOT NULL DEFAULT 0 COMMENT '内容类型',
+    `comment_content`     varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '评论内容',
+    `comment_author`      bit(1)                                                         NOT NULL DEFAULT b'0' COMMENT '是否内容作者',
+    `pic_urls`            varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL     DEFAULT NULL COMMENT '评论图片地址数组',
+    `reply_user_id`       bigint                                                         NULL     DEFAULT NULL COMMENT '回复的用户编号',
+    `reply_user_nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL     DEFAULT NULL COMMENT '回复的用户名称',
+    `reply_content`       varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL     DEFAULT NULL COMMENT '回复的内容',
+    `creator`             varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL DEFAULT '' COMMENT '创建者',
+    `create_time`         datetime                                                       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updater`             varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL DEFAULT '' COMMENT '更新者',
+    `update_time`         datetime                                                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `deleted`             bit(1)                                                         NOT NULL DEFAULT b'0' COMMENT '是否删除',
+    `tenant_id`           bigint                                                         NOT NULL DEFAULT 0 COMMENT '租户编号',
+    CONSTRAINT `pk_meals_comment_id` PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '评论表';
