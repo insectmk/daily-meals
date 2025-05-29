@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 @Tag(name = "用户 APP - 评论")
 @RestController
@@ -32,7 +33,7 @@ public class AppUserCommentController {
     @PostMapping("/create")
     @Operation(summary = "创建评论")
     public CommonResult<Long> createComment(@Valid @RequestBody AppUserCommentSaveReqVO createReqVO) {
-        return success(appUserCommentService.createComment(createReqVO));
+        return success(appUserCommentService.createComment(getLoginUserId(),createReqVO));
     }
 
     @DeleteMapping("/delete")

@@ -18,10 +18,11 @@ public interface AppUserCommentService {
     /**
      * 创建评论
      *
+     * @param userId 用户ID
      * @param createReqVO 创建信息
      * @return 编号
      */
-    Long createComment(@Valid AppUserCommentSaveReqVO createReqVO);
+    Long createComment(Long userId, @Valid AppUserCommentSaveReqVO createReqVO);
 
     /**
      * 更新评论

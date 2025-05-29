@@ -35,7 +35,7 @@ public class AppUserCommentPageReqVO extends PageParam {
     private Boolean commentAuthor;
 
     @Schema(description = "评论图片地址数组")
-    private String picUrls;
+    private String[] picUrls;
 
     @Schema(description = "回复的用户编号", example = "27670")
     private Long replyUserId;

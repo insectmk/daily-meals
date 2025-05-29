@@ -13,15 +13,12 @@ public class AppUserCommentSaveReqVO {
     private Long id;
 
     @Schema(description = "评论人编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "10081")
-    @NotNull(message = "评论人编号不能为空")
     private Long userId;
 
     @Schema(description = "评价人名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "芋艿")
-    @NotEmpty(message = "评价人名称不能为空")
     private String userNickname;
 
     @Schema(description = "评价人头像", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotEmpty(message = "评价人头像不能为空")
     private String userAvatar;
 
     @Schema(description = "内容编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "10501")
@@ -37,11 +34,10 @@ public class AppUserCommentSaveReqVO {
     private String commentContent;
 
     @Schema(description = "是否内容作者", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "是否内容作者不能为空")
     private Boolean commentAuthor;
 
     @Schema(description = "评论图片地址数组")
-    private String picUrls;
+    private String[] picUrls;
 
     @Schema(description = "回复的用户编号", example = "27670")
     private Long replyUserId;

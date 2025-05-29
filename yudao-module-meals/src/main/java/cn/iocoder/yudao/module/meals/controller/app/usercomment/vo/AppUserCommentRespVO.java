@@ -46,7 +46,7 @@ public class AppUserCommentRespVO {
 
     @Schema(description = "评论图片地址数组")
     @ExcelProperty("评论图片地址数组")
-    private String picUrls;
+    private String[] picUrls;
 
     @Schema(description = "回复的用户编号", example = "27670")
     @ExcelProperty("回复的用户编号")

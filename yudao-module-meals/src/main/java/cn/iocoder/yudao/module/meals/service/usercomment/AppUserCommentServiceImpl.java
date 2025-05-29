@@ -3,9 +3,12 @@ package cn.iocoder.yudao.module.meals.service.usercomment;
 import cn.hutool.core.collection.CollUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentSaveReqVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.usercomment.UserCommentDO;
+import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.usercomment.UserCommentMapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -27,11 +30,15 @@ public class AppUserCommentServiceImpl implements AppUserCommentService {
 
     @Resource
     private UserCommentMapper commentMapper;
+    @Resource
+    private RecipeMapper recipeMapper;
 
     @Override
-    public Long createComment(AppUserCommentSaveReqVO createReqVO) {
-        // 插入
+    public Long createComment(Long userId, AppUserCommentSaveReqVO createReqVO) {
         UserCommentDO comment = BeanUtils.toBean(createReqVO, UserCommentDO.class);
+        // 设置用户
+        comment.setUserId(userId);
+        // 插入
         commentMapper.insert(comment);
         // 返回
         return comment.getId();
