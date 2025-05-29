@@ -1,9 +1,9 @@
-package cn.iocoder.yudao.module.meals.service.comment;
+package cn.iocoder.yudao.module.meals.service.usercomment;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.module.meals.controller.app.comment.vo.AppMealsCommentPageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.comment.vo.AppMealsCommentSaveReqVO;
-import cn.iocoder.yudao.module.meals.dal.dataobject.comment.MealsCommentDO;
+import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentPageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentSaveReqVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.usercomment.UserCommentDO;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author InsectMk
  */
-public interface AppMealsCommentService {
+public interface AppUserCommentService {
 
     /**
      * 创建评论
@@ -21,14 +21,14 @@ public interface AppMealsCommentService {
      * @param createReqVO 创建信息
      * @return 编号
      */
-    Long createComment(@Valid AppMealsCommentSaveReqVO createReqVO);
+    Long createComment(@Valid AppUserCommentSaveReqVO createReqVO);
 
     /**
      * 更新评论
      *
      * @param updateReqVO 更新信息
      */
-    void updateComment(@Valid AppMealsCommentSaveReqVO updateReqVO);
+    void updateComment(@Valid AppUserCommentSaveReqVO updateReqVO);
 
     /**
      * 删除评论
@@ -50,7 +50,7 @@ public interface AppMealsCommentService {
      * @param id 编号
      * @return 评论
      */
-    MealsCommentDO getComment(Long id);
+    UserCommentDO getComment(Long id);
 
     /**
      * 获得评论分页
@@ -58,6 +58,6 @@ public interface AppMealsCommentService {
      * @param pageReqVO 分页查询
      * @return 评论分页
      */
-    PageResult<MealsCommentDO> getCommentPage(AppMealsCommentPageReqVO pageReqVO);
+    PageResult<UserCommentDO> getCommentPage(AppUserCommentPageReqVO pageReqVO);
 
 }

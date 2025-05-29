@@ -1,9 +1,6 @@
-package cn.iocoder.yudao.module.meals.dal.dataobject.comment;
+package cn.iocoder.yudao.module.meals.dal.dataobject.usercomment;
 
 import lombok.*;
-import java.util.*;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.*;
 import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
 
@@ -12,15 +9,15 @@ import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
  *
  * @author InsectMk
  */
-@TableName("meals_comment")
-@KeySequence("meals_comment_seq") // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
+@TableName("meals_user_comment")
+@KeySequence("meals_user_comment_seq") // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MealsCommentDO extends BaseDO {
+public class UserCommentDO extends BaseDO {
 
     /**
      * 评论编号，主键自增

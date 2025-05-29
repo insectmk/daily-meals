@@ -1,13 +1,13 @@
-package cn.iocoder.yudao.module.meals.controller.app.comment;
+package cn.iocoder.yudao.module.meals.controller.app.usercomment;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import cn.iocoder.yudao.module.meals.controller.app.comment.vo.AppMealsCommentPageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.comment.vo.AppMealsCommentRespVO;
-import cn.iocoder.yudao.module.meals.controller.app.comment.vo.AppMealsCommentSaveReqVO;
-import cn.iocoder.yudao.module.meals.dal.dataobject.comment.MealsCommentDO;
-import cn.iocoder.yudao.module.meals.service.comment.AppMealsCommentService;
+import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentPageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentRespVO;
+import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentSaveReqVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.usercomment.UserCommentDO;
+import cn.iocoder.yudao.module.meals.service.usercomment.AppUserCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,24 +22,24 @@ import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 
 @Tag(name = "用户 APP - 评论")
 @RestController
-@RequestMapping("/meals/comment")
+@RequestMapping("/meals/user-comment")
 @Validated
-public class AppMealsCommentController {
+public class AppUserCommentController {
 
     @Resource
-    private AppMealsCommentService appMealsCommentService;
+    private AppUserCommentService appUserCommentService;
 
     @PostMapping("/create")
     @Operation(summary = "创建评论")
-    public CommonResult<Long> createComment(@Valid @RequestBody AppMealsCommentSaveReqVO createReqVO) {
-        return success(appMealsCommentService.createComment(createReqVO));
+    public CommonResult<Long> createComment(@Valid @RequestBody AppUserCommentSaveReqVO createReqVO) {
+        return success(appUserCommentService.createComment(createReqVO));
     }
 
     @DeleteMapping("/delete")
     @Operation(summary = "删除评论")
     @Parameter(name = "id", description = "编号", required = true)
     public CommonResult<Boolean> deleteComment(@RequestParam("id") Long id) {
-        appMealsCommentService.deleteComment(id);
+        appUserCommentService.deleteComment(id);
         return success(true);
     }
 
@@ -47,22 +47,22 @@ public class AppMealsCommentController {
     @Parameter(name = "ids", description = "编号", required = true)
     @Operation(summary = "批量删除评论")
     public CommonResult<Boolean> deleteCommentList(@RequestParam("ids") List<Long> ids) {
-        appMealsCommentService.deleteCommentListByIds(ids);
+        appUserCommentService.deleteCommentListByIds(ids);
         return success(true);
     }
 
     @GetMapping("/get")
     @Operation(summary = "获得评论")
     @Parameter(name = "id", description = "编号", required = true, example = "1024")
-    public CommonResult<AppMealsCommentRespVO> getComment(@RequestParam("id") Long id) {
-        MealsCommentDO comment = appMealsCommentService.getComment(id);
-        return success(BeanUtils.toBean(comment, AppMealsCommentRespVO.class));
+    public CommonResult<AppUserCommentRespVO> getComment(@RequestParam("id") Long id) {
+        UserCommentDO comment = appUserCommentService.getComment(id);
+        return success(BeanUtils.toBean(comment, AppUserCommentRespVO.class));
     }
 
     @GetMapping("/page")
     @Operation(summary = "获得评论分页")
-    public CommonResult<PageResult<AppMealsCommentRespVO>> getCommentPage(@Valid AppMealsCommentPageReqVO pageReqVO) {
-        PageResult<MealsCommentDO> pageResult = appMealsCommentService.getCommentPage(pageReqVO);
-        return success(BeanUtils.toBean(pageResult, AppMealsCommentRespVO.class));
+    public CommonResult<PageResult<AppUserCommentRespVO>> getCommentPage(@Valid AppUserCommentPageReqVO pageReqVO) {
+        PageResult<UserCommentDO> pageResult = appUserCommentService.getCommentPage(pageReqVO);
+        return success(BeanUtils.toBean(pageResult, AppUserCommentRespVO.class));
     }
 }

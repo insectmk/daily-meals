@@ -227,8 +227,8 @@ CREATE TABLE IF NOT EXISTS `meals_user_favor`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci COMMENT ='用户收藏表';
 
--- 评论表
-CREATE TABLE IF NOT EXISTS `meals_comment`
+-- 用户评论表
+CREATE TABLE IF NOT EXISTS `meals_user_comment`
 (
     `id`                  bigint                                                         NOT NULL AUTO_INCREMENT COMMENT '评论编号，主键自增',
     `user_id`             bigint                                                         NOT NULL COMMENT '评论人编号',
@@ -248,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `meals_comment`
     `update_time`         datetime                                                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `deleted`             bit(1)                                                         NOT NULL DEFAULT b'0' COMMENT '是否删除',
     `tenant_id`           bigint                                                         NOT NULL DEFAULT 0 COMMENT '租户编号',
-    CONSTRAINT `pk_meals_comment_id` PRIMARY KEY (`id`) USING BTREE
+    CONSTRAINT `pk_meals_user_comment_id` PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '评论表';

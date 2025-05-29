@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.module.meals.controller.app.comment.vo;
+package cn.iocoder.yudao.module.meals.controller.app.usercomment.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Schema(description = "管理后台 - 评论 Response VO")
 @Data
 @ExcelIgnoreUnannotated
-public class AppMealsCommentRespVO {
+public class AppUserCommentRespVO {
 
     @Schema(description = "评论编号，主键自增", requiredMode = Schema.RequiredMode.REQUIRED, example = "3522")
     @ExcelProperty("评论编号，主键自增")

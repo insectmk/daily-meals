@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.module.meals.controller.app.comment.vo;
+package cn.iocoder.yudao.module.meals.controller.app.usercomment.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Schema(description = "管理后台 - 评论新增/修改 Request VO")
 @Data
-public class AppMealsCommentSaveReqVO {
+public class AppUserCommentSaveReqVO {
 
     @Schema(description = "评论编号，主键自增", requiredMode = Schema.RequiredMode.REQUIRED, example = "3522")
     private Long id;

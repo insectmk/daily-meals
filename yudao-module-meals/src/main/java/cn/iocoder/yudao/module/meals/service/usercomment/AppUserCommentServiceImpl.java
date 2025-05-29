@@ -1,13 +1,12 @@
-package cn.iocoder.yudao.module.meals.service.comment;
+package cn.iocoder.yudao.module.meals.service.usercomment;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import cn.iocoder.yudao.module.meals.controller.admin.comment.vo.MealsCommentPageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.comment.vo.AppMealsCommentPageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.comment.vo.AppMealsCommentSaveReqVO;
-import cn.iocoder.yudao.module.meals.dal.dataobject.comment.MealsCommentDO;
-import cn.iocoder.yudao.module.meals.dal.mysql.comment.MealsCommentMapper;
+import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentPageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentSaveReqVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.usercomment.UserCommentDO;
+import cn.iocoder.yudao.module.meals.dal.mysql.usercomment.UserCommentMapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.COMMENT_NOT_EXISTS;
+import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.USER_COMMENT_NOT_EXISTS;
 
 /**
  * 评论 Service 实现类
@@ -24,26 +23,26 @@ import static cn.iocoder.yudao.module.meals.enums.ErrorCodeConstants.COMMENT_NOT
  */
 @Service
 @Validated
-public class AppMealsCommentServiceImpl implements AppMealsCommentService {
+public class AppUserCommentServiceImpl implements AppUserCommentService {
 
     @Resource
-    private MealsCommentMapper commentMapper;
+    private UserCommentMapper commentMapper;
 
     @Override
-    public Long createComment(AppMealsCommentSaveReqVO createReqVO) {
+    public Long createComment(AppUserCommentSaveReqVO createReqVO) {
         // 插入
-        MealsCommentDO comment = BeanUtils.toBean(createReqVO, MealsCommentDO.class);
+        UserCommentDO comment = BeanUtils.toBean(createReqVO, UserCommentDO.class);
         commentMapper.insert(comment);
         // 返回
         return comment.getId();
     }
 
     @Override
-    public void updateComment(AppMealsCommentSaveReqVO updateReqVO) {
+    public void updateComment(AppUserCommentSaveReqVO updateReqVO) {
         // 校验存在
         validateCommentExists(updateReqVO.getId());
         // 更新
-        MealsCommentDO updateObj = BeanUtils.toBean(updateReqVO, MealsCommentDO.class);
+        UserCommentDO updateObj = BeanUtils.toBean(updateReqVO, UserCommentDO.class);
         commentMapper.updateById(updateObj);
     }
 
@@ -64,26 +63,26 @@ public class AppMealsCommentServiceImpl implements AppMealsCommentService {
         }
 
     private void validateCommentExists(List<Long> ids) {
-        List<MealsCommentDO> list = commentMapper.selectByIds(ids);
+        List<UserCommentDO> list = commentMapper.selectByIds(ids);
         if (CollUtil.isEmpty(list) || list.size() != ids.size()) {
-            throw exception(COMMENT_NOT_EXISTS);
+            throw exception(USER_COMMENT_NOT_EXISTS);
         }
     }
 
     private void validateCommentExists(Long id) {
         if (commentMapper.selectById(id) == null) {
-            throw exception(COMMENT_NOT_EXISTS);
+            throw exception(USER_COMMENT_NOT_EXISTS);
         }
     }
 
     @Override
-    public MealsCommentDO getComment(Long id) {
+    public UserCommentDO getComment(Long id) {
         return commentMapper.selectById(id);
     }
 
     @Override
-    public PageResult<MealsCommentDO> getCommentPage(AppMealsCommentPageReqVO pageReqVO) {
-        return commentMapper.selectPage(BeanUtils.toBean(pageReqVO, MealsCommentPageReqVO.class));
+    public PageResult<UserCommentDO> getCommentPage(AppUserCommentPageReqVO pageReqVO) {
+        return commentMapper.selectPage(pageReqVO);
     }
 
 }
