@@ -44,6 +44,10 @@ public class AppUserCommentRespVO {
     @ExcelProperty("是否内容作者")
     private Boolean commentAuthor;
 
+    @Schema(description = "是否已读", requiredMode = Schema.RequiredMode.REQUIRED)
+    @ExcelProperty("是否内容作者")
+    private Boolean userRead;
+
     @Schema(description = "评论图片地址数组")
     @ExcelProperty("评论图片地址数组")
     private String[] picUrls;

@@ -238,6 +238,7 @@ CREATE TABLE IF NOT EXISTS `meals_user_comment`
     `content_type`        tinyint                                                        NOT NULL DEFAULT 0 COMMENT '内容类型',
     `comment_content`     varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '评论内容',
     `comment_author`      bit(1)                                                         NOT NULL DEFAULT b'0' COMMENT '是否内容作者',
+    `user_read`      bit(1)                                                         NOT NULL DEFAULT b'0' COMMENT '是否已读',
     `pic_urls`            varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL     DEFAULT NULL COMMENT '评论图片地址数组',
     `reply_user_id`       bigint                                                         NULL     DEFAULT NULL COMMENT '回复的用户编号',
     `reply_user_nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL     DEFAULT NULL COMMENT '回复的用户名称',

@@ -54,6 +54,10 @@ public class UserCommentDO extends BaseDO {
      */
     private Boolean commentAuthor;
     /**
+     * 是否已读
+     */
+    private Boolean userRead;
+    /**
      * 评论图片地址数组
      */
     @TableField(typeHandler = JacksonTypeHandler.class)

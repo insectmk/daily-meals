@@ -24,6 +24,7 @@ public interface UserCommentMapper extends BaseMapperX<UserCommentDO> {
                 .eqIfPresent(UserCommentDO::getContentType, reqVO.getContentType())
                 .eqIfPresent(UserCommentDO::getCommentContent, reqVO.getCommentContent())
                 .eqIfPresent(UserCommentDO::getCommentAuthor, reqVO.getCommentAuthor())
+                .eqIfPresent(UserCommentDO::getUserRead, reqVO.getUserRead()) // 是否已读
                 .eqIfPresent(UserCommentDO::getPicUrls, reqVO.getPicUrls())
                 .eqIfPresent(UserCommentDO::getReplyUserId, reqVO.getReplyUserId())
                 .likeIfPresent(UserCommentDO::getReplyUserNickname, reqVO.getReplyUserNickname())

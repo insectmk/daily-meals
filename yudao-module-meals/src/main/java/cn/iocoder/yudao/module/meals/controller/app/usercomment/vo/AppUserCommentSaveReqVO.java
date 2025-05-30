@@ -36,6 +36,9 @@ public class AppUserCommentSaveReqVO {
     @Schema(description = "是否内容作者", requiredMode = Schema.RequiredMode.REQUIRED)
     private Boolean commentAuthor;
 
+    @Schema(description = "是否已读", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Boolean userRead;
+
     @Schema(description = "评论图片地址数组")
     private String[] picUrls;
 

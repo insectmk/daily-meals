@@ -34,6 +34,9 @@ public class AppUserCommentPageReqVO extends PageParam {
     @Schema(description = "是否内容作者")
     private Boolean commentAuthor;
 
+    @Schema(description = "是否已读")
+    private Boolean userRead;
+
     @Schema(description = "评论图片地址数组")
     private String[] picUrls;
 
