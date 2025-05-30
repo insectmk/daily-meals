@@ -46,6 +46,10 @@ public class UserCommentDO extends BaseDO {
      */
     private Integer contentType;
     /**
+     * 内容所属人
+     */
+    private Long contentUserId;
+    /**
      * 评论内容
      */
     private String commentContent;

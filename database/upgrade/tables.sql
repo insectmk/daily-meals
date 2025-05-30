@@ -236,6 +236,7 @@ CREATE TABLE IF NOT EXISTS `meals_user_comment`
     `user_avatar`         varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL     DEFAULT NULL COMMENT '评价人头像',
     `content_id`          bigint                                                         NOT NULL DEFAULT 0 COMMENT '内容编号',
     `content_type`        tinyint                                                        NOT NULL DEFAULT 0 COMMENT '内容类型',
+    `content_user_id`             bigint                                                         NOT NULL COMMENT '内容所属人编号',
     `comment_content`     varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '评论内容',
     `comment_author`      bit(1)                                                         NOT NULL DEFAULT b'0' COMMENT '是否内容作者',
     `user_read`      bit(1)                                                         NOT NULL DEFAULT b'0' COMMENT '是否已读',

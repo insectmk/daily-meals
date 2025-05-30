@@ -28,6 +28,9 @@ public class AppUserCommentPageReqVO extends PageParam {
     @Schema(description = "内容类型", example = "1")
     private Integer contentType;
 
+    @Schema(description = "内容所属人", example = "1")
+    private Long contentUserId;
+
     @Schema(description = "评论内容")
     private String commentContent;
 

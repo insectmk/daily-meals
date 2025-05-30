@@ -29,6 +29,9 @@ public class AppUserCommentSaveReqVO {
     @NotNull(message = "内容类型不能为空")
     private Integer contentType;
 
+    @Schema(description = "内容所属人编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "10081")
+    private Long contentUserId;
+
     @Schema(description = "评论内容", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotEmpty(message = "评论内容不能为空")
     private String commentContent;
