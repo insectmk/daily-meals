@@ -266,6 +266,19 @@ public class AppRecipeServiceImpl implements AppRecipeService {
                 .eq(RecipeDO::getRecipeType, RecipeTypesEnum.USER.getType()) // 菜谱类型为用户的
                 .eq(RecipeDO::getId, createReqVO.getRecipeId()) // 该菜谱
         ));
+        // 内容作者
+        if (userCommentDO.getCommentAuthor()) {
+            // 如果是内容作者，直接赋值评论人的id到内容作者上
+            userCommentDO.setContentId(userCommentDO.getUserId());
+        } else {
+            // 如果是不是内容作者，赋值内容的作者的id到内容作者上，如果不为用户菜谱，则不赋值
+            RecipeDO contentRecipe = recipeMapper.selectOne(new LambdaQueryWrapperX<RecipeDO>()
+                    .eq(RecipeDO::getId, createReqVO.getRecipeId())
+                    .eq(RecipeDO::getRecipeType, RecipeTypesEnum.USER.getType()));
+            if (Objects.nonNull(contentRecipe)) {
+                userCommentDO.setContentId(contentRecipe.getId());
+            }
+        }
         // 插入内容
         userCommentMapper.insert(userCommentDO);
         // 返回ID
