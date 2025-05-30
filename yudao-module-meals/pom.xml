@@ -18,6 +18,14 @@
     </description>
 
     <dependencies>  <!-- 5. 新增依赖，这里引入的都是比较常用的业务组件、技术组件 -->
+        <!--导入会员模块接口-->
+        <dependency>
+            <groupId>cn.iocoder.boot</groupId>
+            <artifactId>yudao-module-member</artifactId>
+            <version>${revision}</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!--导入通用包-->
         <dependency>
             <groupId>cn.iocoder.boot</groupId>

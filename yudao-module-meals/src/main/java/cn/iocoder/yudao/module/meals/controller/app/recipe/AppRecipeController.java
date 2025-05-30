@@ -3,10 +3,8 @@ package cn.iocoder.yudao.module.meals.controller.app.recipe;
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePopularPublicReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeSaveReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.*;
+import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentSaveReqVO;
 import cn.iocoder.yudao.module.meals.service.recipe.AppRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,6 +28,12 @@ public class AppRecipeController {
 
     @Resource
     private AppRecipeService appRecipeService;
+
+    @PostMapping("/common")
+    @Operation(summary = "评论菜谱")
+    public CommonResult<Long> createComment(@Valid @RequestBody AppRecipeCommentSaveReqVO createReqVO) {
+        return success(appRecipeService.createRecipeComment(getLoginUserId(),createReqVO));
+    }
 
     @GetMapping("/page-self-by-collect")
     @Operation(summary = "获得自己某个收藏夹下的菜谱分页")

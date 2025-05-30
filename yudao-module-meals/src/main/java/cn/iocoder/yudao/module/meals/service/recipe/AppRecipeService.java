@@ -1,10 +1,7 @@
 package cn.iocoder.yudao.module.meals.service.recipe;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePopularPublicReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
-import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeSaveReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -90,4 +87,12 @@ public interface AppRecipeService {
      * @return 分页信息
      */
     PageResult<AppRecipeRespVO> getSelfRecipeDetailPageByCollect(Long userId, @Valid AppRecipePageReqVO pageReqVO);
+
+    /**
+     * 创建菜谱评论
+     * @param userId 用户ID
+     * @param createReqVO 评论内容
+     * @return
+     */
+    Long createRecipeComment(Long userId, @Valid AppRecipeCommentSaveReqVO createReqVO);
 }

@@ -11,14 +11,18 @@ import cn.iocoder.yudao.module.meals.convert.recipe.RecipeConvert;
 import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplanitem.PopularPublicRecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.usercomment.UserCommentDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.dailyplanitem.DailyPlanItemMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeFoodMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeMapper;
+import cn.iocoder.yudao.module.meals.dal.mysql.usercomment.UserCommentMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.userfavor.UserFavorMapper;
 import cn.iocoder.yudao.module.meals.enums.ContentTypesEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
+import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
+import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +54,10 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     private DailyPlanItemMapper dailyPlanItemMapper;
     @Resource
     private UserFavorMapper userFavorMapper;
+    @Resource
+    private UserCommentMapper userCommentMapper;
+    @Resource
+    private MemberUserApi memberUserApi;
 
     @Override
     public AppRecipeRespVO getRecipeDetail(Long userId, Long id) {
@@ -239,6 +247,29 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         List<RecipeFoodDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
         // 装载信息
         return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
+    }
+
+    @Override
+    public Long createRecipeComment(Long userId, AppRecipeCommentSaveReqVO createReqVO) {
+        UserCommentDO userCommentDO = BeanUtils.toBean(createReqVO, UserCommentDO.class);
+        // 用户信息
+        MemberUserRespDTO user = memberUserApi.getUser(userId);
+        userCommentDO.setUserId(userId); // 用户ID
+        userCommentDO.setUserNickname(user.getNickname()); // 用户昵称
+        userCommentDO.setUserAvatar(user.getAvatar()); // 用户头像
+        // 内容类型：菜谱
+        userCommentDO.setContentType(ContentTypesEnum.RECIPE.getType());
+        userCommentDO.setContentId(createReqVO.getRecipeId()); // 内容编码
+        // 是否内容作者
+        userCommentDO.setCommentAuthor(recipeMapper.exists(new LambdaQueryWrapperX<RecipeDO>()
+                .eq(RecipeDO::getUserId, userId) // 评论人的
+                .eq(RecipeDO::getRecipeType, RecipeTypesEnum.USER.getType()) // 菜谱类型为用户的
+                .eq(RecipeDO::getId, createReqVO.getRecipeId()) // 该菜谱
+        ));
+        // 插入内容
+        userCommentMapper.insert(userCommentDO);
+        // 返回ID
+        return userCommentDO.getId();
     }
 
     /**
