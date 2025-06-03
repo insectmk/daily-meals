@@ -80,8 +80,14 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         // 查询食材信息
         List<RecipeFoodDO> recipeFoods = recipeFoodMapper.selectList(new LambdaQueryWrapperX<RecipeFoodDO>()
                 .eqIfPresent(RecipeFoodDO::getRecipeId, id));
-        // 拼装信息
+        // 拼装食材信息
         appRecipeRespVO.setFoods(BeanUtils.toBean(recipeFoods, AppRecipeFoodRespVO.class));
+        // 查询用户信息
+        if (RecipeTypesEnum.USER.getType().equals(recipeDO.getRecipeType())) {
+            MemberUserRespDTO user = memberUserApi.getUser(recipeDO.getUserId());
+            appRecipeRespVO.setUserNickname(user.getNickname()); // 用户昵称
+            appRecipeRespVO.setUserAvatar(user.getAvatar()); // 用户头像
+        }
         return appRecipeRespVO;
     }
 
