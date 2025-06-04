@@ -80,9 +80,9 @@ public class AppRecipeRespVO {
     @Schema(description = "是否收藏", requiredMode = Schema.RequiredMode.REQUIRED, example = "true")
     private Boolean favor;
 
-    @Schema(description = "评价人名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "芋艿")
+    @Schema(description = "用户名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "芋艿")
     private String userNickname;
 
-    @Schema(description = "评价人头像", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "用户头像", requiredMode = Schema.RequiredMode.REQUIRED)
     private String userAvatar;
 }
