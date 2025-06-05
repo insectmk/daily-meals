@@ -11,8 +11,6 @@ public class AppRecipeFoodSaveReqVO {
     private Long id;
     @Schema(description = "菜谱ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "23107")
     private Long recipeId;
-    @Schema(description = "食材ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "23107")
-    private Long foodId;
     @Schema(description = "量", requiredMode = Schema.RequiredMode.REQUIRED, example = "0.05")
     private Double amount;
     @Schema(description = "备注", requiredMode = Schema.RequiredMode.REQUIRED, example = "这是一个 备注")
