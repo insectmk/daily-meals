@@ -1,0 +1,39 @@
+package cn.iocoder.yudao.module.meals.controller.app.user;
+
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
+import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+
+/**
+ * @Title: AppUserController
+ * @Author InsectMk
+ * @Package cn.iocoder.yudao.module.meals.controller.app.user
+ * @Date 2025/6/5 16:56
+ * @description: 用户 APP - 用户
+ */
+@Tag(name = "用户 APP - 菜谱")
+@RestController
+@RequestMapping("/meals/user")
+@Validated
+public class AppUserController {
+    @Resource
+    private MemberUserApi memberUserApi;
+
+    @GetMapping("/users-by-nickname")
+    @Operation(summary = "基于用户昵称，模糊匹配用户列表")
+    public CommonResult<List<MemberUserRespDTO>> getUserListByNickname(@RequestParam("nickname") String nickname) {
+        return success(memberUserApi.getUserListByNickname(nickname));
+    }
+}
