@@ -87,6 +87,12 @@ public class AppRecipeServiceImpl implements AppRecipeService {
             MemberUserRespDTO user = memberUserApi.getUser(recipeDO.getUserId());
             appRecipeRespVO.setUserNickname(user.getNickname()); // 用户昵称
             appRecipeRespVO.setUserAvatar(user.getAvatar()); // 用户头像
+            // 查询是否关注菜谱作者
+            appRecipeRespVO.setUserFavor(userFavorMapper.exists(new LambdaQueryWrapperX<UserFavorDO>()
+                    .eq(UserFavorDO::getUserId, userId) // 当前登录用户的关注
+                    .eq(UserFavorDO::getContentType, ContentTypesEnum.USER.getType()) // 内容类型为用户
+                    .eq(UserFavorDO::getContentId, user.getId()) // 关注内容ID为菜谱作者ID
+            ));
         }
         return appRecipeRespVO;
     }

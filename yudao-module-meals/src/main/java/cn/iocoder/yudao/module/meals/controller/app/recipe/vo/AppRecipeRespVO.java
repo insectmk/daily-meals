@@ -85,4 +85,7 @@ public class AppRecipeRespVO {
 
     @Schema(description = "用户头像", requiredMode = Schema.RequiredMode.REQUIRED)
     private String userAvatar;
+
+    @Schema(description = "是否关注用户", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Boolean userFavor;
 }
