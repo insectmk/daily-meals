@@ -1,6 +1,10 @@
 package cn.iocoder.yudao.module.meals.service.user;
 
+import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInfoRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInteractDataRespVO;
+import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -16,6 +20,9 @@ import java.util.List;
 @Service
 @Validated
 public class UserServiceImpl implements UserService {
+    @Resource
+    private MemberUserApi memberUserApi;
+
     @Override
     public AppUserInteractDataRespVO getUserInteractData(String userId) {
         AppUserInteractDataRespVO result = new AppUserInteractDataRespVO();
@@ -29,5 +36,10 @@ public class UserServiceImpl implements UserService {
         // 收藏
         result.setCollects(2738L);
         return result;
+    }
+
+    @Override
+    public List<AppUserInfoRespVO> getUserListByNickname(Long loginUserId, String nickname) {
+        return BeanUtils.toBean(memberUserApi.getUserListByNickname(nickname),  AppUserInfoRespVO.class);
     }
 }

@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.meals.controller.app.user;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInfoRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInteractDataRespVO;
 import cn.iocoder.yudao.module.meals.service.user.UserService;
 import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 /**
  * @Title: AppUserController
@@ -31,14 +33,12 @@ import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 @Validated
 public class AppUserController {
     @Resource
-    private MemberUserApi memberUserApi;
-    @Resource
     private UserService userService ;
 
     @GetMapping("/users-by-nickname")
     @Operation(summary = "基于用户昵称，模糊匹配用户列表")
-    public CommonResult<List<MemberUserRespDTO>> getUserListByNickname(@RequestParam("nickname") String nickname) {
-        return success(memberUserApi.getUserListByNickname(nickname));
+    public CommonResult<List<AppUserInfoRespVO>> getUserListByNickname(@RequestParam("nickname") String nickname) {
+        return success(userService.getUserListByNickname(getLoginUserId() ,nickname));
     }
 
     @GetMapping("/user-interact-data")
