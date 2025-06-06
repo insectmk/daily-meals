@@ -1,6 +1,8 @@
 package cn.iocoder.yudao.module.meals.controller.app.user;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInteractDataRespVO;
+import cn.iocoder.yudao.module.meals.service.user.UserService;
 import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
 import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,10 +32,18 @@ import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 public class AppUserController {
     @Resource
     private MemberUserApi memberUserApi;
+    @Resource
+    private UserService userService ;
 
     @GetMapping("/users-by-nickname")
     @Operation(summary = "基于用户昵称，模糊匹配用户列表")
     public CommonResult<List<MemberUserRespDTO>> getUserListByNickname(@RequestParam("nickname") String nickname) {
         return success(memberUserApi.getUserListByNickname(nickname));
+    }
+
+    @GetMapping("/user-interact-data")
+    @Operation(summary = "获取用户的关注数、粉丝数、获赞与收藏量")
+    public CommonResult<AppUserInteractDataRespVO> getUserInteractData(@RequestParam("userId") String userId) {
+        return success(userService.getUserInteractData(userId));
     }
 }
