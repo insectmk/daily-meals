@@ -16,7 +16,8 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum ContentTypesEnum implements ArrayValuable<DictDataRespDTO> {
 
-    RECIPE(0, "菜谱");
+    RECIPE(0, "菜谱"), // 收藏
+    USER(1, "用户"); // 关注
 
     public static final DictDataRespDTO[] ARRAYS = Arrays.stream(values())
             .map(e -> {
