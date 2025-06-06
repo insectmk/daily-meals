@@ -2,6 +2,7 @@ package cn.iocoder.yudao.module.meals.service.user;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInfoRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInteractDataRespVO;
@@ -12,6 +13,9 @@ import cn.iocoder.yudao.module.meals.enums.ContentTypesEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
 import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
+import cn.iocoder.yudao.module.member.controller.admin.user.vo.MemberUserPageReqVO;
+import cn.iocoder.yudao.module.member.dal.dataobject.user.MemberUserDO;
+import cn.iocoder.yudao.module.member.dal.mysql.user.MemberUserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -35,6 +39,8 @@ import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.
 public class UserServiceImpl implements UserService {
     @Resource
     private MemberUserApi memberUserApi;
+    @Resource
+    private MemberUserMapper memberUserMapper;
     @Resource
     private UserFavorMapper userFavorMapper;
 
@@ -80,11 +86,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<AppUserInfoRespVO> getUserListByNickname(Long loginUserId, String nickname) {
-        List<MemberUserRespDTO> userDtoList = memberUserApi.getUserListByNickname(nickname);
+    public PageResult<AppUserInfoRespVO> getUsersPage(Long loginUserId, MemberUserPageReqVO reqVO) {
+        // 查询用户分页
+        PageResult<MemberUserDO> userDOPageResult = memberUserMapper.selectPage(reqVO);
         // 查询是否关注数据
-        Set<Long> contentIds = convertSet(userDtoList, MemberUserRespDTO::getId);
+        Set<Long> contentIds = convertSet(userDOPageResult.getList(), MemberUserDO::getId);
         Set<Long> favorContentIds = userFavorMapper.getFavorContentIds(contentIds, ContentTypesEnum.USER.getType(), loginUserId);
-        return UserConvert.INSTANCE.convertFavorList(userDtoList, favorContentIds);
+        return UserConvert.INSTANCE.convertFavorPage(userDOPageResult, favorContentIds);
     }
 }

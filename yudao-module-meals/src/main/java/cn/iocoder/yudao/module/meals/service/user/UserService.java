@@ -1,7 +1,9 @@
 package cn.iocoder.yudao.module.meals.service.user;
 
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInfoRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInteractDataRespVO;
+import cn.iocoder.yudao.module.member.controller.admin.user.vo.MemberUserPageReqVO;
 
 import java.util.List;
 
@@ -24,8 +26,8 @@ public interface UserService {
     /**
      * 基于用户昵称，模糊匹配用户列表
      * @param loginUserId 当前登录用户id
-     * @param nickname 用户昵称
+     * @param reqVO 分页请求参数
      * @return 用户列表
      */
-    List<AppUserInfoRespVO> getUserListByNickname(Long loginUserId, String nickname);
+    PageResult<AppUserInfoRespVO> getUsersPage(Long loginUserId, MemberUserPageReqVO reqVO);
 }

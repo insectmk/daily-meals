@@ -1,14 +1,17 @@
 package cn.iocoder.yudao.module.meals.controller.app.user;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInfoRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInteractDataRespVO;
 import cn.iocoder.yudao.module.meals.service.user.UserService;
 import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
 import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
+import cn.iocoder.yudao.module.member.controller.admin.user.vo.MemberUserPageReqVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,10 +38,10 @@ public class AppUserController {
     @Resource
     private UserService userService ;
 
-    @GetMapping("/users-by-nickname")
-    @Operation(summary = "基于用户昵称，模糊匹配用户列表")
-    public CommonResult<List<AppUserInfoRespVO>> getUserListByNickname(@RequestParam("nickname") String nickname) {
-        return success(userService.getUserListByNickname(getLoginUserId() ,nickname));
+    @GetMapping("/page")
+    @Operation(summary = "分页查询用户")
+    public CommonResult<PageResult<AppUserInfoRespVO>> getUsersPage(@Valid MemberUserPageReqVO reqVO) {
+        return success(userService.getUsersPage(getLoginUserId(), reqVO));
     }
 
     @GetMapping("/user-interact-data")

@@ -9,6 +9,7 @@ import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInfoRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
 import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
+import cn.iocoder.yudao.module.member.dal.dataobject.user.MemberUserDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -31,16 +32,16 @@ public interface UserConvert {
 
     /**
      * 将用户信息，转为是否关注的用户信息
-     * @param userDtoList
-     * @param favorContentIds
+     * @param userDOPage DO分页数据
+     * @param favorContentIds 关注的ID
      * @return
      */
-    default List<AppUserInfoRespVO> convertFavorList(List<MemberUserRespDTO> userDtoList, Set<Long> favorContentIds) {
-        List<AppUserInfoRespVO> result = BeanUtils.toBean(userDtoList, AppUserInfoRespVO.class);
-        result.forEach(userInfo -> {
+    default PageResult<AppUserInfoRespVO> convertFavorPage(PageResult<MemberUserDO> userDOPage, Set<Long> favorContentIds) {
+        PageResult<AppUserInfoRespVO> pageResult = BeanUtils.toBean(userDOPage, AppUserInfoRespVO.class);
+        pageResult.getList().forEach(userInfo -> {
             // 如果关注列表里存在用户ID则标识为喜欢
             userInfo.setFavor(favorContentIds.contains(userInfo.getId()));
         });
-        return result;
+        return pageResult;
     }
 }
