@@ -44,6 +44,18 @@ public class AppUserController {
         return success(userService.getUsersPage(getLoginUserId(), reqVO));
     }
 
+    @GetMapping("/page-follows")
+    @Operation(summary = "分页查询关注的用户")
+    public CommonResult<PageResult<AppUserInfoRespVO>> getFollowUsersPage(@Valid MemberUserPageReqVO reqVO) {
+        return success(userService.getFollowUsersPage(getLoginUserId(), reqVO));
+    }
+
+    @GetMapping("/page-fans")
+    @Operation(summary = "分页查询粉丝用户")
+    public CommonResult<PageResult<AppUserInfoRespVO>> getFanUsersPage(@Valid MemberUserPageReqVO reqVO) {
+        return success(userService.getFanUsersPage(getLoginUserId(), reqVO));
+    }
+
     @GetMapping("/user-interact-data")
     @Operation(summary = "获取用户的关注数、粉丝数、获赞与收藏量")
     public CommonResult<AppUserInteractDataRespVO> getUserInteractData(@RequestParam("userId") String userId) {

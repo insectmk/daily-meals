@@ -12,7 +12,6 @@ import cn.iocoder.yudao.module.meals.dal.mysql.userfavor.UserFavorMapper;
 import cn.iocoder.yudao.module.meals.enums.ContentTypesEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
-import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
 import cn.iocoder.yudao.module.member.controller.admin.user.vo.MemberUserPageReqVO;
 import cn.iocoder.yudao.module.member.dal.dataobject.user.MemberUserDO;
 import cn.iocoder.yudao.module.member.dal.mysql.user.MemberUserMapper;
@@ -89,6 +88,37 @@ public class UserServiceImpl implements UserService {
     public PageResult<AppUserInfoRespVO> getUsersPage(Long loginUserId, MemberUserPageReqVO reqVO) {
         // 查询用户分页
         PageResult<MemberUserDO> userDOPageResult = memberUserMapper.selectPage(reqVO);
+        if (userDOPageResult.getTotal() == 0) {
+            return BeanUtils.toBean(userDOPageResult, AppUserInfoRespVO.class);
+        }
+        // 查询是否关注数据
+        Set<Long> contentIds = convertSet(userDOPageResult.getList(), MemberUserDO::getId);
+        Set<Long> favorContentIds = userFavorMapper.getFavorContentIds(contentIds, ContentTypesEnum.USER.getType(), loginUserId);
+        return UserConvert.INSTANCE.convertFavorPage(userDOPageResult, favorContentIds);
+    }
+
+    @Override
+    public PageResult<AppUserInfoRespVO> getFollowUsersPage(Long loginUserId, MemberUserPageReqVO reqVO) {
+        // 查询用户分页，关注的人
+        PageResult<MemberUserDO> userDOPageResult = memberUserMapper.selectPage(reqVO, new QueryWrapper<MemberUserDO>()
+                .apply(String.format("exists(select 1 from meals_user_favor f where f.content_type = '%d' and f.user_id = '%d' and f.content_id = member_user.id and f.deleted = 0)", ContentTypesEnum.USER.getType(), loginUserId)));
+        if (userDOPageResult.getTotal() == 0) {
+            return BeanUtils.toBean(userDOPageResult, AppUserInfoRespVO.class);
+        }
+        // 查询是否关注数据
+        Set<Long> contentIds = convertSet(userDOPageResult.getList(), MemberUserDO::getId);
+        Set<Long> favorContentIds = userFavorMapper.getFavorContentIds(contentIds, ContentTypesEnum.USER.getType(), loginUserId);
+        return UserConvert.INSTANCE.convertFavorPage(userDOPageResult, favorContentIds);
+    }
+
+    @Override
+    public PageResult<AppUserInfoRespVO> getFanUsersPage(Long loginUserId, MemberUserPageReqVO reqVO) {
+        // 查询用户分页，粉丝
+        PageResult<MemberUserDO> userDOPageResult = memberUserMapper.selectPage(reqVO, new QueryWrapper<MemberUserDO>()
+                .apply(String.format("exists(select 1 from meals_user_favor f where f.content_type = '%d' and f.content_id = '%d' and f.user_id = member_user.id and f.deleted = 0)", ContentTypesEnum.USER.getType(), loginUserId)));
+        if (userDOPageResult.getTotal() == 0) {
+            return BeanUtils.toBean(userDOPageResult, AppUserInfoRespVO.class);
+        }
         // 查询是否关注数据
         Set<Long> contentIds = convertSet(userDOPageResult.getList(), MemberUserDO::getId);
         Set<Long> favorContentIds = userFavorMapper.getFavorContentIds(contentIds, ContentTypesEnum.USER.getType(), loginUserId);

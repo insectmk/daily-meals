@@ -4,6 +4,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInfoRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInteractDataRespVO;
 import cn.iocoder.yudao.module.member.controller.admin.user.vo.MemberUserPageReqVO;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -27,7 +28,23 @@ public interface UserService {
      * 基于用户昵称，模糊匹配用户列表
      * @param loginUserId 当前登录用户id
      * @param reqVO 分页请求参数
-     * @return 用户列表
+     * @return 用户分页数据
      */
     PageResult<AppUserInfoRespVO> getUsersPage(Long loginUserId, MemberUserPageReqVO reqVO);
+
+    /**
+     * 分页查询关注用户
+     * @param loginUserId 当前登录用户
+     * @param reqVO 分页请求
+     * @return 用户分页数据
+     */
+    PageResult<AppUserInfoRespVO> getFollowUsersPage(Long loginUserId, @Valid MemberUserPageReqVO reqVO);
+
+    /**
+     * 分页查询粉丝用户
+     * @param loginUserId 当前登录用户
+     * @param reqVO 分页请求
+     * @return 用户分页数据
+     */
+    PageResult<AppUserInfoRespVO> getFanUsersPage(Long loginUserId, @Valid MemberUserPageReqVO reqVO);
 }
