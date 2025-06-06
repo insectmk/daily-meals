@@ -73,4 +73,11 @@ public class AppUserInfoRespVO {
     @Schema(description = "积分", example = "27498")
     @ExcelProperty("积分")
     private Integer point;
+
+    /**
+     * 是否关注
+     */
+    @Schema(description = "是否关注")
+    @ExcelProperty("是否关注")
+    private Boolean favor;
 }
