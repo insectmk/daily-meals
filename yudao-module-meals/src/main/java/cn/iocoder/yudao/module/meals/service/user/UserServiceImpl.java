@@ -7,11 +7,12 @@ import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInfoRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInteractDataRespVO;
 import cn.iocoder.yudao.module.meals.convert.user.UserConvert;
+import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
+import cn.iocoder.yudao.module.meals.dal.mysql.recipe.RecipeMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.userfavor.UserFavorMapper;
 import cn.iocoder.yudao.module.meals.enums.ContentTypesEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
-import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
 import cn.iocoder.yudao.module.member.controller.admin.user.vo.MemberUserPageReqVO;
 import cn.iocoder.yudao.module.member.dal.dataobject.user.MemberUserDO;
 import cn.iocoder.yudao.module.member.dal.mysql.user.MemberUserMapper;
@@ -37,14 +38,14 @@ import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.
 @Validated
 public class UserServiceImpl implements UserService {
     @Resource
-    private MemberUserApi memberUserApi;
-    @Resource
     private MemberUserMapper memberUserMapper;
     @Resource
     private UserFavorMapper userFavorMapper;
+    @Resource
+    private RecipeMapper recipeMapper;
 
     @Override
-    public AppUserInteractDataRespVO getUserInteractData(String userId) {
+    public AppUserInteractDataRespVO getUserInteractData(Long userId) {
         AppUserInteractDataRespVO result = new AppUserInteractDataRespVO();
         // 关注
         List<Map<String, Object>> followsMaps = userFavorMapper.selectMaps(new QueryWrapper<UserFavorDO>()
@@ -80,6 +81,17 @@ public class UserServiceImpl implements UserService {
             result.setCollects(0L);
         } else {
             result.setCollects(MapUtil.getLong(collectMaps.get(0), "collects", 0L));
+        }
+        // 发布菜谱数
+        List<Map<String, Object>> recipesMaps = recipeMapper.selectMaps(new QueryWrapper<RecipeDO>()
+                .select("count(distinct id) as recipes")
+                .eq("recipe_type", RecipeTypesEnum.USER.getType()) // 菜谱类型为用户
+                .eq("user_id", userId)
+        );
+        if (CollUtil.isEmpty(recipesMaps)) {
+            result.setRecipes(0L);
+        } else {
+            result.setRecipes(MapUtil.getLong(recipesMaps.get(0), "recipes", 0L));
         }
         return result;
     }

@@ -31,4 +31,8 @@ public class AppUserInteractDataRespVO {
     @Schema(description = "收藏量", example = "27498")
     @ExcelProperty("收藏量")
     private Long collects;
+
+    @Schema(description = "发布菜谱数", example = "27498")
+    @ExcelProperty("发布菜谱数")
+    private Long recipes;
 }

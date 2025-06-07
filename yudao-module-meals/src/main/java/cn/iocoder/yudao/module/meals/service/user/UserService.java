@@ -22,7 +22,7 @@ public interface UserService {
      * @param userId 用户ID
      * @return 关注数、粉丝数、获赞与收藏量
      */
-    AppUserInteractDataRespVO getUserInteractData(String userId);
+    AppUserInteractDataRespVO getUserInteractData(Long userId);
 
     /**
      * 基于用户昵称，模糊匹配用户列表

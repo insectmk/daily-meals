@@ -58,7 +58,7 @@ public class AppUserController {
 
     @GetMapping("/user-interact-data")
     @Operation(summary = "获取用户的关注数、粉丝数、获赞与收藏量")
-    public CommonResult<AppUserInteractDataRespVO> getUserInteractData(@RequestParam("userId") String userId) {
+    public CommonResult<AppUserInteractDataRespVO> getUserInteractData(@RequestParam("userId") Long userId) {
         return success(userService.getUserInteractData(userId));
     }
 }
