@@ -297,6 +297,23 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         return userCommentDO.getId();
     }
 
+    @Override
+    public PageResult<AppRecipeRespVO> getFavorUsersRecipePage(Long userId, AppRecipePageReqVO pageReqVO) {
+        // 关注用户的菜谱
+        pageReqVO.setUserFavor(Boolean.TRUE);
+        // 查询基础信息
+        PageResult<RecipeDO> pageResult = recipeMapper.getUserViewableRecipePage(userId, pageReqVO);
+        List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
+        if (CollUtil.isEmpty(recipes)) {
+            // 为空直接返回
+            return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
+        }
+        // 查询菜谱食材信息
+        List<RecipeFoodDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
+        // 装载信息
+        return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
+    }
+
     /**
      * 通过菜谱ID集合获取所有菜谱的食材信息
      * @param recipeIds 菜谱ID

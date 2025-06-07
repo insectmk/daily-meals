@@ -35,6 +35,13 @@ public class AppRecipeController {
         return success(appRecipeService.createRecipeComment(getLoginUserId(),createReqVO));
     }
 
+    @GetMapping("/page-favor-users")
+    @Operation(summary = "获取用户关注作者的的菜谱分页")
+    public CommonResult<PageResult<AppRecipeRespVO>> getFavorUsersRecipePage(@Valid AppRecipePageReqVO pageReqVO) {
+        PageResult<AppRecipeRespVO> pageResult = appRecipeService.getFavorUsersRecipePage(getLoginUserId(),pageReqVO);
+        return success(pageResult);
+    }
+
     @GetMapping("/page-self-by-collect")
     @Operation(summary = "获得自己某个收藏夹下的菜谱分页")
     public CommonResult<PageResult<AppRecipeRespVO>> getSelfRecipePageByCollect(@Valid AppRecipePageReqVO pageReqVO) {

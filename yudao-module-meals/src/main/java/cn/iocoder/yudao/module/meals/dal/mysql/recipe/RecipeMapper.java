@@ -8,6 +8,7 @@ import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.module.meals.controller.admin.recipe.vo.RecipePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipePageReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
+import cn.iocoder.yudao.module.meals.enums.ContentTypesEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -39,6 +40,14 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
      * @param pageReqVO 分页查询对象
      */
     default PageResult<RecipeDO> getUserViewableRecipePage(Long userId, AppRecipePageReqVO pageReqVO) {
+        // 处理 关注用户菜谱 userFavor 过滤条件
+        String userFavorSql = "";
+        if (!Objects.isNull(pageReqVO.getUserFavor())) {
+            // 查询关注用户的菜谱
+            if (pageReqVO.getUserFavor()) {
+                userFavorSql = String.format("exists(select 1 from meals_user_favor f where f.content_type = %d and f.content_id = meals_recipe.user_id and meals_recipe.recipe_type = %d and f.user_id = %d and f.deleted = 0)", ContentTypesEnum.USER.getType(), RecipeTypesEnum.USER.getType(), userId);
+            }
+        }
         // 处理 食材名称 foodNames 过滤条件
         String foodNameSql = "";
         if (CollUtil.isNotEmpty(pageReqVO.getFoodNames())) {
@@ -111,6 +120,8 @@ public interface RecipeMapper extends BaseMapperX<RecipeDO> {
                 .apply(StrUtil.isNotEmpty(foodCategorySql), foodCategorySql)
                 // 食材名称
                 .apply(StrUtil.isNotEmpty(foodNameSql), foodNameSql)
+                // 关注用户的菜谱
+                .apply(StrUtil.isNotEmpty(userFavorSql), userFavorSql)
                 // 按照更新时间排序
                 .orderByDesc(RecipeDO::getUpdateTime)
                 .orderByDesc(RecipeDO::getId);
