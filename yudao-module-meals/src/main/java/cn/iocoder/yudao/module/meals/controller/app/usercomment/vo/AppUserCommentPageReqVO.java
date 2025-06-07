@@ -28,11 +28,17 @@ public class AppUserCommentPageReqVO extends PageParam {
     @Schema(description = "内容类型", example = "1")
     private Integer contentType;
 
+    @Schema(description = "内容所属人", example = "1")
+    private Long contentUserId;
+
     @Schema(description = "评论内容")
     private String commentContent;
 
     @Schema(description = "是否内容作者")
     private Boolean commentAuthor;
+
+    @Schema(description = "是否已读")
+    private Boolean userRead;
 
     @Schema(description = "评论图片地址数组")
     private String[] picUrls;

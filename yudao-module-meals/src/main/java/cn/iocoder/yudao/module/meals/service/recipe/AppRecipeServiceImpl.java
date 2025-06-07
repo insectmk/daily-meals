@@ -80,8 +80,20 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         // 查询食材信息
         List<RecipeFoodDO> recipeFoods = recipeFoodMapper.selectList(new LambdaQueryWrapperX<RecipeFoodDO>()
                 .eqIfPresent(RecipeFoodDO::getRecipeId, id));
-        // 拼装信息
+        // 拼装食材信息
         appRecipeRespVO.setFoods(BeanUtils.toBean(recipeFoods, AppRecipeFoodRespVO.class));
+        // 查询用户信息
+        if (RecipeTypesEnum.USER.getType().equals(recipeDO.getRecipeType())) {
+            MemberUserRespDTO user = memberUserApi.getUser(recipeDO.getUserId());
+            appRecipeRespVO.setUserNickname(user.getNickname()); // 用户昵称
+            appRecipeRespVO.setUserAvatar(user.getAvatar()); // 用户头像
+            // 查询是否关注菜谱作者
+            appRecipeRespVO.setUserFavor(userFavorMapper.exists(new LambdaQueryWrapperX<UserFavorDO>()
+                    .eq(UserFavorDO::getUserId, userId) // 当前登录用户的关注
+                    .eq(UserFavorDO::getContentType, ContentTypesEnum.USER.getType()) // 内容类型为用户
+                    .eq(UserFavorDO::getContentId, user.getId()) // 关注内容ID为菜谱作者ID
+            ));
+        }
         return appRecipeRespVO;
     }
 
@@ -266,10 +278,40 @@ public class AppRecipeServiceImpl implements AppRecipeService {
                 .eq(RecipeDO::getRecipeType, RecipeTypesEnum.USER.getType()) // 菜谱类型为用户的
                 .eq(RecipeDO::getId, createReqVO.getRecipeId()) // 该菜谱
         ));
+        // 内容作者
+        if (userCommentDO.getCommentAuthor()) {
+            // 如果是内容作者，直接赋值评论人的id到内容作者上
+            userCommentDO.setContentId(userCommentDO.getUserId());
+        } else {
+            // 如果是不是内容作者，赋值内容的作者的id到内容作者上，如果不为用户菜谱，则不赋值
+            RecipeDO contentRecipe = recipeMapper.selectOne(new LambdaQueryWrapperX<RecipeDO>()
+                    .eq(RecipeDO::getId, createReqVO.getRecipeId())
+                    .eq(RecipeDO::getRecipeType, RecipeTypesEnum.USER.getType()));
+            if (Objects.nonNull(contentRecipe)) {
+                userCommentDO.setContentId(contentRecipe.getId());
+            }
+        }
         // 插入内容
         userCommentMapper.insert(userCommentDO);
         // 返回ID
         return userCommentDO.getId();
+    }
+
+    @Override
+    public PageResult<AppRecipeRespVO> getFavorUsersRecipePage(Long userId, AppRecipePageReqVO pageReqVO) {
+        // 关注用户的菜谱
+        pageReqVO.setUserFavor(Boolean.TRUE);
+        // 查询基础信息
+        PageResult<RecipeDO> pageResult = recipeMapper.getUserViewableRecipePage(userId, pageReqVO);
+        List<RecipeDO> recipes = pageResult.getList(); // 菜谱信息
+        if (CollUtil.isEmpty(recipes)) {
+            // 为空直接返回
+            return BeanUtils.toBean(pageResult, AppRecipeRespVO.class);
+        }
+        // 查询菜谱食材信息
+        List<RecipeFoodDO> recipeFoods = getRecipeFoodsByRecipeIds(convertSet(recipes, RecipeDO::getId));
+        // 装载信息
+        return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
     }
 
     /**

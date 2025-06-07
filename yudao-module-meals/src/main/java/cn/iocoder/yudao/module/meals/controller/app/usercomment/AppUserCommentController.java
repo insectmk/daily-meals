@@ -5,7 +5,6 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentRespVO;
-import cn.iocoder.yudao.module.meals.controller.app.usercomment.vo.AppUserCommentSaveReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.usercomment.UserCommentDO;
 import cn.iocoder.yudao.module.meals.service.usercomment.AppUserCommentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 @Tag(name = "用户 APP - 评论")
 @RestController
@@ -29,12 +27,6 @@ public class AppUserCommentController {
 
     @Resource
     private AppUserCommentService appUserCommentService;
-
-    @PostMapping("/create")
-    @Operation(summary = "创建评论")
-    public CommonResult<Long> createComment(@Valid @RequestBody AppUserCommentSaveReqVO createReqVO) {
-        return success(appUserCommentService.createComment(getLoginUserId(),createReqVO));
-    }
 
     @DeleteMapping("/delete")
     @Operation(summary = "删除评论")

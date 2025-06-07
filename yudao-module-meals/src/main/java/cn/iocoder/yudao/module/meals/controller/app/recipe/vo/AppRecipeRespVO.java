@@ -38,6 +38,11 @@ public class AppRecipeRespVO {
     @ExcelProperty("菜谱分类")
     private List<Integer> recipeCategory;
 
+
+    @Schema(description = "菜谱类型")
+    @ExcelProperty("菜谱类型")
+    private Integer recipeType;
+
     @Schema(description = "烹饪难度")
     @ExcelProperty("烹饪难度")
     private Integer recipeLevel;
@@ -71,6 +76,16 @@ public class AppRecipeRespVO {
     // ========== 其他附加信息 ==========
     @Schema(description = "是否属于自己", requiredMode = Schema.RequiredMode.REQUIRED, example = "true")
     private Boolean selfRecipe;
+
     @Schema(description = "是否收藏", requiredMode = Schema.RequiredMode.REQUIRED, example = "true")
     private Boolean favor;
+
+    @Schema(description = "用户名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "芋艿")
+    private String userNickname;
+
+    @Schema(description = "用户头像", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String userAvatar;
+
+    @Schema(description = "是否关注用户", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Boolean userFavor;
 }

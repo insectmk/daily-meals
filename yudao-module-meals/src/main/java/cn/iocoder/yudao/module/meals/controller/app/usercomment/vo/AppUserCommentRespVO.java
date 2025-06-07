@@ -36,6 +36,10 @@ public class AppUserCommentRespVO {
     @ExcelProperty("内容类型")
     private Integer contentType;
 
+    @Schema(description = "内容所属人编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @ExcelProperty("内容所属人编号")
+    private Long contentUserId;
+
     @Schema(description = "评论内容", requiredMode = Schema.RequiredMode.REQUIRED)
     @ExcelProperty("评论内容")
     private String commentContent;
@@ -43,6 +47,10 @@ public class AppUserCommentRespVO {
     @Schema(description = "是否内容作者", requiredMode = Schema.RequiredMode.REQUIRED)
     @ExcelProperty("是否内容作者")
     private Boolean commentAuthor;
+
+    @Schema(description = "是否已读", requiredMode = Schema.RequiredMode.REQUIRED)
+    @ExcelProperty("是否内容作者")
+    private Boolean userRead;
 
     @Schema(description = "评论图片地址数组")
     @ExcelProperty("评论图片地址数组")

@@ -9,7 +9,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Schema(description = "管理后台 - 菜谱菜单 Response VO")
+@Schema(description = "用户 APP - 菜谱菜单 Response VO")
 @Data
 @ExcelIgnoreUnannotated
 public class AppRecipeMenuRespVO {

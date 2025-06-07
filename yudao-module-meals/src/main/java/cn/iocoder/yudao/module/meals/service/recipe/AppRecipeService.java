@@ -95,4 +95,12 @@ public interface AppRecipeService {
      * @return
      */
     Long createRecipeComment(Long userId, @Valid AppRecipeCommentSaveReqVO createReqVO);
+
+    /**
+     * 获取用户关注作者的的菜谱分页
+     * @param userId 用户ID
+     * @param pageReqVO 分页信息
+     * @return 分页信息
+     */
+    PageResult<AppRecipeRespVO> getFavorUsersRecipePage(Long userId, @Valid AppRecipePageReqVO pageReqVO);
 }

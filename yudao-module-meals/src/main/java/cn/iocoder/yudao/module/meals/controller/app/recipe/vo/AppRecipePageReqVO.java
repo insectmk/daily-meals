@@ -62,4 +62,6 @@ public class AppRecipePageReqVO extends PageParam {
     @Schema(description = "食材名称", example = "['番茄','鸡蛋']")
     private List<String> foodNames;
 
+    @Schema(description = "关注用户的菜谱", example = "true")
+    private Boolean userFavor;
 }

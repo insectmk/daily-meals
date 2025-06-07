@@ -19,10 +19,6 @@ public class AppRecipeFoodRespVO {
     @ExcelProperty("菜谱编号")
     private Long recipeId;
 
-    @Schema(description = "食物编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "23107")
-    @ExcelProperty("食物编号")
-    private Long foodId;
-
     @Schema(description = "数量", requiredMode = Schema.RequiredMode.REQUIRED, example = "2.2")
     @ExcelProperty("数量")
     private Double amount;

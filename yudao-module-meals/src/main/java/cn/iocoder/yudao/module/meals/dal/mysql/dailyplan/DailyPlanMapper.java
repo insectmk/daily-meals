@@ -25,6 +25,8 @@ public interface DailyPlanMapper extends BaseMapperX<DailyPlanDO> {
                 .betweenIfPresent(DailyPlanDO::getPlanDate, reqVO.getPlanDate())
                 .eqIfPresent(DailyPlanDO::getMemo, reqVO.getMemo())
                 .betweenIfPresent(DailyPlanDO::getCreateTime, reqVO.getCreateTime())
+                // 有计划明细的
+                .apply("exists(select 1 from meals_daily_plan_item i where i.plan_id = meals_daily_plan.id and i.deleted = 0)")
                 .orderByDesc(DailyPlanDO::getPlanDate));
     }
 

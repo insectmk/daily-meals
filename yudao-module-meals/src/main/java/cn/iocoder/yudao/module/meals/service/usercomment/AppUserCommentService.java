@@ -16,15 +16,6 @@ import java.util.List;
 public interface AppUserCommentService {
 
     /**
-     * 创建评论
-     *
-     * @param userId 用户ID
-     * @param createReqVO 创建信息
-     * @return 编号
-     */
-    Long createComment(Long userId, @Valid AppUserCommentSaveReqVO createReqVO);
-
-    /**
      * 更新评论
      *
      * @param updateReqVO 更新信息
