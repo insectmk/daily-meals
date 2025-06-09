@@ -2,6 +2,7 @@ package cn.iocoder.yudao.module.meals.controller.app.user;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInfoRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.user.vo.AppUserInteractDataRespVO;
 import cn.iocoder.yudao.module.meals.service.user.UserService;
@@ -9,6 +10,7 @@ import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
 import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
 import cn.iocoder.yudao.module.member.controller.admin.user.vo.MemberUserPageReqVO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
@@ -54,6 +56,14 @@ public class AppUserController {
     @Operation(summary = "分页查询粉丝用户")
     public CommonResult<PageResult<AppUserInfoRespVO>> getFanUsersPage(@Valid MemberUserPageReqVO reqVO) {
         return success(userService.getFanUsersPage(getLoginUserId(), reqVO));
+    }
+
+    @GetMapping("/get")
+    @Operation(summary = "获得用户信息")
+    @Parameter(name = "id", description = "编号", required = true, example = "1024")
+    public CommonResult<AppUserInfoRespVO> getUserInfo(@RequestParam("id") Long id) {
+        AppUserInfoRespVO userInfo = userService.getUserInfo(id);
+        return success(userInfo);
     }
 
     @GetMapping("/user-interact-data")

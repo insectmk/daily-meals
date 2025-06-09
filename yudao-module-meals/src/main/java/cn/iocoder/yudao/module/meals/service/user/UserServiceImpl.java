@@ -16,6 +16,7 @@ import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import cn.iocoder.yudao.module.member.controller.admin.user.vo.MemberUserPageReqVO;
 import cn.iocoder.yudao.module.member.dal.dataobject.user.MemberUserDO;
 import cn.iocoder.yudao.module.member.dal.mysql.user.MemberUserMapper;
+import cn.iocoder.yudao.module.member.service.user.MemberUserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,8 @@ public class UserServiceImpl implements UserService {
     private UserFavorMapper userFavorMapper;
     @Resource
     private RecipeMapper recipeMapper;
+    @Resource
+    private MemberUserService memberUserService;
 
     @Override
     public AppUserInteractDataRespVO getUserInteractData(Long userId) {
@@ -135,5 +138,10 @@ public class UserServiceImpl implements UserService {
         Set<Long> contentIds = convertSet(userDOPageResult.getList(), MemberUserDO::getId);
         Set<Long> favorContentIds = userFavorMapper.getFavorContentIds(contentIds, ContentTypesEnum.USER.getType(), loginUserId);
         return UserConvert.INSTANCE.convertFavorPage(userDOPageResult, favorContentIds);
+    }
+
+    @Override
+    public AppUserInfoRespVO getUserInfo(Long userId) {
+        return BeanUtils.toBean(memberUserService.getUser(userId),  AppUserInfoRespVO.class);
     }
 }
