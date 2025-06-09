@@ -95,4 +95,11 @@ public interface AppRecipeMenuService {
      * @param id 菜谱菜单ID
      */
     void deleteRecipeMenu(Long userId, Long id);
+
+    /**
+     * 获得用户公开的菜谱菜单分页
+     * @param pageReqVO 分页请求
+     * @return 分页信息
+     */
+    PageResult<RecipeMenuDO> getRecipeMenuPageByUser(@Valid AppRecipeMenuPageReqVO pageReqVO);
 }

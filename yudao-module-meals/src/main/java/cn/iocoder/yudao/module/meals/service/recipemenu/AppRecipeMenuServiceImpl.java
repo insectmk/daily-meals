@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.meals.service.recipemenu;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
+import cn.iocoder.yudao.module.meals.controller.admin.recipemenu.vo.RecipeMenuPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipe.vo.AppRecipeRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuPageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.recipemenu.vo.AppRecipeMenuRespVO;
@@ -12,6 +13,7 @@ import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.recipemenu.RecipeMenuDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.menurecipe.MenuRecipeMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.recipemenu.RecipeMenuMapper;
+import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
 import cn.iocoder.yudao.module.meals.enums.RecipeTypesEnum;
 import cn.iocoder.yudao.module.meals.service.recipe.AppRecipeService;
 import jakarta.annotation.Resource;
@@ -153,5 +155,12 @@ public class AppRecipeMenuServiceImpl implements AppRecipeMenuService {
         recipeMenuMapper.deleteById(id);
         // 删除菜单的菜谱信息
         menuRecipeMapper.deleteByRecipeMenuId(id);
+    }
+
+    @Override
+    public PageResult<RecipeMenuDO> getRecipeMenuPageByUser(AppRecipeMenuPageReqVO pageReqVO) {
+        pageReqVO.setMenuType(RecipeTypesEnum.USER.getType()); // 用户类型
+        pageReqVO.setMenuStatus(RecipeStatusEnum.PUBLIC.getType()); // 公开的
+        return recipeMenuMapper.selectPage(BeanUtils.toBean(pageReqVO, RecipeMenuPageReqVO.class));
     }
 }

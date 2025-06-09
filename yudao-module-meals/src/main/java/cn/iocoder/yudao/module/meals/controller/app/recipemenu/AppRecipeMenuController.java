@@ -79,6 +79,14 @@ public class AppRecipeMenuController {
         return success(BeanUtils.toBean(pageResult, AppRecipeMenuRespVO.class));
     }
 
+    @GetMapping("/page-by-user")
+    @Operation(summary = "获得用户公开的菜谱菜单分页")
+    @PermitAll
+    public CommonResult<PageResult<AppRecipeMenuRespVO>> getRecipeMenuPageByUser(@Valid AppRecipeMenuPageReqVO pageReqVO) {
+        PageResult<RecipeMenuDO> pageResult = appRecipeMenuService.getRecipeMenuPageByUser(pageReqVO);
+        return success(BeanUtils.toBean(pageResult, AppRecipeMenuRespVO.class));
+    }
+
     @GetMapping("/page-self")
     @Operation(summary = "获得用户可见菜谱菜单分页")
     @PermitAll
