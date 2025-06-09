@@ -281,7 +281,7 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         // 内容作者
         if (userCommentDO.getCommentAuthor()) {
             // 如果是内容作者，直接赋值评论人的id到内容作者上
-            userCommentDO.setContentId(userCommentDO.getUserId());
+            userCommentDO.setContentUserId(userCommentDO.getUserId());
         } else {
             // 如果是不是内容作者，赋值内容的作者的id到内容作者上，如果不为用户菜谱，则不赋值
             RecipeDO contentRecipe = recipeMapper.selectOne(new LambdaQueryWrapperX<RecipeDO>()
