@@ -14,6 +14,7 @@ import cn.iocoder.yudao.module.meals.dal.dataobject.usercollect.UserCollectDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userfavor.UserFavorDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.usercollect.UserCollectMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.userfavor.UserFavorMapper;
+import cn.iocoder.yudao.module.meals.enums.RecipeStatusEnum;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -140,6 +141,12 @@ public class AppUserCollectServiceImpl implements AppUserCollectService {
     @Override
     public List<AppUserCollectSimpleRespVO> getSelfUserCollectAllSimpleList(Long userId, AppUserCollectSimpleListReqVO reqVO) {
         return userCollectMapper.selectUserListByContent(userId, reqVO);
+    }
+
+    @Override
+    public PageResult<UserCollectDO> getUserCollectPageByUser(AppUserCollectPageReqVO pageReqVO) {
+        pageReqVO.setCollectStatus(RecipeStatusEnum.PUBLIC.getType()); // 公开的
+        return userCollectMapper.selectPage(pageReqVO);
     }
 
     // ==================== 子表（用户收藏） ====================

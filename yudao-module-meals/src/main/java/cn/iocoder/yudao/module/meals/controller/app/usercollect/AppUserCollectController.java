@@ -48,6 +48,13 @@ public class AppUserCollectController {
         return success(BeanUtils.toBean(pageResult, AppUserCollectRespVO.class));
     }
 
+    @GetMapping("/page-by-user")
+    @Operation(summary = "获得用户公开的收藏夹分页")
+    public CommonResult<PageResult<AppUserCollectRespVO>> getUserCollectPageByUser(@Valid AppUserCollectPageReqVO pageReqVO) {
+        PageResult<UserCollectDO> pageResult = appUserCollectService.getUserCollectPageByUser(pageReqVO);
+        return success(BeanUtils.toBean(pageResult, AppUserCollectRespVO.class));
+    }
+
     @PostMapping("/create-or-update")
     @Operation(summary = "创建或更新用户收藏夹")
     public CommonResult<Long> createOrUpdateUserCollect(@Valid @RequestBody AppUserCollectSaveReqVO createReqVO) {

@@ -96,4 +96,11 @@ public interface AppUserCollectService {
      * @return 用户收藏夹精简信息
      */
     List<AppUserCollectSimpleRespVO> getSelfUserCollectAllSimpleList(Long userId, AppUserCollectSimpleListReqVO reqVO);
+
+    /**
+     * 获得用户公开的收藏夹分页
+     * @param pageReqVO 分页请求
+     * @return 分页信息
+     */
+    PageResult<UserCollectDO> getUserCollectPageByUser(@Valid AppUserCollectPageReqVO pageReqVO);
 }
