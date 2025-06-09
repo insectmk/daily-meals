@@ -45,7 +45,7 @@ public class AppRecipeController {
     @GetMapping("/page-by-user")
     @Operation(summary = "获得某个用户可见的菜谱分页")
     public CommonResult<PageResult<AppRecipeRespVO>> getRecipePageByUser(@Valid AppRecipePageReqVO pageReqVO) {
-        PageResult<AppRecipeRespVO> pageResult = appRecipeService.getRecipePageByUser(pageReqVO.getUserId(),pageReqVO);
+        PageResult<AppRecipeRespVO> pageResult = appRecipeService.getRecipePageByUser(pageReqVO);
         return success(pageResult);
     }
 

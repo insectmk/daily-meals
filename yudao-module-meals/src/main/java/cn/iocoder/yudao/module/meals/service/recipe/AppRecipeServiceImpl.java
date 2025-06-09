@@ -315,10 +315,10 @@ public class AppRecipeServiceImpl implements AppRecipeService {
     }
 
     @Override
-    public PageResult<AppRecipeRespVO> getRecipePageByUser(Long userId, AppRecipePageReqVO pageReqVO) {
+    public PageResult<AppRecipeRespVO> getRecipePageByUser(AppRecipePageReqVO pageReqVO) {
         pageReqVO.setRecipeType(RecipeTypesEnum.USER.getType()); // 用户类型
         pageReqVO.setStatus(RecipeStatusEnum.PUBLIC.getType()); // 公开的
-        return BeanUtils.toBean(recipeMapper.selectPage(userId, pageReqVO),  AppRecipeRespVO.class);
+        return BeanUtils.toBean(recipeMapper.selectPage(pageReqVO.getUserId(), pageReqVO),  AppRecipeRespVO.class);
     }
 
     /**

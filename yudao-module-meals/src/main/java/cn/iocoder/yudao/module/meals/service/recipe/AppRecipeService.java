@@ -106,9 +106,8 @@ public interface AppRecipeService {
 
     /**
      * 获得某个用户可见的菜谱分页
-     * @param userId 用户ID
      * @param pageReqVO 分页参数
      * @return 分页信息
      */
-    PageResult<AppRecipeRespVO> getRecipePageByUser(Long userId, @Valid AppRecipePageReqVO pageReqVO);
+    PageResult<AppRecipeRespVO> getRecipePageByUser(@Valid AppRecipePageReqVO pageReqVO);
 }
