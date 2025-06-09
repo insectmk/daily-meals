@@ -20,6 +20,10 @@ public interface RecipeMenuMapper extends BaseMapperX<RecipeMenuDO> {
 
     default PageResult<RecipeMenuDO> selectPage(RecipeMenuPageReqVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<RecipeMenuDO>()
+                .eqIfPresent(RecipeMenuDO::getUserId, reqVO.getUserId()) // 用户
+                .eqIfPresent(RecipeMenuDO::getMenuType, reqVO.getMenuType()) // 菜单类型
+                .eqIfPresent(RecipeMenuDO::getMenuStatus, reqVO.getMenuStatus()) // 菜单状态
+                .likeIfPresent(RecipeMenuDO::getMenuDesc, reqVO.getMenuDesc()) // 菜单描述
                 .likeIfPresent(RecipeMenuDO::getTitle, reqVO.getTitle())
                 .likeIfPresent(RecipeMenuDO::getSubtitle, reqVO.getSubtitle())
                 .betweenIfPresent(RecipeMenuDO::getCreateTime, reqVO.getCreateTime())

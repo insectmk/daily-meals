@@ -23,6 +23,18 @@ public class AppRecipeMenuPageReqVO extends PageParam {
     @Schema(description = "副标题")
     private String subtitle;
 
+    @Schema(description = "用户编号")
+    private Long userId;
+
+    @Schema(description = "菜单描述")
+    private String menuDesc;
+
+    @Schema(description = "菜单类型")
+    private Integer menuType;
+
+    @Schema(description = "菜单状态")
+    private Integer menuStatus;
+
     @Schema(description = "创建时间")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime[] createTime;
