@@ -42,6 +42,13 @@ public class AppRecipeController {
         return success(pageResult);
     }
 
+    @GetMapping("/page-by-user")
+    @Operation(summary = "获得某个用户可见的菜谱分页")
+    public CommonResult<PageResult<AppRecipeRespVO>> getRecipePageByUser(@Valid AppRecipePageReqVO pageReqVO) {
+        PageResult<AppRecipeRespVO> pageResult = appRecipeService.getRecipePageByUser(pageReqVO.getUserId(),pageReqVO);
+        return success(pageResult);
+    }
+
     @GetMapping("/page-self-by-collect")
     @Operation(summary = "获得自己某个收藏夹下的菜谱分页")
     public CommonResult<PageResult<AppRecipeRespVO>> getSelfRecipePageByCollect(@Valid AppRecipePageReqVO pageReqVO) {

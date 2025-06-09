@@ -314,6 +314,13 @@ public class AppRecipeServiceImpl implements AppRecipeService {
         return RecipeConvert.INSTANCE.convertPage(pageResult,recipeFoods);
     }
 
+    @Override
+    public PageResult<AppRecipeRespVO> getRecipePageByUser(Long userId, AppRecipePageReqVO pageReqVO) {
+        pageReqVO.setRecipeType(RecipeTypesEnum.USER.getType()); // 用户类型
+        pageReqVO.setStatus(RecipeStatusEnum.PUBLIC.getType()); // 公开的
+        return BeanUtils.toBean(recipeMapper.selectPage(userId, pageReqVO),  AppRecipeRespVO.class);
+    }
+
     /**
      * 通过菜谱ID集合获取所有菜谱的食材信息
      * @param recipeIds 菜谱ID
