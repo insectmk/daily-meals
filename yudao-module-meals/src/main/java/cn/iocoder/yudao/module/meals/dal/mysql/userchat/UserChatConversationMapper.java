@@ -22,10 +22,14 @@ public interface UserChatConversationMapper extends BaseMapperX<UserChatConversa
                 .orderByDesc(UserChatConversationDO::getCreateTime));
     }
 
-    default void updateAdminUnreadMessageCountIncrement(Long id) {
+    /**
+     * 更新会话消息未读数
+     * @param id 会话ID
+     */
+    default void updateUnreadMessageCountIncrement(Long id) {
         update(new LambdaUpdateWrapper<UserChatConversationDO>()
                 .eq(UserChatConversationDO::getId, id)
-                .setSql("admin_unread_message_count = admin_unread_message_count + 1"));
+                .setSql("unread_message_count = unread_message_count + 1"));
     }
 
     default UserChatConversationDO selectByUserId(Long userId) {

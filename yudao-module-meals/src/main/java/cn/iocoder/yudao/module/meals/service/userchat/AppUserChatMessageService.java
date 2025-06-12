@@ -18,9 +18,8 @@ public interface AppUserChatMessageService {
      * 发送消息
      *
      * @param sendReqVO 信息
-     * @return 编号
      */
-    Long sendMessage(AppUserChatMessageSendReqVO sendReqVO);
+    void sendMessage(AppUserChatMessageSendReqVO sendReqVO);
 
     /**
      * 【管理员】更新消息已读状态

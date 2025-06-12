@@ -37,11 +37,11 @@ public interface AppUserChatConversationService {
     void updateConversationPinnedByAdmin(AppUserChatConversationUpdatePinnedReqVO updateReqVO);
 
     /**
-     * 更新会话客服消息冗余信息
+     * 更新会话消息冗余信息
      *
-     * @param kefuMessage 消息
+     * @param userChatMessage 消息
      */
-    void updateConversationLastMessage(UserChatMessageDO kefuMessage);
+    void updateConversationLastMessage(UserChatMessageDO userChatMessage);
 
     /**
      * 【管理员】将管理员未读消息计数更新为零

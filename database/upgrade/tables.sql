@@ -285,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `meals_user_chat_message`
     `id`               bigint                                                         NOT NULL AUTO_INCREMENT COMMENT '编号，主键自增',
     `conversation_id`  bigint                                                         NOT NULL COMMENT '会话编号',
     `sender_user_id`   bigint                                                         NOT NULL COMMENT '发送人编号',
-    `receiver_user_id` bigint                                                                  DEFAULT NULL COMMENT '接收人编号',
+    `receiver_user_id` bigint                                                                  DEFAULT NOT NULL COMMENT '接收人编号',
     `content_type`     int                                                            NOT NULL COMMENT '消息类型',
     `content`          varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '消息',
     `read_status`      bit(1)                                                         NOT NULL DEFAULT b'0' COMMENT '是否已读',

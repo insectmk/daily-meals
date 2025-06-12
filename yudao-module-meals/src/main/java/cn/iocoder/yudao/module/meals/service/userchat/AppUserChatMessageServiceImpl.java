@@ -11,6 +11,7 @@ import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserC
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatConversationDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
+import cn.iocoder.yudao.module.meals.dal.mysql.userchat.UserChatConversationMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.userchat.UserChatMessageMapper;
 import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
 import cn.iocoder.yudao.module.system.api.user.AdminUserApi;
@@ -49,20 +50,34 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
     private MemberUserApi memberUserApi;
     @Resource
     private WebSocketSenderApi webSocketSenderApi;
+    @Resource
+    private UserChatConversationMapper conversationMapper;
 
     @Override
-    public Long sendMessage(AppUserChatMessageSendReqVO sendReqVO) {
+    @Transactional(rollbackFor = Exception.class)
+    public void sendMessage(AppUserChatMessageSendReqVO sendReqVO) {
+        // 1、发送方会话
         // 1.1 设置会话编号
          UserChatMessageDO userChatMessage = BeanUtils.toBean(sendReqVO,  UserChatMessageDO.class);
          UserChatConversationDO conversation = conversationService.getOrCreateConversation(sendReqVO.getSenderUserId(), sendReqVO.getReceiverUserId());
         userChatMessage.setConversationId(conversation.getId());
         // 1.2 保存消息
         userChatMessageMapper.insert(userChatMessage);
-        // 2. 更新会话消息冗余
+        // 1.3 更新会话消息冗余
         conversationService.updateConversationLastMessage(userChatMessage);
-        // 3. 通知用户对话更新
+        // 2、接收方会话
+        // 2.1 设置会话编码
+        UserChatConversationDO receiveConversation = conversationService.getOrCreateConversation(sendReqVO.getReceiverUserId(), sendReqVO.getSenderUserId());
+        // 2.2 保存消息
+        userChatMessage.setId(null); // 清空ID
+        userChatMessage.setConversationId(receiveConversation.getId()); // 设置会话编码
+        userChatMessageMapper.insert(userChatMessage);
+        // 2.3 更新会话消息冗余
+        conversationService.updateConversationLastMessage(userChatMessage);
+        // 2.4 更新未读消息数
+        conversationMapper.updateUnreadMessageCountIncrement(receiveConversation.getId());
+        // 2.5 通知用户对话更新
         getSelf().sendAsyncMessageToMember(sendReqVO.getReceiverUserId(),USER_CHAT_MESSAGE_TYPE, userChatMessage);
-        return userChatMessage.getId();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package cn.iocoder.yudao.module.meals.service.userchat;
 
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.conversation.AppUserChatConversationUpdatePinnedReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatConversationDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
@@ -56,19 +55,16 @@ public class AppUserChatConversationServiceImpl implements AppUserChatConversati
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateConversationLastMessage(UserChatMessageDO kefuMessage) {
+    public void updateConversationLastMessage(UserChatMessageDO userChatMessage) {
         // 1.1 校验会话是否存在
-        UserChatConversationDO conversation = validateKefuConversationExists(kefuMessage.getConversationId());
+        UserChatConversationDO conversation = validateKefuConversationExists(userChatMessage.getConversationId());
         // 1.2 更新会话消息冗余
-        conversationMapper.updateById(new UserChatConversationDO().setId(kefuMessage.getConversationId())
-                .setLastMessageTime(kefuMessage.getCreateTime()).setLastMessageContent(kefuMessage.getContent())
-                .setLastMessageContentType(kefuMessage.getContentType()));
-
-        // 2.1 更新管理员未读消息数
-        conversationMapper.updateAdminUnreadMessageCountIncrement(kefuMessage.getConversationId());
-        // 2.2 会员用户发送消息时，如果管理员删除过会话则进行恢复
+        conversationMapper.updateById(new UserChatConversationDO().setId(userChatMessage.getConversationId())
+                .setLastMessageTime(userChatMessage.getCreateTime()).setLastMessageContent(userChatMessage.getContent())
+                .setLastMessageContentType(userChatMessage.getContentType()));
+        // 1.2 用户发送消息时，如果用户删除过会话则进行恢复
         if (Boolean.TRUE.equals(conversation.getUserDeleted())) {
-            updateConversationAdminDeleted(kefuMessage.getConversationId(), Boolean.FALSE);
+            updateConversationAdminDeleted(userChatMessage.getConversationId(), Boolean.FALSE);
         }
     }
 
