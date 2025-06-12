@@ -26,7 +26,7 @@ import static cn.iocoder.yudao.framework.common.util.collection.MapUtils.findAnd
 
 @Tag(name = "用户APP - 用户聊天会话")
 @RestController
-@RequestMapping("/daily-meals/user-chat-conversation")
+@RequestMapping("/meals/user-chat-conversation")
 @Validated
 public class AppUserChatConversationController {
 

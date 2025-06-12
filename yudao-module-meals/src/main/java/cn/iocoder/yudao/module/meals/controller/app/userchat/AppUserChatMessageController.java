@@ -28,7 +28,7 @@ import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUti
 
 @Tag(name = "用户APP - 用户聊天消息")
 @RestController
-@RequestMapping("/daily-meals/user-chat-message")
+@RequestMapping("/meals/user-chat-message")
 @Validated
 public class AppUserChatMessageController {
 
@@ -38,7 +38,7 @@ public class AppUserChatMessageController {
     private AdminUserApi adminUserApi;
 
     @PostMapping("/send")
-    @Operation(summary = "发送客服消息")
+    @Operation(summary = "发送消息")
     public CommonResult<Long> sendUserChatMessage(@Valid @RequestBody AppUserChatMessageSendReqVO sendReqVO) {
         sendReqVO.setSenderUserId(getLoginUserId()); // 设置用户编号和类型
         return success(appUserChatMessageService.sendKefuMessage(sendReqVO));
