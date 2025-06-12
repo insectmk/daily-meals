@@ -40,8 +40,8 @@ public class AppUserChatMessageController {
     @PostMapping("/send")
     @Operation(summary = "发送消息")
     public CommonResult<Long> sendUserChatMessage(@Valid @RequestBody AppUserChatMessageSendReqVO sendReqVO) {
-        sendReqVO.setSenderUserId(getLoginUserId()); // 设置用户编号和类型
-        return success(appUserChatMessageService.sendKefuMessage(sendReqVO));
+        sendReqVO.setSenderUserId(getLoginUserId()); // 设置用户编号
+        return success(appUserChatMessageService.sendMessage(sendReqVO));
     }
 
     @PutMapping("/update-read-status")

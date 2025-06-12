@@ -66,14 +66,15 @@ public interface AppUserChatConversationService {
     List<UserChatConversationDO> getKefuConversationList();
 
     /**
-     * 【会员】获得或创建会话
+     * 用户获得或创建会话
      *
-     * 对于【会员】来说，有且仅有一个对话
+     * 对于用户来说，有且仅有一个对话
      *
-     * @param userId 用户编号
-     * @return 客服会话
+     * @param senderUserId 发送人用户编号
+     * @param receiverUserId 接收人的用户编号
+     * @return 用户会话
      */
-    UserChatConversationDO getOrCreateConversation(Long userId);
+    UserChatConversationDO getOrCreateConversation(Long senderUserId, Long receiverUserId);
 
     /**
      * 校验客服会话是否存在

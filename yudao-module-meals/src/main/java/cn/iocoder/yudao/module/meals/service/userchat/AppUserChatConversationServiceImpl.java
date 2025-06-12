@@ -92,14 +92,22 @@ public class AppUserChatConversationServiceImpl implements AppUserChatConversati
     }
 
     @Override
-    public UserChatConversationDO getOrCreateConversation(Long userId) {
-        UserChatConversationDO conversation = conversationMapper.selectOne(UserChatConversationDO::getUserId, userId);
+    public UserChatConversationDO getOrCreateConversation(Long senderUserId, Long receiverUserId) {
+        // 查询对话
+        UserChatConversationDO conversation = conversationMapper.selectOne(
+                UserChatConversationDO::getUserId, senderUserId, // 发送人
+                UserChatConversationDO::getChatUserId, receiverUserId); // 接收人
         // 没有历史会话，则初始化一个新会话
         if (conversation == null) {
-            conversation = new UserChatConversationDO().setUserId(userId).setLastMessageTime(LocalDateTime.now())
-                    .setLastMessageContent(StrUtil.EMPTY).setLastMessageContentType(UserChatMessageContentTypeEnum.TEXT.getType())
-                    .setPinned(Boolean.FALSE).setUserDeleted(Boolean.FALSE).setUserDeleted(Boolean.FALSE)
-                    .setUnreadMessageCount(0);
+            conversation = new UserChatConversationDO()
+                    .setUserId(senderUserId) // 所属用户
+                    .setChatUserId(receiverUserId) // 聊天对象用户
+                    .setLastMessageTime(LocalDateTime.now()) // 最后发送消息时间
+                    .setLastMessageContent(StrUtil.EMPTY) // 最后发送内容
+                    .setLastMessageContentType(UserChatMessageContentTypeEnum.TEXT.getType()) // 最后发送内容类型
+                    .setPinned(Boolean.FALSE) // 是否置顶
+                    .setUserDeleted(Boolean.FALSE) // 用户是否删除
+                    .setUnreadMessageCount(0); // 未读消息数
             conversationMapper.insert(conversation);
         }
         return conversation;

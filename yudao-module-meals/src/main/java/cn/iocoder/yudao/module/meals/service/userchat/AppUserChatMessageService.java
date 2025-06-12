@@ -4,7 +4,6 @@ import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserC
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessagePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
-import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -16,12 +15,12 @@ import java.util.List;
 public interface AppUserChatMessageService {
 
     /**
-     * 【会员】发送客服消息
+     * 发送消息
      *
      * @param sendReqVO 信息
      * @return 编号
      */
-    Long sendKefuMessage(AppUserChatMessageSendReqVO sendReqVO);
+    Long sendMessage(AppUserChatMessageSendReqVO sendReqVO);
 
     /**
      * 【管理员】更新消息已读状态

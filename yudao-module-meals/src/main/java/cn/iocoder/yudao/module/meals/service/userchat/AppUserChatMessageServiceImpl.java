@@ -50,41 +50,19 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
     @Resource
     private WebSocketSenderApi webSocketSenderApi;
 
-    @Transactional(rollbackFor = Exception.class)
-    public Long senDMessage(AppUserChatMessageSendReqVO sendReqVO) {
-        // 1.1 校验会话是否存在
-         UserChatConversationDO conversation = conversationService.validateKefuConversationExists(sendReqVO.getConversationId());
-        // 1.2 校验接收人是否存在
-        validateReceiverExist(conversation.getUserId(), UserTypeEnum.MEMBER.getValue());
-
-        // 2.1 保存消息
-         UserChatMessageDO kefuMessage = BeanUtils.toBean(sendReqVO,  UserChatMessageDO.class);
-        kefuMessage.setReceiverUserId(conversation.getUserId()); // 设置接收人
-        userChatMessageMapper.insert(kefuMessage);
-        // 2.2 更新会话消息冗余
-        conversationService.updateConversationLastMessage(kefuMessage);
-
-        // 3.1 发送消息给会员
-        getSelf().sendAsyncMessageToMember(conversation.getUserId(), USER_CHAT_MESSAGE_TYPE, kefuMessage);
-        // 3.2 通知所有管理员更新对话
-        getSelf().sendAsyncMessageToAdmin(USER_CHAT_MESSAGE_TYPE, kefuMessage);
-        return kefuMessage.getId();
-    }
-
     @Override
-    public Long sendKefuMessage(AppUserChatMessageSendReqVO sendReqVO) {
+    public Long sendMessage(AppUserChatMessageSendReqVO sendReqVO) {
         // 1.1 设置会话编号
-         UserChatMessageDO kefuMessage = BeanUtils.toBean(sendReqVO,  UserChatMessageDO.class);
-         UserChatConversationDO conversation = conversationService.getOrCreateConversation(sendReqVO.getSenderUserId());
-        kefuMessage.setConversationId(conversation.getId());
+         UserChatMessageDO userChatMessage = BeanUtils.toBean(sendReqVO,  UserChatMessageDO.class);
+         UserChatConversationDO conversation = conversationService.getOrCreateConversation(sendReqVO.getSenderUserId(), sendReqVO.getReceiverUserId());
+        userChatMessage.setConversationId(conversation.getId());
         // 1.2 保存消息
-        userChatMessageMapper.insert(kefuMessage);
-
+        userChatMessageMapper.insert(userChatMessage);
         // 2. 更新会话消息冗余
-        conversationService.updateConversationLastMessage(kefuMessage);
-        // 3. 通知所有管理员更新对话
-        getSelf().sendAsyncMessageToAdmin(USER_CHAT_MESSAGE_TYPE, kefuMessage);
-        return kefuMessage.getId();
+        conversationService.updateConversationLastMessage(userChatMessage);
+        // 3. 通知用户对话更新
+        getSelf().sendAsyncMessageToMember(sendReqVO.getReceiverUserId(),USER_CHAT_MESSAGE_TYPE, userChatMessage);
+        return userChatMessage.getId();
     }
 
     @Override
@@ -113,7 +91,7 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
         assert keFuMessage != null; // 断言避免警告
         getSelf().sendAsyncMessageToMember(keFuMessage.getSenderUserId(), USER_CHAT_MESSAGE_READ_STATUS_CHANGE, conversation.getId());
         // 2.4 通知所有管理员消息已读
-        getSelf().sendAsyncMessageToAdmin(USER_CHAT_MESSAGE_READ_STATUS_CHANGE, conversation.getId());
+        getSelf().sendAsyncMessageToMember(userId,USER_CHAT_MESSAGE_READ_STATUS_CHANGE, conversation.getId());
     }
 
     private void validateReceiverExist(Long receiverId, Integer receiverType) {
@@ -125,14 +103,15 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
         }
     }
 
+    /**
+     * 发送WebSocket消息给用户
+     * @param userId 用户ID
+     * @param messageType 消息类型
+     * @param content 消息内容
+     */
     @Async
     public void sendAsyncMessageToMember(Long userId, String messageType, Object content) {
         webSocketSenderApi.sendObject(UserTypeEnum.MEMBER.getValue(), userId, messageType, content);
-    }
-
-    @Async
-    public void sendAsyncMessageToAdmin(String messageType, Object content) {
-        webSocketSenderApi.sendObject(UserTypeEnum.ADMIN.getValue(), messageType, content);
     }
 
     @Override

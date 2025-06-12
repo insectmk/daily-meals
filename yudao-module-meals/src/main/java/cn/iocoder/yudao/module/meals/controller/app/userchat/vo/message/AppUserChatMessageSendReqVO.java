@@ -9,9 +9,9 @@ import lombok.Data;
 @Data
 public class AppUserChatMessageSendReqVO {
 
-    @Schema(description = "会话编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "12580")
-    @NotNull(message = "会话编号不能为空")
-    private Long conversationId;
+    @Schema(description = "接收人编号", example = "24571", hidden = true)
+    @NotNull(message = "接收人不能为空")
+    private Long receiverUserId;
 
     @Schema(description = "消息类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @NotNull(message = "消息类型不能为空")
