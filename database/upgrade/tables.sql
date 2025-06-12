@@ -261,6 +261,7 @@ CREATE TABLE IF NOT EXISTS `meals_user_chat_conversation`
 (
     `id`                        bigint                                                         NOT NULL AUTO_INCREMENT COMMENT '编号，主键自增',
     `user_id`                   bigint                                                         NOT NULL COMMENT '会话所属用户',
+    `chat_user_id`              bigint                                                         NOT NULL COMMENT '会话聊天对象用户',
     `last_message_time`         datetime                                                       NOT NULL COMMENT '最后聊天时间',
     `last_message_content`      varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '最后聊天内容',
     `last_message_content_type` int                                                            NOT NULL COMMENT '最后发送的消息类型',

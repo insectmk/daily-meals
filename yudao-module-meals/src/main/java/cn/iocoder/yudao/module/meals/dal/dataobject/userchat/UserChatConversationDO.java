@@ -34,7 +34,12 @@ public class UserChatConversationDO extends BaseDO {
      * 关联 {@link MemberUserRespDTO#getId()}
      */
     private Long userId;
-
+    /**
+     * 会话聊天对象用户
+     *
+     * 关联 {@link MemberUserRespDTO#getId()}
+     */
+    private Long chatUserId;
     /**
      * 最后聊天时间
      */
