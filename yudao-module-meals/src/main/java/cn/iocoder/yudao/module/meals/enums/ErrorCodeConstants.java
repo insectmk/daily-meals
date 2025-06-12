@@ -54,4 +54,7 @@ public interface ErrorCodeConstants {
 
     // ========== 评论 ==========
     ErrorCode USER_COMMENT_NOT_EXISTS = new ErrorCode(200_012_001, "评论不存在");
+
+    // ========== 用户对话 ==========
+    ErrorCode USER_CHAT_CONVERSATION_NOT_EXISTS = new ErrorCode(200_013_001, "用户会话不存在");
 }
