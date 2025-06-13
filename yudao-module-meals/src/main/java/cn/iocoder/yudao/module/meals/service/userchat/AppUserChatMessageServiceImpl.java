@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -83,6 +84,7 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
         // 3.2 拼装用户信息
         AppUserChatMessageRespVO userChatMessageNotice = BeanUtils.toBean(sendReqVO, AppUserChatMessageRespVO.class);
         userChatMessageNotice.setSenderUserAvatar(senderUser.getAvatar()); // 头像
+        userChatMessageNotice.setCreateTime(LocalDateTime.now()); // 消息创建时间
         getSelf().sendAsyncMessageToMember(sendReqVO.getReceiverUserId(),USER_CHAT_MESSAGE_TYPE, userChatMessageNotice);
     }
 
