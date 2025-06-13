@@ -8,6 +8,8 @@ import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserC
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
 import cn.iocoder.yudao.module.meals.service.userchat.AppUserChatMessageService;
+import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
+import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
 import cn.iocoder.yudao.module.system.api.user.AdminUserApi;
 import cn.iocoder.yudao.module.system.api.user.dto.AdminUserRespDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +37,7 @@ public class AppUserChatMessageController {
     @Resource
     private AppUserChatMessageService appUserChatMessageService;
     @Resource
-    private AdminUserApi adminUserApi;
+    private MemberUserApi memberUserApi;
 
     @PostMapping("/send")
     @Operation(summary = "发送消息")
@@ -62,7 +64,7 @@ public class AppUserChatMessageController {
         // 2 拼接用户数据
         List<AppUserChatMessageRespVO> result = BeanUtils.toBean(list, AppUserChatMessageRespVO.class);
         // 2.1 获取用户信息
-        Map<Long, AdminUserRespDTO> userMap = adminUserApi.getUserMap(convertSet(result, AppUserChatMessageRespVO::getSenderUserId));
+        Map<Long, MemberUserRespDTO> userMap = memberUserApi.getUserMap(convertSet(result, AppUserChatMessageRespVO::getSenderUserId));
         // 2.2 拼接用户信息
         result.forEach(item -> findAndThen(userMap, item.getSenderUserId(), user -> item.setSenderUserAvatar(user.getAvatar())));
         return success(result);
