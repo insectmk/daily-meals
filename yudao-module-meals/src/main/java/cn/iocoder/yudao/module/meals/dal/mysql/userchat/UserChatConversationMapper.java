@@ -32,8 +32,16 @@ public interface UserChatConversationMapper extends BaseMapperX<UserChatConversa
                 .setSql("unread_message_count = unread_message_count + 1"));
     }
 
-    default UserChatConversationDO selectByUserId(Long userId) {
-        return selectOne(UserChatConversationDO::getUserId, userId);
+    /**
+     * 获取用户会话
+     * @param senderUserId 发送方ID
+     * @param receiverUserId 接收方ID
+     * @return 用户会话
+     */
+    default UserChatConversationDO selectByUserId(Long senderUserId, Long receiverUserId) {
+        return selectOne(
+                UserChatConversationDO::getUserId, senderUserId,
+                UserChatConversationDO::getChatUserId, receiverUserId);
     }
 
 }

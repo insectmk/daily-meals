@@ -85,11 +85,11 @@ public interface AppUserChatConversationService {
     UserChatConversationDO validateKefuConversationExists(Long id);
 
     /**
-     * 【会员】获得客服会话
-     *
-     * @param userId 用户编号
-     * @return 客服会话
+     * 获得用户会话
+     * @param senderUserId 发送人ID
+     * @param receiverUserId 接收方ID
+     * @return 用户会话
      */
-    UserChatConversationDO getConversationByUserId(Long userId);
+    UserChatConversationDO getConversationByUserId(Long senderUserId, Long receiverUserId);
 
 }

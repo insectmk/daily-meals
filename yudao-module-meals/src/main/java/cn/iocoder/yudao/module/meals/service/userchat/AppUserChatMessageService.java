@@ -1,6 +1,5 @@
 package cn.iocoder.yudao.module.meals.service.userchat;
 
-import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageListReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessagePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
@@ -31,20 +30,11 @@ public interface AppUserChatMessageService {
     void updateUserChatMessageReadStatus(Long conversationId, Long userId, Integer userType);
 
     /**
-     * 获得客服消息分页
-     *
-     * @param pageReqVO 分页查询
-     * @return 客服消息分页
-     */
-    List<UserChatMessageDO> getUserChatMessageList(AppUserChatMessageListReqVO pageReqVO);
-
-    /**
-     * 【会员】获得客服消息分页
+     * 获得用户会话消息分页
      *
      * @param pageReqVO 请求
-     * @param userId    用户编号
      * @return 客服消息分页
      */
-    List<UserChatMessageDO> getUserChatMessageList(AppUserChatMessagePageReqVO pageReqVO, Long userId);
+    List<UserChatMessageDO> getUserChatMessageList(AppUserChatMessagePageReqVO pageReqVO);
 
 }

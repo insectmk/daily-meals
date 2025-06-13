@@ -24,10 +24,18 @@ public class AppUserChatMessagePageReqVO {
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime createTime;
 
+    @Schema(description = "接收方用户编码", requiredMode = Schema.RequiredMode.REQUIRED, example = "1320")
+    @NotNull(message = "接收方用户编码不能为空")
+    private Long receiverUserId;
+
     @Schema(description = "每次查询条数，最大值为 100", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
     @NotNull(message = "每次查询条数不能为空")
     @Min(value = 1, message = "每次查询条数最小值为 1")
     @Max(value = 100, message = "每次查询最大值为 100")
     private Integer limit = LIMIT;
 
+    // ========== 后端设置的参数，前端无需传递 ==========
+
+    @Schema(description = "发送人编号", example = "24571", hidden = true)
+    private Long senderUserId;
 }

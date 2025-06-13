@@ -3,7 +3,7 @@ package cn.iocoder.yudao.module.meals.controller.app.userchat;
 import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageListReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessagePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
@@ -54,14 +54,16 @@ public class AppUserChatMessageController {
     }
 
     @GetMapping("/list")
-    @Operation(summary = "获得客服消息列表")
-    public CommonResult<List<AppUserChatMessageRespVO>> getUserChatMessageList(@Valid AppUserChatMessageListReqVO pageReqVO) {
-        // 获得数据
+    @Operation(summary = "获得用户聊天消息列表")
+    public CommonResult<List<AppUserChatMessageRespVO>> getUserChatMessageList(@Valid AppUserChatMessagePageReqVO pageReqVO) {
+        pageReqVO.setSenderUserId(getLoginUserId()); // 设置发送用户ID
+        // 1 获得会话消息数据
         List<UserChatMessageDO> list = appUserChatMessageService.getUserChatMessageList(pageReqVO);
-
-        // 拼接数据
+        // 2 拼接用户数据
         List<AppUserChatMessageRespVO> result = BeanUtils.toBean(list, AppUserChatMessageRespVO.class);
+        // 2.1 获取用户信息
         Map<Long, AdminUserRespDTO> userMap = adminUserApi.getUserMap(convertSet(result, AppUserChatMessageRespVO::getSenderUserId));
+        // 2.2 拼接用户信息
         result.forEach(item -> findAndThen(userMap, item.getSenderUserId(), user -> item.setSenderUserAvatar(user.getAvatar())));
         return success(result);
     }

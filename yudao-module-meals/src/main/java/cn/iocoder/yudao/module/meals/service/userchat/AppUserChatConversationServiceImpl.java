@@ -119,8 +119,8 @@ public class AppUserChatConversationServiceImpl implements AppUserChatConversati
     }
 
     @Override
-    public UserChatConversationDO getConversationByUserId(Long userId) {
-        return conversationMapper.selectByUserId(userId);
+    public UserChatConversationDO getConversationByUserId(Long senderUserId, Long receiverUserId) {
+        return conversationMapper.selectByUserId(senderUserId, receiverUserId);
     }
 
 }

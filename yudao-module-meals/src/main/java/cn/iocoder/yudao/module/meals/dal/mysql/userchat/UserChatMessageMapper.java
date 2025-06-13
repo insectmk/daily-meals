@@ -2,7 +2,7 @@ package cn.iocoder.yudao.module.meals.dal.mysql.userchat;
 
 import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
 import cn.iocoder.yudao.framework.mybatis.core.query.QueryWrapperX;
-import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageListReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessagePageReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -27,7 +27,7 @@ public interface UserChatMessageMapper extends BaseMapperX<UserChatMessageDO> {
      * @param reqVO 列表请求
      * @return 消息列表
      */
-    default List<UserChatMessageDO> selectList(AppUserChatMessageListReqVO reqVO) {
+    default List<UserChatMessageDO> selectList(AppUserChatMessagePageReqVO reqVO) {
         return selectList(new QueryWrapperX<UserChatMessageDO>()
                 .eqIfPresent("conversation_id", reqVO.getConversationId())
                 .ltIfPresent("create_time", reqVO.getCreateTime())

@@ -6,7 +6,6 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.infra.api.websocket.WebSocketSenderApi;
-import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageListReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessagePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
@@ -137,20 +136,15 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
     }
 
     @Override
-    public List<UserChatMessageDO> getUserChatMessageList( AppUserChatMessageListReqVO pageReqVO) {
-        return userChatMessageMapper.selectList(pageReqVO);
-    }
-
-    @Override
-    public List<UserChatMessageDO> getUserChatMessageList(AppUserChatMessagePageReqVO pageReqVO, Long userId) {
-        // 1. 获得客服会话
-         UserChatConversationDO conversation = conversationService.getConversationByUserId(userId);
+    public List<UserChatMessageDO> getUserChatMessageList(AppUserChatMessagePageReqVO pageReqVO) {
+        // 1. 获得用户消息会话
+        UserChatConversationDO conversation = conversationService.getConversationByUserId(pageReqVO.getSenderUserId(), pageReqVO.getReceiverUserId());
         if (conversation == null) {
             return Collections.emptyList();
         }
         // 2. 设置会话编号
         pageReqVO.setConversationId(conversation.getId());
-        return userChatMessageMapper.selectList(BeanUtils.toBean(pageReqVO,  AppUserChatMessageListReqVO.class));
+        return userChatMessageMapper.selectList(pageReqVO);
     }
 
     private AppUserChatMessageServiceImpl getSelf() {
