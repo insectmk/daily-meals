@@ -8,12 +8,14 @@ import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.infra.api.websocket.WebSocketSenderApi;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageListReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessagePageReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatConversationDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.userchat.UserChatConversationMapper;
 import cn.iocoder.yudao.module.meals.dal.mysql.userchat.UserChatMessageMapper;
 import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
+import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
 import cn.iocoder.yudao.module.system.api.user.AdminUserApi;
 import jakarta.annotation.Resource;
 import org.springframework.scheduling.annotation.Async;
@@ -76,8 +78,13 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
         conversationService.updateConversationLastMessage(userChatMessage);
         // 2.4 更新未读消息数
         conversationMapper.updateUnreadMessageCountIncrement(receiveConversation.getId());
-        // 2.5 通知用户对话更新
-        getSelf().sendAsyncMessageToMember(sendReqVO.getReceiverUserId(),USER_CHAT_MESSAGE_TYPE, userChatMessage);
+        // 3 通知用户对话更新
+        // 3.1 查询用户信息
+        MemberUserRespDTO senderUser = memberUserApi.getUser(userChatMessage.getSenderUserId());
+        // 3.2 拼装用户信息
+        AppUserChatMessageRespVO userChatMessageNotice = BeanUtils.toBean(sendReqVO, AppUserChatMessageRespVO.class);
+        userChatMessageNotice.setSenderUserAvatar(senderUser.getAvatar()); // 头像
+        getSelf().sendAsyncMessageToMember(sendReqVO.getReceiverUserId(),USER_CHAT_MESSAGE_TYPE, userChatMessageNotice);
     }
 
     @Override
