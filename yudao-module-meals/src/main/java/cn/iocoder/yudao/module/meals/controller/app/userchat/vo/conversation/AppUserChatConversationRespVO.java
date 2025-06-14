@@ -14,10 +14,15 @@ public class AppUserChatConversationRespVO {
 
     @Schema(description = "会话所属用户", requiredMode = Schema.RequiredMode.REQUIRED, example = "8300")
     private Long userId;
-    @Schema(description = "会话所属用户头像", requiredMode = Schema.RequiredMode.REQUIRED, example = "https://yudao.com/images/avatar.jpg")
-    private String userAvatar;
-    @Schema(description = "会话所属用户昵称", requiredMode = Schema.RequiredMode.REQUIRED, example = "芋道")
-    private String userNickname;
+
+    @Schema(description = "会话聊天对象用户", requiredMode = Schema.RequiredMode.REQUIRED, example = "8300")
+    private Long chatUserId;
+
+    @Schema(description = "会话聊天对象头像", requiredMode = Schema.RequiredMode.REQUIRED, example = "https://yudao.com/images/avatar.jpg")
+    private String chatUserAvatar;
+
+    @Schema(description = "会话聊天对象昵称", requiredMode = Schema.RequiredMode.REQUIRED, example = "芋道")
+    private String chatUserNickname;
 
     @Schema(description = "最后聊天时间", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime lastMessageTime;
@@ -28,8 +33,8 @@ public class AppUserChatConversationRespVO {
     @Schema(description = "最后发送的消息类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private Integer lastMessageContentType;
 
-    @Schema(description = "管理端置顶", requiredMode = Schema.RequiredMode.REQUIRED, example = "false")
-    private Boolean adminPinned;
+    @Schema(description = "用户置顶", requiredMode = Schema.RequiredMode.REQUIRED, example = "false")
+    private Boolean pinned;
 
     @Schema(description = "用户是否可见", requiredMode = Schema.RequiredMode.REQUIRED, example = "true")
     private Boolean userDeleted;

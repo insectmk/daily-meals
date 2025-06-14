@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +22,7 @@ import java.util.Map;
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 import static cn.iocoder.yudao.framework.common.util.collection.MapUtils.findAndThen;
+import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 @Tag(name = "用户APP - 用户聊天会话")
 @RestController
@@ -46,9 +46,9 @@ public class AppUserChatConversationController {
 
         // 拼接数据
          AppUserChatConversationRespVO result = BeanUtils.toBean(conversation,  AppUserChatConversationRespVO.class);
-        MemberUserRespDTO memberUser = memberUserApi.getUser(conversation.getUserId());
+        MemberUserRespDTO memberUser = memberUserApi.getUser(conversation.getChatUserId());
         if (memberUser != null) {
-            result.setUserAvatar(memberUser.getAvatar()).setUserNickname(memberUser.getNickname());
+            result.setChatUserAvatar(memberUser.getAvatar()).setChatUserNickname(memberUser.getNickname());
         }
         return success(result);
     }
@@ -69,16 +69,16 @@ public class AppUserChatConversationController {
     }
 
     @GetMapping("/list")
-    @Operation(summary = "获得客服会话列表")
-    public CommonResult<List< AppUserChatConversationRespVO>> getConversationList() {
+    @Operation(summary = "获得用户会话列表")
+    public CommonResult<List<AppUserChatConversationRespVO>> getConversationList() {
         // 查询会话列表
-        List< AppUserChatConversationRespVO> respList = BeanUtils.toBean(appUserChatConversationService.getKefuConversationList(),
+        List<AppUserChatConversationRespVO> respList = BeanUtils.toBean(appUserChatConversationService.getUserChatConversationList(getLoginUserId()),
                  AppUserChatConversationRespVO.class);
 
-        // 拼接数据
-        Map<Long, MemberUserRespDTO> userMap = memberUserApi.getUserMap(convertSet(respList,  AppUserChatConversationRespVO::getUserId));
-        respList.forEach(item-> findAndThen(userMap, item.getUserId(),
-                memberUser-> item.setUserAvatar(memberUser.getAvatar()).setUserNickname(memberUser.getNickname())));
+        // 拼接聊天对象用户数据
+        Map<Long, MemberUserRespDTO> userMap = memberUserApi.getUserMap(convertSet(respList,  AppUserChatConversationRespVO::getChatUserId));
+        respList.forEach(item-> findAndThen(userMap, item.getChatUserId(),
+                memberUser-> item.setChatUserAvatar(memberUser.getAvatar()).setChatUserNickname(memberUser.getNickname())));
         return success(respList);
     }
 

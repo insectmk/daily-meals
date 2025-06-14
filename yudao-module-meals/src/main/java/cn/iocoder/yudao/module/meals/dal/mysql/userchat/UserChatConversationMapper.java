@@ -16,9 +16,10 @@ import java.util.List;
 @Mapper
 public interface UserChatConversationMapper extends BaseMapperX<UserChatConversationDO> {
 
-    default List<UserChatConversationDO> selectConversationList() {
+    default List<UserChatConversationDO> selectConversationList(Long userId) {
         return selectList(new LambdaQueryWrapperX<UserChatConversationDO>()
-                .eq(UserChatConversationDO::getUserDeleted, Boolean.FALSE)
+                .eq(UserChatConversationDO::getUserId, userId) // 该用户的会话
+                .eq(UserChatConversationDO::getUserDeleted, Boolean.FALSE) // 未被用户删除的
                 .orderByDesc(UserChatConversationDO::getCreateTime));
     }
 

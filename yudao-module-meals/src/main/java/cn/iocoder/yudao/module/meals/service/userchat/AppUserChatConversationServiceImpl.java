@@ -83,8 +83,8 @@ public class AppUserChatConversationServiceImpl implements AppUserChatConversati
     }
 
     @Override
-    public List<UserChatConversationDO> getKefuConversationList() {
-        return conversationMapper.selectConversationList();
+    public List<UserChatConversationDO> getUserChatConversationList(Long userId) {
+        return conversationMapper.selectConversationList(userId);
     }
 
     @Override

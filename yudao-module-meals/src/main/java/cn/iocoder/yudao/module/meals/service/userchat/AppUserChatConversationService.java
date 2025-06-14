@@ -59,11 +59,13 @@ public interface AppUserChatConversationService {
     void updateConversationAdminDeleted(Long id, Boolean adminDeleted);
 
     /**
-     * 【管理员】获得客服会话列表
+     * 获得用户会话列表
      *
+     * @param userId  会话所属用户ID
      * @return 会话列表
      */
-    List<UserChatConversationDO> getKefuConversationList();
+    List<UserChatConversationDO> getUserChatConversationList(Long userId
+    );
 
     /**
      * 用户获得或创建会话
