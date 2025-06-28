@@ -1,14 +1,18 @@
 package cn.iocoder.yudao.module.meals.service.userchat;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
+import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.infra.api.websocket.WebSocketSenderApi;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessagePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatUnreadMessageCntRespVO;
+import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplanitem.PopularPublicRecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatConversationDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.userchat.UserChatConversationMapper;
@@ -16,6 +20,7 @@ import cn.iocoder.yudao.module.meals.dal.mysql.userchat.UserChatMessageMapper;
 import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
 import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
 import cn.iocoder.yudao.module.system.api.user.AdminUserApi;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -25,6 +30,9 @@ import org.springframework.validation.annotation.Validated;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
@@ -147,6 +155,30 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
         // 2. 设置会话编号
         pageReqVO.setConversationId(conversation.getId());
         return userChatMessageMapper.selectList(pageReqVO);
+    }
+
+    @Override
+    public List<AppUserChatUnreadMessageCntRespVO> getUserChatUnreadMessageCountList(Long userId) {
+        // SQL sum 查询
+        List<Map<String, Object>> result = conversationMapper.selectMaps(new QueryWrapper<UserChatConversationDO>()
+                .select(String.format("id, (select count(*) from meals_user_chat_message m where m.conversation_id = meals_user_chat_conversation.id and m.receiver_user_id = %d and m.read_status = 0 and deleted = 0) AS unreadCount", userId))
+                .eq("user_id", userId)
+        );
+        // 使用convertListByFlatMap转换结果
+        return CollectionUtils.convertListByFlatMap(result, record -> {
+            // 从Map中提取字段并构建对象
+            Long conversationId = MapUtil.getLong(record, "id"); // 会话ID
+            Integer unreadCount = MapUtil.getInt(record, "unreadCount"); // 未读消息数
+
+            // 过滤空值并创建流
+            if (conversationId == null || unreadCount == null) {
+                return Stream.empty();
+            }
+            AppUserChatUnreadMessageCntRespVO unreadMsgCntVO = new AppUserChatUnreadMessageCntRespVO();
+            unreadMsgCntVO.setConversationId(conversationId); // 设置会话ID
+            unreadMsgCntVO.setUnreadCount(unreadCount); // 设置未读消息数
+            return Stream.of(unreadMsgCntVO);
+        });
     }
 
     private AppUserChatMessageServiceImpl getSelf() {

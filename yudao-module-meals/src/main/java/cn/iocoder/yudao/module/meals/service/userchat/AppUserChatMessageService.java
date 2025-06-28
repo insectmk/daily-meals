@@ -2,6 +2,7 @@ package cn.iocoder.yudao.module.meals.service.userchat;
 
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessagePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
+import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatUnreadMessageCntRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
 
 import java.util.List;
@@ -37,4 +38,10 @@ public interface AppUserChatMessageService {
      */
     List<UserChatMessageDO> getUserChatMessageList(AppUserChatMessagePageReqVO pageReqVO);
 
+    /**
+     * 获得用户未读消息数信息
+     * @param userId 用户ID
+     * @return 会话未读消息数集合
+     */
+    List<AppUserChatUnreadMessageCntRespVO> getUserChatUnreadMessageCountList(Long userId);
 }
