@@ -3,10 +3,7 @@ package cn.iocoder.yudao.module.meals.controller.app.userchat;
 import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessagePageReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageRespVO;
-import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
-import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatUnreadMessageCntRespVO;
+import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.*;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
 import cn.iocoder.yudao.module.meals.service.userchat.AppUserChatMessageService;
 import cn.iocoder.yudao.module.member.api.user.MemberUserApi;
@@ -73,6 +70,13 @@ public class AppUserChatMessageController {
     @Operation(summary = "获得用户未读消息数信息")
     public CommonResult<List<AppUserChatUnreadMessageCntRespVO>> getUserChatUnreadMessageCountList() {
         return success(appUserChatMessageService.getUserChatUnreadMessageCountList(getLoginUserId()));
+    }
+
+    @PutMapping("/conversation-read")
+    @Operation(summary = "已读会话消息")
+    public CommonResult<Boolean> conversationRead(@Valid @RequestBody AppUserChatMessageReadVO reqVO) {
+        appUserChatMessageService.conversationRead(reqVO.getConversationId());
+        return success(Boolean.TRUE);
     }
 
 }

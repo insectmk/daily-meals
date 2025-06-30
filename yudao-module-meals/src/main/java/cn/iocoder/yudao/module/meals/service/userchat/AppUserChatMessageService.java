@@ -44,4 +44,10 @@ public interface AppUserChatMessageService {
      * @return 会话未读消息数集合
      */
     List<AppUserChatUnreadMessageCntRespVO> getUserChatUnreadMessageCountList(Long userId);
+
+    /**
+     * 已读会话消息
+     * @param conversationId 会话ID
+     */
+    void conversationRead(Long conversationId);
 }

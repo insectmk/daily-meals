@@ -7,6 +7,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.module.infra.api.websocket.WebSocketSenderApi;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessagePageReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageRespVO;
@@ -179,6 +180,16 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
             unreadMsgCntVO.setUnreadCount(unreadCount); // 设置未读消息数
             return Stream.of(unreadMsgCntVO);
         });
+    }
+
+    @Override
+    public void conversationRead(Long conversationId) {
+        userChatMessageMapper.update(new UserChatMessageDO()
+                .setReadStatus(Boolean.TRUE),
+                new LambdaQueryWrapperX<UserChatMessageDO>()
+                        .eq(UserChatMessageDO::getConversationId, conversationId) // 该会话
+                        .eq(UserChatMessageDO::getReadStatus, Boolean.FALSE) // 未读的数据
+        );
     }
 
     private AppUserChatMessageServiceImpl getSelf() {
