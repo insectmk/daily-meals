@@ -79,4 +79,10 @@ public class AppUserChatMessageController {
         return success(Boolean.TRUE);
     }
 
+    @PutMapping("/conversation-read-by-receiver")
+    @Operation(summary = "根据接收方ID已读会话消息")
+    public CommonResult<Boolean> conversationReadByReceiver(@Valid @RequestBody AppUserChatMessageReadByReceiverVO reqVO) {
+        appUserChatMessageService.conversationReadByReceiver(reqVO.getReceiverUserId(), getLoginUserId());
+        return success(Boolean.TRUE);
+    }
 }

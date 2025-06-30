@@ -4,6 +4,7 @@ import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserC
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatUnreadMessageCntRespVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -51,4 +52,11 @@ public interface AppUserChatMessageService {
      * @param userId 用户ID
      */
     void conversationRead(Long conversationId, Long userId);
+
+    /**
+     * 根据接收方ID已读会话消息
+     * @param receiverUserId 接收方用户ID
+     * @param senderUserId 发送方用户ID
+     */
+    void conversationReadByReceiver(@NotNull(message = "接收方ID不能为空") Long receiverUserId, Long senderUserId);
 }

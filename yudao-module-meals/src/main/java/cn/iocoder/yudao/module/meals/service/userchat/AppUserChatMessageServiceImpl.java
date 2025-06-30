@@ -211,6 +211,12 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
         getSelf().sendAsyncMessageToMember(receiverConversationDO.getUserId(),USER_CHAT_MESSAGE_READ_STATUS_CHANGE, null);
     }
 
+    @Override
+    public void conversationReadByReceiver(Long receiverUserId, Long senderUserId) {
+        UserChatConversationDO conversationDO = conversationService.getOrCreateConversation(senderUserId, receiverUserId); // 获取会话
+        conversationRead(conversationDO.getId(), senderUserId); // 已读内容
+    }
+
     private AppUserChatMessageServiceImpl getSelf() {
         return SpringUtil.getBean(getClass());
     }
