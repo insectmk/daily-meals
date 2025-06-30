@@ -23,6 +23,7 @@ import cn.iocoder.yudao.module.member.api.user.dto.MemberUserRespDTO;
 import cn.iocoder.yudao.module.system.api.user.AdminUserApi;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +64,8 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
     private WebSocketSenderApi webSocketSenderApi;
     @Resource
     private UserChatConversationMapper conversationMapper;
+    @Autowired
+    private UserChatConversationMapper userChatConversationMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -183,13 +186,29 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
     }
 
     @Override
-    public void conversationRead(Long conversationId) {
+    public void conversationRead(Long conversationId, Long userId) {
+        // 1 已读当前会话 接收的 内容
         userChatMessageMapper.update(new UserChatMessageDO()
                 .setReadStatus(Boolean.TRUE),
                 new LambdaQueryWrapperX<UserChatMessageDO>()
                         .eq(UserChatMessageDO::getConversationId, conversationId) // 该会话
+                        .eq(UserChatMessageDO::getReceiverUserId, userId) // 该用户接收的内容
                         .eq(UserChatMessageDO::getReadStatus, Boolean.FALSE) // 未读的数据
         );
+        // 2 已读聊天对象会话的内容
+        // 2.1 查询出聊天对象的会话
+        UserChatConversationDO conversationDO = conversationMapper.selectById(conversationId); // 发送方会话
+        UserChatConversationDO receiverConversationDO = conversationService.getOrCreateConversation(conversationDO.getChatUserId(), conversationDO.getUserId()); // 接收方会话
+        // 2.2 已读接收方会话 发送的内容
+        userChatMessageMapper.update(new UserChatMessageDO()
+                        .setReadStatus(Boolean.TRUE),
+                new LambdaQueryWrapperX<UserChatMessageDO>()
+                        .eq(UserChatMessageDO::getConversationId, receiverConversationDO.getId()) // 该会话
+                        .eq(UserChatMessageDO::getSenderUserId, userId) // 该会话用户发送的内容
+                        .eq(UserChatMessageDO::getReadStatus, Boolean.FALSE) // 未读的数据
+        );
+        // 3 通知接收方，已读消息
+        getSelf().sendAsyncMessageToMember(receiverConversationDO.getUserId(),USER_CHAT_MESSAGE_READ_STATUS_CHANGE, null);
     }
 
     private AppUserChatMessageServiceImpl getSelf() {

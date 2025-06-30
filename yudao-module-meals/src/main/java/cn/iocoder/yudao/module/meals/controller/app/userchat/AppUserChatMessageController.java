@@ -75,7 +75,7 @@ public class AppUserChatMessageController {
     @PutMapping("/conversation-read")
     @Operation(summary = "已读会话消息")
     public CommonResult<Boolean> conversationRead(@Valid @RequestBody AppUserChatMessageReadVO reqVO) {
-        appUserChatMessageService.conversationRead(reqVO.getConversationId());
+        appUserChatMessageService.conversationRead(reqVO.getConversationId(), getLoginUserId());
         return success(Boolean.TRUE);
     }
 

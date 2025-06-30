@@ -48,6 +48,7 @@ public interface AppUserChatMessageService {
     /**
      * 已读会话消息
      * @param conversationId 会话ID
+     * @param userId 用户ID
      */
-    void conversationRead(Long conversationId);
+    void conversationRead(Long conversationId, Long userId);
 }
