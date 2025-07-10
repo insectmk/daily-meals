@@ -69,10 +69,10 @@ public class AppUserChatConversationController {
     }
 
     @DeleteMapping("/delete")
-    @Operation(summary = "删除客服会话")
+    @Operation(summary = "删除会话")
     @Parameter(name = "id", description = "编号", required = true)
     public CommonResult<Boolean> deleteConversation(@RequestParam("id") Long id) {
-        appUserChatConversationService.deleteKefuConversation(id);
+        appUserChatConversationService.deleteConversation(id);
         return success(true);
     }
 

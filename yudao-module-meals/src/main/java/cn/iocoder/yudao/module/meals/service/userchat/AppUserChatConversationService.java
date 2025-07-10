@@ -25,11 +25,11 @@ public interface AppUserChatConversationService {
     UserChatConversationDO getConversation(Long id);
 
     /**
-     * 【管理员】删除客服会话
+     * 删除会话
      *
      * @param id 编号
      */
-    void deleteKefuConversation(Long id);
+    void deleteConversation(Long id);
 
     /**
      * 会话置顶

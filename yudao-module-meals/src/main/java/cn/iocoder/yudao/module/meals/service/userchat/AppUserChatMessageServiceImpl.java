@@ -71,20 +71,32 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
          UserChatMessageDO userChatMessage = BeanUtils.toBean(sendReqVO,  UserChatMessageDO.class);
          UserChatConversationDO conversation = conversationService.getOrCreateConversation(sendReqVO.getSenderUserId(), sendReqVO.getReceiverUserId());
         userChatMessage.setConversationId(conversation.getId());
-        // 1.2 保存消息
+        // 1.2 判断是否隐藏会话，如果隐藏，则开启
+        if (conversation.getUserDeleted()) {
+            conversationMapper.updateById(new UserChatConversationDO()
+                    .setId(conversation.getId())
+                    .setUserDeleted(Boolean.FALSE));
+        }
+        // 1.3 保存消息
         userChatMessageMapper.insert(userChatMessage);
-        // 1.3 更新会话消息冗余
+        // 1.4 更新会话消息冗余
         conversationService.updateConversationLastMessage(userChatMessage);
         // 2、接收方会话
         // 2.1 设置会话编码
         UserChatConversationDO receiveConversation = conversationService.getOrCreateConversation(sendReqVO.getReceiverUserId(), sendReqVO.getSenderUserId());
-        // 2.2 保存消息
+        // 2.2 判断是否隐藏会话，如果隐藏，则开启
+        if (receiveConversation.getUserDeleted()) {
+            conversationMapper.updateById(new UserChatConversationDO()
+                    .setId(receiveConversation.getId())
+                    .setUserDeleted(Boolean.FALSE));
+        }
+        // 2.3 保存消息
         userChatMessage.setId(null); // 清空ID
         userChatMessage.setConversationId(receiveConversation.getId()); // 设置会话编码
         userChatMessageMapper.insert(userChatMessage);
-        // 2.3 更新会话消息冗余
+        // 2.4 更新会话消息冗余
         conversationService.updateConversationLastMessage(userChatMessage);
-        // 2.4 更新未读消息数
+        // 2.5 更新未读消息数
         conversationMapper.updateUnreadMessageCountIncrement(receiveConversation.getId());
         // 3 通知用户对话更新
         // 3.1 查询用户信息

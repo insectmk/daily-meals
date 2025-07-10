@@ -44,12 +44,13 @@ public class AppUserChatConversationServiceImpl implements AppUserChatConversati
     }
 
     @Override
-    public void deleteKefuConversation(Long id) {
+    public void deleteConversation(Long id) {
         // 校验存在
         validateConversationExists(id);
-
-        // 只有管理员端可以删除会话，也不真的删，只是管理员端看不到啦
-        conversationMapper.updateById(new UserChatConversationDO().setId(id).setUserDeleted(Boolean.TRUE));
+        // 不真的删，只是看不到啦
+        conversationMapper.updateById(new UserChatConversationDO()
+                .setId(id)
+                .setUserDeleted(Boolean.TRUE));
     }
 
     @Override
