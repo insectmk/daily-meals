@@ -30,11 +30,11 @@ public interface AppUserChatConversationService {
     void deleteKefuConversation(Long id);
 
     /**
-     * 【管理员】客服会话置顶
+     * 会话置顶
      *
      * @param updateReqVO 请求
      */
-    void updateConversationPinnedByAdmin(AppUserChatConversationUpdatePinnedReqVO updateReqVO);
+    void updateConversationPinned(AppUserChatConversationUpdatePinnedReqVO updateReqVO);
 
     /**
      * 更新会话消息冗余信息
@@ -84,7 +84,7 @@ public interface AppUserChatConversationService {
      * @param id 编号
      * @return 客服会话
      */
-    UserChatConversationDO validateKefuConversationExists(Long id);
+    UserChatConversationDO validateConversationExists(Long id);
 
     /**
      * 获得用户会话

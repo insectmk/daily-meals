@@ -54,9 +54,9 @@ public class AppUserChatConversationController {
     }
 
     @PutMapping("/update-conversation-pinned")
-    @Operation(summary = "置顶/取消置顶客服会话")
+    @Operation(summary = "置顶/取消置顶会话")
     public CommonResult<Boolean> updateConversationPinned(@Valid @RequestBody AppUserChatConversationUpdatePinnedReqVO updateReqVO) {
-        appUserChatConversationService.updateConversationPinnedByAdmin(updateReqVO);
+        appUserChatConversationService.updateConversationPinned(updateReqVO);
         return success(true);
     }
 

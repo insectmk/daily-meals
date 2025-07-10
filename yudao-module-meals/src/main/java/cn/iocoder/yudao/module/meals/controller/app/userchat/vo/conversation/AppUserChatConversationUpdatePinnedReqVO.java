@@ -12,8 +12,8 @@ public class AppUserChatConversationUpdatePinnedReqVO {
     @NotNull(message = "会话编号不能为空")
     private Long id;
 
-    @Schema(description = "管理端置顶", requiredMode = Schema.RequiredMode.REQUIRED, example = "false")
-    @NotNull(message = "管理端置顶不能为空")
+    @Schema(description = "置顶状态", requiredMode = Schema.RequiredMode.REQUIRED, example = "false")
+    @NotNull(message = "置顶状态不能为空")
     private Boolean pinned;
 
 }

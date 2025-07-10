@@ -38,26 +38,27 @@ public class AppUserChatConversationServiceImpl implements AppUserChatConversati
     @Override
     public void deleteKefuConversation(Long id) {
         // 校验存在
-        validateKefuConversationExists(id);
+        validateConversationExists(id);
 
         // 只有管理员端可以删除会话，也不真的删，只是管理员端看不到啦
         conversationMapper.updateById(new UserChatConversationDO().setId(id).setUserDeleted(Boolean.TRUE));
     }
 
     @Override
-    public void updateConversationPinnedByAdmin(AppUserChatConversationUpdatePinnedReqVO updateReqVO) {
+    public void updateConversationPinned(AppUserChatConversationUpdatePinnedReqVO updateReqVO) {
         // 校验存在
-        validateKefuConversationExists(updateReqVO.getId());
-
-        // 更新管理员会话置顶状态
-        conversationMapper.updateById(new UserChatConversationDO().setId(updateReqVO.getId()).setPinned(updateReqVO.getPinned()));
+        validateConversationExists(updateReqVO.getId());
+        // 更新会话置顶状态
+        conversationMapper.updateById(new UserChatConversationDO()
+                .setId(updateReqVO.getId())
+                .setPinned(updateReqVO.getPinned()));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateConversationLastMessage(UserChatMessageDO userChatMessage) {
         // 1.1 校验会话是否存在
-        UserChatConversationDO conversation = validateKefuConversationExists(userChatMessage.getConversationId());
+        UserChatConversationDO conversation = validateConversationExists(userChatMessage.getConversationId());
         // 1.2 更新会话消息冗余
         conversationMapper.updateById(new UserChatConversationDO().setId(userChatMessage.getConversationId())
                 .setLastMessageTime(userChatMessage.getCreateTime()).setLastMessageContent(userChatMessage.getContent())
@@ -71,7 +72,7 @@ public class AppUserChatConversationServiceImpl implements AppUserChatConversati
     @Override
     public void updateAdminUnreadMessageCountToZero(Long id) {
         // 校验存在
-        validateKefuConversationExists(id);
+        validateConversationExists(id);
 
         // 管理员未读消息数归零
         conversationMapper.updateById(new UserChatConversationDO().setId(id).setUnreadMessageCount(0));
@@ -110,7 +111,7 @@ public class AppUserChatConversationServiceImpl implements AppUserChatConversati
     }
 
     @Override
-    public UserChatConversationDO validateKefuConversationExists(Long id) {
+    public UserChatConversationDO validateConversationExists(Long id) {
         UserChatConversationDO conversation = conversationMapper.selectById(id);
         if (conversation == null) {
             throw exception(USER_CHAT_CONVERSATION_NOT_EXISTS);

@@ -13,7 +13,6 @@ import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserC
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageRespVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatMessageSendReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.message.AppUserChatUnreadMessageCntRespVO;
-import cn.iocoder.yudao.module.meals.dal.dataobject.dailyplanitem.PopularPublicRecipeDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatConversationDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.userchat.UserChatConversationMapper;
@@ -33,7 +32,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
@@ -104,7 +102,7 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
     @Transactional(rollbackFor = Exception.class)
     public void updateUserChatMessageReadStatus(Long conversationId, Long userId, Integer userType) {
         // 1.1 校验会话是否存在
-         UserChatConversationDO conversation = conversationService.validateKefuConversationExists(conversationId);
+         UserChatConversationDO conversation = conversationService.validateConversationExists(conversationId);
         // 1.2 如果是会员端处理已读，需要传递 userId；万一用户模拟一个 conversationId
         if (UserTypeEnum.MEMBER.getValue().equals(userType) && ObjUtil.notEqual(conversation.getUserId(), userId)) {
             throw exception(USER_CHAT_CONVERSATION_NOT_EXISTS);
