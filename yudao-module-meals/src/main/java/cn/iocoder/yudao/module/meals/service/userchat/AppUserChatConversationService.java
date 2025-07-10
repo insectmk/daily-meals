@@ -1,9 +1,11 @@
 package cn.iocoder.yudao.module.meals.service.userchat;
 
 
+import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.conversation.AppUserChatConversationMarkReadStatusReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.conversation.AppUserChatConversationUpdatePinnedReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatConversationDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -94,4 +96,9 @@ public interface AppUserChatConversationService {
      */
     UserChatConversationDO getConversationByUserId(Long senderUserId, Long receiverUserId);
 
+    /**
+     * 标记会话未读/已读
+     * @param markReqVO 请求对象
+     */
+    void markReadStatus(@Valid AppUserChatConversationMarkReadStatusReqVO markReqVO);
 }

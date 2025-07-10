@@ -1,12 +1,15 @@
 package cn.iocoder.yudao.module.meals.service.userchat;
 
 import cn.hutool.core.util.StrUtil;
+import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.conversation.AppUserChatConversationMarkReadStatusReqVO;
 import cn.iocoder.yudao.module.meals.controller.app.userchat.vo.conversation.AppUserChatConversationUpdatePinnedReqVO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatConversationDO;
 import cn.iocoder.yudao.module.meals.dal.dataobject.userchat.UserChatMessageDO;
 import cn.iocoder.yudao.module.meals.dal.mysql.userchat.UserChatConversationMapper;
+import cn.iocoder.yudao.module.meals.dal.mysql.userchat.UserChatMessageMapper;
 import cn.iocoder.yudao.module.meals.enums.userchat.UserChatMessageContentTypeEnum;
 import jakarta.annotation.Resource;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +32,11 @@ public class AppUserChatConversationServiceImpl implements AppUserChatConversati
 
     @Resource
     private UserChatConversationMapper conversationMapper;
+    @Resource
+    private UserChatMessageMapper messageMapper;
+    @Resource
+    @Lazy
+    private AppUserChatMessageService messageService;
 
     @Override
     public UserChatConversationDO getConversation(Long id) {
@@ -122,6 +130,26 @@ public class AppUserChatConversationServiceImpl implements AppUserChatConversati
     @Override
     public UserChatConversationDO getConversationByUserId(Long senderUserId, Long receiverUserId) {
         return conversationMapper.selectByUserId(senderUserId, receiverUserId);
+    }
+
+    @Override
+    public void markReadStatus(AppUserChatConversationMarkReadStatusReqVO markReqVO) {
+        // 校验存在
+        UserChatConversationDO conversationDO = validateConversationExists(markReqVO.getId());
+        if (markReqVO.getReadStatus()) {
+            // 已读
+            messageService.conversationRead(markReqVO.getId(), conversationDO.getUserId());
+        } else {
+            // 未读
+            // 更新会话发送方最新聊天为未读
+            UserChatMessageDO messageDO = messageMapper.selectFirstOne(
+                    UserChatMessageDO::getConversationId, conversationDO.getId(),
+                    UserChatMessageDO::getReceiverUserId, conversationDO.getUserId()
+            );
+            messageMapper.updateById(new UserChatMessageDO()
+                    .setId(messageDO.getId())
+                    .setReadStatus(Boolean.FALSE));
+        }
     }
 
 }

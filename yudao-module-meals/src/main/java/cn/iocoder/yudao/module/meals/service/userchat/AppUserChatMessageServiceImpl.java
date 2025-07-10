@@ -62,8 +62,6 @@ public class AppUserChatMessageServiceImpl implements AppUserChatMessageService 
     private WebSocketSenderApi webSocketSenderApi;
     @Resource
     private UserChatConversationMapper conversationMapper;
-    @Autowired
-    private UserChatConversationMapper userChatConversationMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
