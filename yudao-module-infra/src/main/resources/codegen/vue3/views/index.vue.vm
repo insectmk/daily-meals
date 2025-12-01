@@ -353,6 +353,9 @@ const handleDelete = async (id: number) => {
     // 发起删除
     await ${simpleClassName}Api.delete${simpleClassName}(id)
     message.success(t('common.delSuccess'))
+#if ( $table.templateType == 11 )
+    currentRow.value = {}
+#end
     // 刷新列表
     await getList()
   } catch {}
@@ -365,6 +368,7 @@ const handleDeleteBatch = async () => {
     // 删除的二次确认
     await message.delConfirm()
     await ${simpleClassName}Api.delete${simpleClassName}List(checkedIds.value);
+    checkedIds.value = [];
     message.success(t('common.delSuccess'))
     await getList();
   } catch {}
@@ -372,7 +376,7 @@ const handleDeleteBatch = async () => {
 
 const checkedIds = ref<number[]>([])
 const handleRowCheckboxChange = (records: ${simpleClassName}[]) => {
-  checkedIds.value = records.map((item) => item.id);
+  checkedIds.value = records.map((item) => item.id!);
 }
 #end
 

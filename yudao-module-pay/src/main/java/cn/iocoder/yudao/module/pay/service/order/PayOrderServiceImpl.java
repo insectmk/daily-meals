@@ -80,6 +80,11 @@ public class PayOrderServiceImpl implements PayOrderService {
     }
 
     @Override
+    public PayOrderDO getOrder(String no) {
+        return orderMapper.selectByNo(no);
+    }
+
+    @Override
     public PayOrderDO getOrder(Long appId, String merchantOrderId) {
         return orderMapper.selectByAppIdAndMerchantOrderId(appId, merchantOrderId);
     }
@@ -585,7 +590,7 @@ public class PayOrderServiceImpl implements PayOrderService {
                 log.error("[expireOrder][order({}) 更新为支付关闭失败]", order.getId());
                 return false;
             }
-            log.info("[expireOrder][order({}) 更新为支付关闭失败]", order.getId());
+            log.info("[expireOrder][order({}) 更新为支付关闭成功]", order.getId());
             return true;
         } catch (Throwable e) {
             log.error("[expireOrder][order({}) 过期订单异常]", order.getId(), e);

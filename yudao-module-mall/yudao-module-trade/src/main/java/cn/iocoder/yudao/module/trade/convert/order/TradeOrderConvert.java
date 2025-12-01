@@ -2,6 +2,7 @@ package cn.iocoder.yudao.module.trade.convert.order;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
 import cn.iocoder.yudao.framework.common.util.string.StrUtils;
@@ -101,7 +102,8 @@ public interface TradeOrderConvert {
     default PayOrderCreateReqDTO convert(TradeOrderDO order, List<TradeOrderItemDO> orderItems,
                                          TradeOrderProperties orderProperties) {
         PayOrderCreateReqDTO createReqDTO = new PayOrderCreateReqDTO()
-                .setAppKey(orderProperties.getPayAppKey()).setUserIp(order.getUserIp());
+                .setAppKey(orderProperties.getPayAppKey()).setUserIp(order.getUserIp())
+                .setUserId(order.getUserId()).setUserType(UserTypeEnum.MEMBER.getValue());
         // 商户相关字段
         createReqDTO.setMerchantOrderId(String.valueOf(order.getId()));
         String subject = orderItems.get(0).getSpuName();
@@ -266,7 +268,9 @@ public interface TradeOrderConvert {
                 .setTitle(StrUtil.format("{}成功购买{}", user.getNickname(), item.getSpuName()))
                 .setFirstFixedPrice(0).setSecondFixedPrice(0);
         if (BooleanUtil.isTrue(spu.getSubCommissionType())) {
-            bo.setFirstFixedPrice(sku.getFirstBrokeragePrice()).setSecondFixedPrice(sku.getSecondBrokeragePrice());
+            // 特殊：单独设置的佣金需要乘以购买数量。关联 https://gitee.com/yudaocode/yudao-mall-uniapp/issues/ICY7SJ
+            bo.setFirstFixedPrice(sku.getFirstBrokeragePrice() * item.getCount())
+                    .setSecondFixedPrice(sku.getSecondBrokeragePrice() * item.getCount());
         }
         return bo;
     }

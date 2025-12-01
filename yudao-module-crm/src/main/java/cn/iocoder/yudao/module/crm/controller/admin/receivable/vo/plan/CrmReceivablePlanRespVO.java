@@ -1,8 +1,8 @@
 package cn.iocoder.yudao.module.crm.controller.admin.receivable.vo.plan;
 
 import cn.iocoder.yudao.module.crm.controller.admin.receivable.vo.receivable.CrmReceivableRespVO;
-import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
-import com.alibaba.excel.annotation.ExcelProperty;
+import cn.idev.excel.annotation.ExcelIgnoreUnannotated;
+import cn.idev.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -59,7 +59,6 @@ public class CrmReceivablePlanRespVO {
     @ExcelProperty("回款编号")
     private Long receivableId;
     @Schema(description = "回款信息")
-    @ExcelProperty("回款信息")
     private CrmReceivableRespVO receivable;
 
     @Schema(description = "提前几天提醒", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")

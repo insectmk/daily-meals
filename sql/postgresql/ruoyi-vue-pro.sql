@@ -27,13 +27,17 @@ COMMENT ON TABLE dual IS '数据库连接的表';
 INSERT INTO dual VALUES (1);
 -- @formatter:on
 
+DROP SEQUENCE IF EXISTS infra_api_access_log_seq;
+CREATE SEQUENCE infra_api_access_log_seq
+    START 1;
+
 -- ----------------------------
 -- Table structure for infra_api_access_log
 -- ----------------------------
 DROP TABLE IF EXISTS infra_api_access_log;
 CREATE TABLE infra_api_access_log
 (
-    id               int8         NOT NULL,
+    id               int8         NOT NULL DEFAULT NEXTVAL('infra_api_access_log_seq'),
     trace_id         varchar(64)  NOT NULL DEFAULT '',
     user_id          int8         NOT NULL DEFAULT 0,
     user_type        int2         NOT NULL DEFAULT 0,
@@ -92,8 +96,8 @@ COMMENT ON COLUMN infra_api_access_log.deleted IS '是否删除';
 COMMENT ON COLUMN infra_api_access_log.tenant_id IS '租户编号';
 COMMENT ON TABLE infra_api_access_log IS 'API 访问日志表';
 
-DROP SEQUENCE IF EXISTS infra_api_access_log_seq;
-CREATE SEQUENCE infra_api_access_log_seq
+DROP SEQUENCE IF EXISTS infra_api_error_log_seq;
+CREATE SEQUENCE infra_api_error_log_seq
     START 1;
 
 -- ----------------------------
@@ -102,7 +106,7 @@ CREATE SEQUENCE infra_api_access_log_seq
 DROP TABLE IF EXISTS infra_api_error_log;
 CREATE TABLE infra_api_error_log
 (
-    id                           int8          NOT NULL,
+    id                           int8          NOT NULL DEFAULT NEXTVAL('infra_api_error_log_seq'),
     trace_id                     varchar(64)   NOT NULL,
     user_id                      int8          NOT NULL DEFAULT 0,
     user_type                    int2          NOT NULL DEFAULT 0,
@@ -165,8 +169,8 @@ COMMENT ON COLUMN infra_api_error_log.deleted IS '是否删除';
 COMMENT ON COLUMN infra_api_error_log.tenant_id IS '租户编号';
 COMMENT ON TABLE infra_api_error_log IS '系统异常日志';
 
-DROP SEQUENCE IF EXISTS infra_api_error_log_seq;
-CREATE SEQUENCE infra_api_error_log_seq
+DROP SEQUENCE IF EXISTS infra_codegen_column_seq;
+CREATE SEQUENCE infra_codegen_column_seq
     START 1;
 
 -- ----------------------------
@@ -175,7 +179,7 @@ CREATE SEQUENCE infra_api_error_log_seq
 DROP TABLE IF EXISTS infra_codegen_column;
 CREATE TABLE infra_codegen_column
 (
-    id                       int8         NOT NULL,
+    id                       int8         NOT NULL default nextval('infra_codegen_column_seq'),
     table_id                 int8         NOT NULL,
     column_name              varchar(200) NOT NULL,
     data_type                varchar(100) NOT NULL,
@@ -228,8 +232,8 @@ COMMENT ON COLUMN infra_codegen_column.update_time IS '更新时间';
 COMMENT ON COLUMN infra_codegen_column.deleted IS '是否删除';
 COMMENT ON TABLE infra_codegen_column IS '代码生成表字段定义';
 
-DROP SEQUENCE IF EXISTS infra_codegen_column_seq;
-CREATE SEQUENCE infra_codegen_column_seq
+DROP SEQUENCE IF EXISTS infra_codegen_table_seq;
+CREATE SEQUENCE infra_codegen_table_seq
     START 1;
 
 -- ----------------------------
@@ -238,7 +242,7 @@ CREATE SEQUENCE infra_codegen_column_seq
 DROP TABLE IF EXISTS infra_codegen_table;
 CREATE TABLE infra_codegen_table
 (
-    id                    int8         NOT NULL,
+    id                    int8         NOT NULL default nextval('infra_codegen_table_seq'),
     data_source_config_id int8         NOT NULL,
     scene                 int2         NOT NULL DEFAULT 1,
     table_name            varchar(200) NOT NULL DEFAULT '',
@@ -293,8 +297,9 @@ COMMENT ON COLUMN infra_codegen_table.update_time IS '更新时间';
 COMMENT ON COLUMN infra_codegen_table.deleted IS '是否删除';
 COMMENT ON TABLE infra_codegen_table IS '代码生成表定义';
 
-DROP SEQUENCE IF EXISTS infra_codegen_table_seq;
-CREATE SEQUENCE infra_codegen_table_seq
+
+DROP SEQUENCE IF EXISTS infra_config_seq;
+CREATE SEQUENCE infra_config_seq
     START 1;
 
 -- ----------------------------
@@ -303,7 +308,7 @@ CREATE SEQUENCE infra_codegen_table_seq
 DROP TABLE IF EXISTS infra_config;
 CREATE TABLE infra_config
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('infra_config_seq'),
     category    varchar(50)  NOT NULL,
     type        int2         NOT NULL,
     name        varchar(100) NOT NULL DEFAULT '',
@@ -352,9 +357,9 @@ INSERT INTO infra_config (id, category, type, name, config_key, value, visible, 
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS infra_config_seq;
-CREATE SEQUENCE infra_config_seq
-    START 14;
+DROP SEQUENCE IF EXISTS infra_data_source_config_seq;
+CREATE SEQUENCE infra_data_source_config_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for infra_data_source_config
@@ -362,7 +367,7 @@ CREATE SEQUENCE infra_config_seq
 DROP TABLE IF EXISTS infra_data_source_config;
 CREATE TABLE infra_data_source_config
 (
-    id          int8          NOT NULL,
+    id          int8          NOT NULL default nextval('infra_data_source_config_seq'),
     name        varchar(100)  NOT NULL DEFAULT '',
     url         varchar(1024) NOT NULL,
     username    varchar(255)  NOT NULL,
@@ -389,8 +394,8 @@ COMMENT ON COLUMN infra_data_source_config.update_time IS '更新时间';
 COMMENT ON COLUMN infra_data_source_config.deleted IS '是否删除';
 COMMENT ON TABLE infra_data_source_config IS '数据源配置表';
 
-DROP SEQUENCE IF EXISTS infra_data_source_config_seq;
-CREATE SEQUENCE infra_data_source_config_seq
+DROP SEQUENCE IF EXISTS infra_file_seq;
+CREATE SEQUENCE infra_file_seq
     START 1;
 
 -- ----------------------------
@@ -399,7 +404,7 @@ CREATE SEQUENCE infra_data_source_config_seq
 DROP TABLE IF EXISTS infra_file;
 CREATE TABLE infra_file
 (
-    id          int8          NOT NULL,
+    id          int8          NOT NULL default nextval('infra_file_seq'),
     config_id   int8          NULL     DEFAULT NULL,
     name        varchar(256)  NULL     DEFAULT NULL,
     path        varchar(512)  NOT NULL,
@@ -430,9 +435,9 @@ COMMENT ON COLUMN infra_file.update_time IS '更新时间';
 COMMENT ON COLUMN infra_file.deleted IS '是否删除';
 COMMENT ON TABLE infra_file IS '文件表';
 
-DROP SEQUENCE IF EXISTS infra_file_seq;
-CREATE SEQUENCE infra_file_seq
-    START 1;
+DROP SEQUENCE IF EXISTS infra_file_config_seq;
+CREATE SEQUENCE infra_file_config_seq
+    START 31;
 
 -- ----------------------------
 -- Table structure for infra_file_config
@@ -440,7 +445,7 @@ CREATE SEQUENCE infra_file_seq
 DROP TABLE IF EXISTS infra_file_config;
 CREATE TABLE infra_file_config
 (
-    id          int8          NOT NULL,
+    id          int8          NOT NULL default nextval('infra_file_config_seq'),
     name        varchar(63)   NOT NULL,
     storage     int2          NOT NULL,
     remark      varchar(255)  NULL     DEFAULT NULL,
@@ -486,9 +491,9 @@ INSERT INTO infra_file_config (id, name, storage, remark, master, config, creato
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS infra_file_config_seq;
-CREATE SEQUENCE infra_file_config_seq
-    START 31;
+DROP SEQUENCE IF EXISTS infra_file_content_seq;
+CREATE SEQUENCE infra_file_content_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for infra_file_content
@@ -496,7 +501,7 @@ CREATE SEQUENCE infra_file_config_seq
 DROP TABLE IF EXISTS infra_file_content;
 CREATE TABLE infra_file_content
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('infra_file_content_seq'),
     config_id   int8         NOT NULL,
     path        varchar(512) NOT NULL,
     content     bytea        NOT NULL,
@@ -521,8 +526,8 @@ COMMENT ON COLUMN infra_file_content.update_time IS '更新时间';
 COMMENT ON COLUMN infra_file_content.deleted IS '是否删除';
 COMMENT ON TABLE infra_file_content IS '文件表';
 
-DROP SEQUENCE IF EXISTS infra_file_content_seq;
-CREATE SEQUENCE infra_file_content_seq
+DROP SEQUENCE IF EXISTS infra_job_seq;
+CREATE SEQUENCE infra_job_seq
     START 1;
 
 -- ----------------------------
@@ -531,7 +536,7 @@ CREATE SEQUENCE infra_file_content_seq
 DROP TABLE IF EXISTS infra_job;
 CREATE TABLE infra_job
 (
-    id              int8         NOT NULL,
+    id              int8         NOT NULL default nextval('infra_job_seq'),
     name            varchar(32)  NOT NULL,
     status          int2         NOT NULL,
     handler_name    varchar(64)  NOT NULL,
@@ -587,9 +592,9 @@ INSERT INTO infra_job (id, name, status, handler_name, handler_param, cron_expre
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS infra_job_seq;
-CREATE SEQUENCE infra_job_seq
-    START 36;
+DROP SEQUENCE IF EXISTS infra_job_log_seq;
+CREATE SEQUENCE infra_job_log_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for infra_job_log
@@ -597,7 +602,7 @@ CREATE SEQUENCE infra_job_seq
 DROP TABLE IF EXISTS infra_job_log;
 CREATE TABLE infra_job_log
 (
-    id            int8          NOT NULL,
+    id            int8          NOT NULL default nextval('infra_job_log_seq'),
     job_id        int8          NOT NULL,
     handler_name  varchar(64)   NOT NULL,
     handler_param varchar(255)  NULL     DEFAULT NULL,
@@ -634,8 +639,8 @@ COMMENT ON COLUMN infra_job_log.update_time IS '更新时间';
 COMMENT ON COLUMN infra_job_log.deleted IS '是否删除';
 COMMENT ON TABLE infra_job_log IS '定时任务日志表';
 
-DROP SEQUENCE IF EXISTS infra_job_log_seq;
-CREATE SEQUENCE infra_job_log_seq
+DROP SEQUENCE IF EXISTS system_dept_seq;
+CREATE SEQUENCE system_dept_seq
     START 1;
 
 -- ----------------------------
@@ -644,7 +649,7 @@ CREATE SEQUENCE infra_job_log_seq
 DROP TABLE IF EXISTS system_dept;
 CREATE TABLE system_dept
 (
-    id             int8        NOT NULL,
+    id             int8        NOT NULL default nextval('system_dept_seq'),
     name           varchar(30) NOT NULL DEFAULT '',
     parent_id      int8        NOT NULL DEFAULT 0,
     sort           int4        NOT NULL DEFAULT 0,
@@ -701,9 +706,9 @@ INSERT INTO system_dept (id, name, parent_id, sort, leader_user_id, phone, email
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_dept_seq;
-CREATE SEQUENCE system_dept_seq
-    START 114;
+DROP SEQUENCE IF EXISTS system_dict_data_seq;
+CREATE SEQUENCE system_dict_data_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_dict_data
@@ -711,7 +716,7 @@ CREATE SEQUENCE system_dept_seq
 DROP TABLE IF EXISTS system_dict_data;
 CREATE TABLE system_dict_data
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('system_dict_data_seq'),
     sort        int4         NOT NULL DEFAULT 0,
     label       varchar(100) NOT NULL DEFAULT '',
     value       varchar(100) NOT NULL DEFAULT '',
@@ -1177,7 +1182,7 @@ INSERT INTO system_dict_data (id, sort, label, value, dict_type, status, color_t
 INSERT INTO system_dict_data (id, sort, label, value, dict_type, status, color_type, css_class, remark, creator, create_time, updater, update_time, deleted) VALUES (1690, 5, '向量', '5', 'ai_model_type', 0, '', '', '', '1', '2025-03-03 12:28:15', '1', '2025-03-03 12:28:15', '0');
 INSERT INTO system_dict_data (id, sort, label, value, dict_type, status, color_type, css_class, remark, creator, create_time, updater, update_time, deleted) VALUES (1691, 6, '重排', '6', 'ai_model_type', 0, '', '', '', '1', '2025-03-03 12:28:26', '1', '2025-03-03 12:28:26', '0');
 INSERT INTO system_dict_data (id, sort, label, value, dict_type, status, color_type, css_class, remark, creator, create_time, updater, update_time, deleted) VALUES (1692, 14, 'MiniMax', 'MiniMax', 'ai_platform', 0, '', '', '', '1', '2025-03-11 20:04:51', '1', '2025-03-11 20:04:51', '0');
-INSERT INTO system_dict_data (id, sort, label, value, dict_type, status, color_type, css_class, remark, creator, create_time, updater, update_time, deleted) VALUES (1693, 15, '月之暗灭', 'Moonshot', 'ai_platform', 0, '', '', '', '1', '2025-03-11 20:05:08', '1', '2025-03-11 20:05:08', '0');
+INSERT INTO system_dict_data (id, sort, label, value, dict_type, status, color_type, css_class, remark, creator, create_time, updater, update_time, deleted) VALUES (1693, 15, '月之暗面', 'Moonshot', 'ai_platform', 0, '', '', '', '1', '2025-03-11 20:05:08', '1', '2025-03-11 20:05:08', '0');
 INSERT INTO system_dict_data (id, sort, label, value, dict_type, status, color_type, css_class, remark, creator, create_time, updater, update_time, deleted) VALUES (2000, 0, '标准数据格式（JSON）', '0', 'iot_data_format', 0, 'default', '', '', '1', '2024-08-10 11:53:26', '1', '2025-03-17 09:28:16', '0');
 INSERT INTO system_dict_data (id, sort, label, value, dict_type, status, color_type, css_class, remark, creator, create_time, updater, update_time, deleted) VALUES (2001, 1, '透传/自定义', '1', 'iot_data_format', 0, 'default', '', '', '1', '2024-08-10 11:53:37', '1', '2025-03-17 09:28:19', '0');
 INSERT INTO system_dict_data (id, sort, label, value, dict_type, status, color_type, css_class, remark, creator, create_time, updater, update_time, deleted) VALUES (2002, 0, '直连设备', '0', 'iot_product_device_type', 0, 'default', '', '', '1', '2024-08-10 11:54:58', '1', '2025-03-17 09:28:22', '0');
@@ -1357,9 +1362,9 @@ INSERT INTO system_dict_data (id, sort, label, value, dict_type, status, color_t
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_dict_data_seq;
-CREATE SEQUENCE system_dict_data_seq
-    START 3003;
+DROP SEQUENCE IF EXISTS system_dict_type_seq;
+CREATE SEQUENCE system_dict_type_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_dict_type
@@ -1367,7 +1372,7 @@ CREATE SEQUENCE system_dict_data_seq
 DROP TABLE IF EXISTS system_dict_type;
 CREATE TABLE system_dict_type
 (
-    id           int8         NOT NULL,
+    id           int8         NOT NULL default nextval('system_dict_type_seq'),
     name         varchar(100) NOT NULL DEFAULT '',
     type         varchar(100) NOT NULL DEFAULT '',
     status       int2         NOT NULL DEFAULT 0,
@@ -1511,9 +1516,9 @@ INSERT INTO system_dict_type (id, name, type, status, remark, creator, create_ti
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_dict_type_seq;
-CREATE SEQUENCE system_dict_type_seq
-    START 1014;
+DROP SEQUENCE IF EXISTS system_login_log_seq;
+CREATE SEQUENCE system_login_log_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_login_log
@@ -1521,7 +1526,7 @@ CREATE SEQUENCE system_dict_type_seq
 DROP TABLE IF EXISTS system_login_log;
 CREATE TABLE system_login_log
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('system_login_log_seq'),
     log_type    int8         NOT NULL,
     trace_id    varchar(64)  NOT NULL DEFAULT '',
     user_id     int8         NOT NULL DEFAULT 0,
@@ -1558,8 +1563,8 @@ COMMENT ON COLUMN system_login_log.deleted IS '是否删除';
 COMMENT ON COLUMN system_login_log.tenant_id IS '租户编号';
 COMMENT ON TABLE system_login_log IS '系统访问记录';
 
-DROP SEQUENCE IF EXISTS system_login_log_seq;
-CREATE SEQUENCE system_login_log_seq
+DROP SEQUENCE IF EXISTS system_mail_account_seq;
+CREATE SEQUENCE system_mail_account_seq
     START 1;
 
 -- ----------------------------
@@ -1568,7 +1573,7 @@ CREATE SEQUENCE system_login_log_seq
 DROP TABLE IF EXISTS system_mail_account;
 CREATE TABLE system_mail_account
 (
-    id              int8         NOT NULL,
+    id              int8         NOT NULL default nextval('system_mail_account_seq'),
     mail            varchar(255) NOT NULL,
     username        varchar(255) NOT NULL,
     password        varchar(255) NOT NULL,
@@ -1613,9 +1618,9 @@ INSERT INTO system_mail_account (id, mail, username, password, host, port, ssl_e
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_mail_account_seq;
-CREATE SEQUENCE system_mail_account_seq
-    START 5;
+DROP SEQUENCE IF EXISTS system_mail_log_seq;
+CREATE SEQUENCE system_mail_log_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_mail_log
@@ -1623,7 +1628,7 @@ CREATE SEQUENCE system_mail_account_seq
 DROP TABLE IF EXISTS system_mail_log;
 CREATE TABLE system_mail_log
 (
-    id                int8           NOT NULL,
+    id                int8           NOT NULL default nextval('system_mail_log_seq'),
     user_id           int8           NULL     DEFAULT NULL,
     user_type         int2           NULL     DEFAULT NULL,
     to_mail           varchar(255)   NOT NULL,
@@ -1672,8 +1677,8 @@ COMMENT ON COLUMN system_mail_log.update_time IS '更新时间';
 COMMENT ON COLUMN system_mail_log.deleted IS '是否删除';
 COMMENT ON TABLE system_mail_log IS '邮件日志表';
 
-DROP SEQUENCE IF EXISTS system_mail_log_seq;
-CREATE SEQUENCE system_mail_log_seq
+DROP SEQUENCE IF EXISTS system_mail_template_seq;
+CREATE SEQUENCE system_mail_template_seq
     START 1;
 
 -- ----------------------------
@@ -1682,7 +1687,7 @@ CREATE SEQUENCE system_mail_log_seq
 DROP TABLE IF EXISTS system_mail_template;
 CREATE TABLE system_mail_template
 (
-    id          int8           NOT NULL,
+    id          int8           NOT NULL default nextval('system_mail_template_seq'),
     name        varchar(63)    NOT NULL,
     code        varchar(63)    NOT NULL,
     account_id  int8           NOT NULL,
@@ -1730,9 +1735,9 @@ INSERT INTO system_mail_template (id, name, code, account_id, nickname, title, c
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_mail_template_seq;
-CREATE SEQUENCE system_mail_template_seq
-    START 16;
+DROP SEQUENCE IF EXISTS system_menu_seq;
+CREATE SEQUENCE system_menu_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_menu
@@ -1740,7 +1745,7 @@ CREATE SEQUENCE system_mail_template_seq
 DROP TABLE IF EXISTS system_menu;
 CREATE TABLE system_menu
 (
-    id             int8         NOT NULL,
+    id             int8         NOT NULL default nextval('system_menu_seq'),
     name           varchar(50)  NOT NULL,
     permission     varchar(100) NOT NULL DEFAULT '',
     type           int2         NOT NULL,
@@ -2704,9 +2709,9 @@ INSERT INTO system_menu (id, name, permission, type, sort, parent_id, path, icon
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_menu_seq;
-CREATE SEQUENCE system_menu_seq
-    START 5013;
+DROP SEQUENCE IF EXISTS system_notice_seq;
+CREATE SEQUENCE system_notice_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_notice
@@ -2714,7 +2719,7 @@ CREATE SEQUENCE system_menu_seq
 DROP TABLE IF EXISTS system_notice;
 CREATE TABLE system_notice
 (
-    id          int8        NOT NULL,
+    id          int8        NOT NULL default nextval('system_notice_seq'),
     title       varchar(50) NOT NULL,
     content     text        NOT NULL,
     type        int2        NOT NULL,
@@ -2754,9 +2759,9 @@ INSERT INTO system_notice (id, title, content, type, status, creator, create_tim
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_notice_seq;
-CREATE SEQUENCE system_notice_seq
-    START 5;
+DROP SEQUENCE IF EXISTS system_notify_message_seq;
+CREATE SEQUENCE system_notify_message_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_notify_message
@@ -2764,7 +2769,7 @@ CREATE SEQUENCE system_notice_seq
 DROP TABLE IF EXISTS system_notify_message;
 CREATE TABLE system_notify_message
 (
-    id                int8          NOT NULL,
+    id                int8          NOT NULL default nextval('system_notify_message_seq'),
     user_id           int8          NOT NULL,
     user_type         int2          NOT NULL,
     template_id       int8          NOT NULL,
@@ -2822,9 +2827,9 @@ INSERT INTO system_notify_message (id, user_id, user_type, template_id, template
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_notify_message_seq;
-CREATE SEQUENCE system_notify_message_seq
-    START 11;
+DROP SEQUENCE IF EXISTS system_notify_template_seq;
+CREATE SEQUENCE system_notify_template_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_notify_template
@@ -2832,7 +2837,7 @@ CREATE SEQUENCE system_notify_message_seq
 DROP TABLE IF EXISTS system_notify_template;
 CREATE TABLE system_notify_template
 (
-    id          int8          NOT NULL,
+    id          int8          NOT NULL default nextval('system_notify_template_seq'),
     name        varchar(63)   NOT NULL,
     code        varchar(64)   NOT NULL,
     nickname    varchar(255)  NOT NULL,
@@ -2867,8 +2872,8 @@ COMMENT ON COLUMN system_notify_template.update_time IS '更新时间';
 COMMENT ON COLUMN system_notify_template.deleted IS '是否删除';
 COMMENT ON TABLE system_notify_template IS '站内信模板表';
 
-DROP SEQUENCE IF EXISTS system_notify_template_seq;
-CREATE SEQUENCE system_notify_template_seq
+DROP SEQUENCE IF EXISTS system_oauth2_access_token_seq;
+CREATE SEQUENCE system_oauth2_access_token_seq
     START 1;
 
 -- ----------------------------
@@ -2877,7 +2882,7 @@ CREATE SEQUENCE system_notify_template_seq
 DROP TABLE IF EXISTS system_oauth2_access_token;
 CREATE TABLE system_oauth2_access_token
 (
-    id            int8         NOT NULL,
+    id            int8         NOT NULL default nextval('system_oauth2_access_token_seq'),
     user_id       int8         NOT NULL,
     user_type     int2         NOT NULL,
     user_info     varchar(512) NOT NULL,
@@ -2917,8 +2922,8 @@ COMMENT ON COLUMN system_oauth2_access_token.deleted IS '是否删除';
 COMMENT ON COLUMN system_oauth2_access_token.tenant_id IS '租户编号';
 COMMENT ON TABLE system_oauth2_access_token IS 'OAuth2 访问令牌';
 
-DROP SEQUENCE IF EXISTS system_oauth2_access_token_seq;
-CREATE SEQUENCE system_oauth2_access_token_seq
+DROP SEQUENCE IF EXISTS system_oauth2_approve_seq;
+CREATE SEQUENCE system_oauth2_approve_seq
     START 1;
 
 -- ----------------------------
@@ -2927,7 +2932,7 @@ CREATE SEQUENCE system_oauth2_access_token_seq
 DROP TABLE IF EXISTS system_oauth2_approve;
 CREATE TABLE system_oauth2_approve
 (
-    id           int8         NOT NULL,
+    id           int8         NOT NULL default nextval('system_oauth2_approve_seq'),
     user_id      int8         NOT NULL,
     user_type    int2         NOT NULL,
     client_id    varchar(255) NOT NULL,
@@ -2960,8 +2965,8 @@ COMMENT ON COLUMN system_oauth2_approve.deleted IS '是否删除';
 COMMENT ON COLUMN system_oauth2_approve.tenant_id IS '租户编号';
 COMMENT ON TABLE system_oauth2_approve IS 'OAuth2 批准表';
 
-DROP SEQUENCE IF EXISTS system_oauth2_approve_seq;
-CREATE SEQUENCE system_oauth2_approve_seq
+DROP SEQUENCE IF EXISTS system_oauth2_client_seq;
+CREATE SEQUENCE system_oauth2_client_seq
     START 1;
 
 -- ----------------------------
@@ -2970,7 +2975,7 @@ CREATE SEQUENCE system_oauth2_approve_seq
 DROP TABLE IF EXISTS system_oauth2_client;
 CREATE TABLE system_oauth2_client
 (
-    id                             int8          NOT NULL,
+    id                             int8          NOT NULL default nextval('system_oauth2_client_seq'),
     client_id                      varchar(255)  NOT NULL,
     secret                         varchar(255)  NOT NULL,
     name                           varchar(255)  NOT NULL,
@@ -3031,9 +3036,9 @@ INSERT INTO system_oauth2_client (id, client_id, secret, name, logo, description
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_oauth2_client_seq;
-CREATE SEQUENCE system_oauth2_client_seq
-    START 43;
+DROP SEQUENCE IF EXISTS system_oauth2_code_seq;
+CREATE SEQUENCE system_oauth2_code_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_oauth2_code
@@ -3041,7 +3046,7 @@ CREATE SEQUENCE system_oauth2_client_seq
 DROP TABLE IF EXISTS system_oauth2_code;
 CREATE TABLE system_oauth2_code
 (
-    id           int8         NOT NULL,
+    id           int8         NOT NULL default nextval('system_oauth2_code_seq'),
     user_id      int8         NOT NULL,
     user_type    int2         NOT NULL,
     code         varchar(32)  NOT NULL,
@@ -3078,8 +3083,8 @@ COMMENT ON COLUMN system_oauth2_code.deleted IS '是否删除';
 COMMENT ON COLUMN system_oauth2_code.tenant_id IS '租户编号';
 COMMENT ON TABLE system_oauth2_code IS 'OAuth2 授权码表';
 
-DROP SEQUENCE IF EXISTS system_oauth2_code_seq;
-CREATE SEQUENCE system_oauth2_code_seq
+DROP SEQUENCE IF EXISTS system_oauth2_refresh_token_seq;
+CREATE SEQUENCE system_oauth2_refresh_token_seq
     START 1;
 
 -- ----------------------------
@@ -3088,7 +3093,7 @@ CREATE SEQUENCE system_oauth2_code_seq
 DROP TABLE IF EXISTS system_oauth2_refresh_token;
 CREATE TABLE system_oauth2_refresh_token
 (
-    id            int8         NOT NULL,
+    id            int8         NOT NULL default nextval('system_oauth2_refresh_token_seq'),
     user_id       int8         NOT NULL,
     refresh_token varchar(32)  NOT NULL,
     user_type     int2         NOT NULL,
@@ -3121,8 +3126,8 @@ COMMENT ON COLUMN system_oauth2_refresh_token.deleted IS '是否删除';
 COMMENT ON COLUMN system_oauth2_refresh_token.tenant_id IS '租户编号';
 COMMENT ON TABLE system_oauth2_refresh_token IS 'OAuth2 刷新令牌';
 
-DROP SEQUENCE IF EXISTS system_oauth2_refresh_token_seq;
-CREATE SEQUENCE system_oauth2_refresh_token_seq
+DROP SEQUENCE IF EXISTS system_operate_log_seq;
+CREATE SEQUENCE system_operate_log_seq
     START 1;
 
 -- ----------------------------
@@ -3131,7 +3136,7 @@ CREATE SEQUENCE system_oauth2_refresh_token_seq
 DROP TABLE IF EXISTS system_operate_log;
 CREATE TABLE system_operate_log
 (
-    id             int8          NOT NULL,
+    id             int8          NOT NULL default nextval('system_operate_log_seq'),
     trace_id       varchar(64)   NOT NULL DEFAULT '',
     user_id        int8          NOT NULL,
     user_type      int2          NOT NULL DEFAULT 0,
@@ -3178,8 +3183,8 @@ COMMENT ON COLUMN system_operate_log.deleted IS '是否删除';
 COMMENT ON COLUMN system_operate_log.tenant_id IS '租户编号';
 COMMENT ON TABLE system_operate_log IS '操作日志记录 V2 版本';
 
-DROP SEQUENCE IF EXISTS system_operate_log_seq;
-CREATE SEQUENCE system_operate_log_seq
+DROP SEQUENCE IF EXISTS system_post_seq;
+CREATE SEQUENCE system_post_seq
     START 1;
 
 -- ----------------------------
@@ -3188,7 +3193,7 @@ CREATE SEQUENCE system_operate_log_seq
 DROP TABLE IF EXISTS system_post;
 CREATE TABLE system_post
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('system_post_seq'),
     code        varchar(64)  NOT NULL,
     name        varchar(50)  NOT NULL,
     sort        int4         NOT NULL,
@@ -3231,9 +3236,9 @@ INSERT INTO system_post (id, code, name, sort, status, remark, creator, create_t
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_post_seq;
-CREATE SEQUENCE system_post_seq
-    START 6;
+DROP SEQUENCE IF EXISTS system_role_seq;
+CREATE SEQUENCE system_role_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_role
@@ -3241,7 +3246,7 @@ CREATE SEQUENCE system_post_seq
 DROP TABLE IF EXISTS system_role;
 CREATE TABLE system_role
 (
-    id                  int8         NOT NULL,
+    id                  int8         NOT NULL default nextval('system_role_seq'),
     name                varchar(30)  NOT NULL,
     code                varchar(100) NOT NULL,
     sort                int4         NOT NULL,
@@ -3294,9 +3299,9 @@ INSERT INTO system_role (id, name, code, sort, data_scope, data_scope_dept_ids, 
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_role_seq;
-CREATE SEQUENCE system_role_seq
-    START 159;
+DROP SEQUENCE IF EXISTS system_role_menu_seq;
+CREATE SEQUENCE system_role_menu_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_role_menu
@@ -3304,7 +3309,7 @@ CREATE SEQUENCE system_role_seq
 DROP TABLE IF EXISTS system_role_menu;
 CREATE TABLE system_role_menu
 (
-    id          int8        NOT NULL,
+    id          int8        NOT NULL default nextval('system_role_menu_seq'),
     role_id     int8        NOT NULL,
     menu_id     int8        NOT NULL,
     creator     varchar(64) NULL     DEFAULT '',
@@ -4200,9 +4205,9 @@ INSERT INTO system_role_menu (id, role_id, menu_id, creator, create_time, update
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_role_menu_seq;
-CREATE SEQUENCE system_role_menu_seq
-    START 6139;
+DROP SEQUENCE IF EXISTS system_sms_channel_seq;
+CREATE SEQUENCE system_sms_channel_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_sms_channel
@@ -4210,7 +4215,7 @@ CREATE SEQUENCE system_role_menu_seq
 DROP TABLE IF EXISTS system_sms_channel;
 CREATE TABLE system_sms_channel
 (
-    id           int8         NOT NULL,
+    id           int8         NOT NULL default nextval('system_sms_channel_seq'),
     signature    varchar(12)  NOT NULL,
     code         varchar(63)  NOT NULL,
     status       int2         NOT NULL,
@@ -4254,9 +4259,9 @@ INSERT INTO system_sms_channel (id, signature, code, status, remark, api_key, ap
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_sms_channel_seq;
-CREATE SEQUENCE system_sms_channel_seq
-    START 8;
+DROP SEQUENCE IF EXISTS system_sms_code_seq;
+CREATE SEQUENCE system_sms_code_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_sms_code
@@ -4264,7 +4269,7 @@ CREATE SEQUENCE system_sms_channel_seq
 DROP TABLE IF EXISTS system_sms_code;
 CREATE TABLE system_sms_code
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('system_sms_code_seq'),
     mobile      varchar(11)  NOT NULL,
     code        varchar(6)   NOT NULL,
     create_ip   varchar(15)  NOT NULL,
@@ -4303,8 +4308,8 @@ COMMENT ON COLUMN system_sms_code.deleted IS '是否删除';
 COMMENT ON COLUMN system_sms_code.tenant_id IS '租户编号';
 COMMENT ON TABLE system_sms_code IS '手机验证码';
 
-DROP SEQUENCE IF EXISTS system_sms_code_seq;
-CREATE SEQUENCE system_sms_code_seq
+DROP SEQUENCE IF EXISTS system_sms_log_seq;
+CREATE SEQUENCE system_sms_log_seq
     START 1;
 
 -- ----------------------------
@@ -4313,7 +4318,7 @@ CREATE SEQUENCE system_sms_code_seq
 DROP TABLE IF EXISTS system_sms_log;
 CREATE TABLE system_sms_log
 (
-    id               int8         NOT NULL,
+    id               int8         NOT NULL default nextval('system_sms_log_seq'),
     channel_id       int8         NOT NULL,
     channel_code     varchar(63)  NOT NULL,
     template_id      int8         NOT NULL,
@@ -4374,8 +4379,8 @@ COMMENT ON COLUMN system_sms_log.update_time IS '更新时间';
 COMMENT ON COLUMN system_sms_log.deleted IS '是否删除';
 COMMENT ON TABLE system_sms_log IS '短信日志';
 
-DROP SEQUENCE IF EXISTS system_sms_log_seq;
-CREATE SEQUENCE system_sms_log_seq
+DROP SEQUENCE IF EXISTS system_sms_template_seq;
+CREATE SEQUENCE system_sms_template_seq
     START 1;
 
 -- ----------------------------
@@ -4384,7 +4389,7 @@ CREATE SEQUENCE system_sms_log_seq
 DROP TABLE IF EXISTS system_sms_template;
 CREATE TABLE system_sms_template
 (
-    id              int8         NOT NULL,
+    id              int8         NOT NULL default nextval('system_sms_template_seq'),
     type            int2         NOT NULL,
     status          int2         NOT NULL,
     code            varchar(63)  NOT NULL,
@@ -4446,9 +4451,9 @@ INSERT INTO system_sms_template (id, type, status, code, name, content, params, 
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_sms_template_seq;
-CREATE SEQUENCE system_sms_template_seq
-    START 20;
+DROP SEQUENCE IF EXISTS system_social_client_seq;
+CREATE SEQUENCE system_social_client_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_social_client
@@ -4456,12 +4461,13 @@ CREATE SEQUENCE system_sms_template_seq
 DROP TABLE IF EXISTS system_social_client;
 CREATE TABLE system_social_client
 (
-    id            int8         NOT NULL,
+    id            int8         NOT NULL default nextval('system_social_client_seq'),
     name          varchar(255) NOT NULL,
     social_type   int2         NOT NULL,
     user_type     int2         NOT NULL,
     client_id     varchar(255) NOT NULL,
     client_secret varchar(255) NOT NULL,
+    public_key    varchar(255) NULL     DEFAULT NULL,
     agent_id      varchar(255) NULL     DEFAULT NULL,
     status        int2         NOT NULL,
     creator       varchar(64)  NULL     DEFAULT '',
@@ -4481,6 +4487,7 @@ COMMENT ON COLUMN system_social_client.social_type IS '社交平台的类型';
 COMMENT ON COLUMN system_social_client.user_type IS '用户类型';
 COMMENT ON COLUMN system_social_client.client_id IS '客户端编号';
 COMMENT ON COLUMN system_social_client.client_secret IS '客户端密钥';
+COMMENT ON COLUMN system_social_client.public_key IS 'publicKey 公钥';
 COMMENT ON COLUMN system_social_client.agent_id IS '代理编号';
 COMMENT ON COLUMN system_social_client.status IS '状态';
 COMMENT ON COLUMN system_social_client.creator IS '创建者';
@@ -4504,9 +4511,9 @@ INSERT INTO system_social_client (id, name, social_type, user_type, client_id, c
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_social_client_seq;
-CREATE SEQUENCE system_social_client_seq
-    START 45;
+DROP SEQUENCE IF EXISTS system_social_user_seq;
+CREATE SEQUENCE system_social_user_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_social_user
@@ -4514,7 +4521,7 @@ CREATE SEQUENCE system_social_client_seq
 DROP TABLE IF EXISTS system_social_user;
 CREATE TABLE system_social_user
 (
-    id             int8          NOT NULL,
+    id             int8          NOT NULL default nextval('system_social_user_seq'),
     type           int2          NOT NULL,
     openid         varchar(32)   NOT NULL,
     token          varchar(256)  NULL     DEFAULT NULL,
@@ -4553,8 +4560,8 @@ COMMENT ON COLUMN system_social_user.deleted IS '是否删除';
 COMMENT ON COLUMN system_social_user.tenant_id IS '租户编号';
 COMMENT ON TABLE system_social_user IS '社交用户表';
 
-DROP SEQUENCE IF EXISTS system_social_user_seq;
-CREATE SEQUENCE system_social_user_seq
+DROP SEQUENCE IF EXISTS system_social_user_bind_seq;
+CREATE SEQUENCE system_social_user_bind_seq
     START 1;
 
 -- ----------------------------
@@ -4563,7 +4570,7 @@ CREATE SEQUENCE system_social_user_seq
 DROP TABLE IF EXISTS system_social_user_bind;
 CREATE TABLE system_social_user_bind
 (
-    id             int8        NOT NULL,
+    id             int8        NOT NULL default nextval('system_social_user_bind_seq'),
     user_id        int8        NOT NULL,
     user_type      int2        NOT NULL,
     social_type    int2        NOT NULL,
@@ -4592,8 +4599,8 @@ COMMENT ON COLUMN system_social_user_bind.deleted IS '是否删除';
 COMMENT ON COLUMN system_social_user_bind.tenant_id IS '租户编号';
 COMMENT ON TABLE system_social_user_bind IS '社交绑定表';
 
-DROP SEQUENCE IF EXISTS system_social_user_bind_seq;
-CREATE SEQUENCE system_social_user_bind_seq
+DROP SEQUENCE IF EXISTS system_tenant_seq;
+CREATE SEQUENCE system_tenant_seq
     START 1;
 
 -- ----------------------------
@@ -4602,13 +4609,13 @@ CREATE SEQUENCE system_social_user_bind_seq
 DROP TABLE IF EXISTS system_tenant;
 CREATE TABLE system_tenant
 (
-    id              int8         NOT NULL,
+    id              int8         NOT NULL default nextval('system_tenant_seq'),
     name            varchar(30)  NOT NULL,
     contact_user_id int8         NULL     DEFAULT NULL,
     contact_name    varchar(30)  NOT NULL,
     contact_mobile  varchar(500) NULL     DEFAULT NULL,
     status          int2         NOT NULL DEFAULT 0,
-    website         varchar(256) NULL     DEFAULT '',
+    websites        varchar(256) NULL     DEFAULT '',
     package_id      int8         NOT NULL,
     expire_time     timestamp    NOT NULL,
     account_count   int4         NOT NULL,
@@ -4628,7 +4635,7 @@ COMMENT ON COLUMN system_tenant.contact_user_id IS '联系人的用户编号';
 COMMENT ON COLUMN system_tenant.contact_name IS '联系人';
 COMMENT ON COLUMN system_tenant.contact_mobile IS '联系手机';
 COMMENT ON COLUMN system_tenant.status IS '租户状态（0正常 1停用）';
-COMMENT ON COLUMN system_tenant.website IS '绑定域名';
+COMMENT ON COLUMN system_tenant.websites IS '绑定域名数组';
 COMMENT ON COLUMN system_tenant.package_id IS '租户套餐编号';
 COMMENT ON COLUMN system_tenant.expire_time IS '过期时间';
 COMMENT ON COLUMN system_tenant.account_count IS '账号数量';
@@ -4644,15 +4651,15 @@ COMMENT ON TABLE system_tenant IS '租户表';
 -- ----------------------------
 -- @formatter:off
 BEGIN;
-INSERT INTO system_tenant (id, name, contact_user_id, contact_name, contact_mobile, status, website, package_id, expire_time, account_count, creator, create_time, updater, update_time, deleted) VALUES (1, '芋道源码', NULL, '芋艿', '17321315478', 0, 'www.iocoder.cn', 0, '2099-02-19 17:14:16', 9999, '1', '2021-01-05 17:03:47', '1', '2023-11-06 11:41:41', '0');
-INSERT INTO system_tenant (id, name, contact_user_id, contact_name, contact_mobile, status, website, package_id, expire_time, account_count, creator, create_time, updater, update_time, deleted) VALUES (121, '小租户', 110, '小王2', '15601691300', 0, 'zsxq.iocoder.cn', 111, '2026-07-10 00:00:00', 30, '1', '2022-02-22 00:56:14', '1', '2025-04-03 21:33:01', '0');
-INSERT INTO system_tenant (id, name, contact_user_id, contact_name, contact_mobile, status, website, package_id, expire_time, account_count, creator, create_time, updater, update_time, deleted) VALUES (122, '测试租户', 113, '芋道', '15601691300', 0, 'test.iocoder.cn', 111, '2022-04-29 00:00:00', 50, '1', '2022-03-07 21:37:58', '1', '2024-09-22 12:10:50', '0');
+INSERT INTO system_tenant (id, name, contact_user_id, contact_name, contact_mobile, status, websites, package_id, expire_time, account_count, creator, create_time, updater, update_time, deleted) VALUES (1, '芋道源码', NULL, '芋艿', '17321315478', 0, 'www.iocoder.cn', 0, '2099-02-19 17:14:16', 9999, '1', '2021-01-05 17:03:47', '1', '2023-11-06 11:41:41', '0');
+INSERT INTO system_tenant (id, name, contact_user_id, contact_name, contact_mobile, status, websites, package_id, expire_time, account_count, creator, create_time, updater, update_time, deleted) VALUES (121, '小租户', 110, '小王2', '15601691300', 0, 'zsxq.iocoder.cn', 111, '2026-07-10 00:00:00', 30, '1', '2022-02-22 00:56:14', '1', '2025-04-03 21:33:01', '0');
+INSERT INTO system_tenant (id, name, contact_user_id, contact_name, contact_mobile, status, websites, package_id, expire_time, account_count, creator, create_time, updater, update_time, deleted) VALUES (122, '测试租户', 113, '芋道', '15601691300', 0, 'test.iocoder.cn', 111, '2022-04-29 00:00:00', 50, '1', '2022-03-07 21:37:58', '1', '2024-09-22 12:10:50', '0');
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_tenant_seq;
-CREATE SEQUENCE system_tenant_seq
-    START 123;
+DROP SEQUENCE IF EXISTS system_tenant_package_seq;
+CREATE SEQUENCE system_tenant_package_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_tenant_package
@@ -4660,7 +4667,7 @@ CREATE SEQUENCE system_tenant_seq
 DROP TABLE IF EXISTS system_tenant_package;
 CREATE TABLE system_tenant_package
 (
-    id          int8          NOT NULL,
+    id          int8          NOT NULL default nextval('system_tenant_package_seq'),
     name        varchar(30)   NOT NULL,
     status      int2          NOT NULL DEFAULT 0,
     remark      varchar(256)  NULL     DEFAULT '',
@@ -4697,9 +4704,9 @@ INSERT INTO system_tenant_package (id, name, status, remark, menu_ids, creator, 
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_tenant_package_seq;
-CREATE SEQUENCE system_tenant_package_seq
-    START 113;
+DROP SEQUENCE IF EXISTS system_user_post_seq;
+CREATE SEQUENCE system_user_post_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_user_post
@@ -4707,7 +4714,7 @@ CREATE SEQUENCE system_tenant_package_seq
 DROP TABLE IF EXISTS system_user_post;
 CREATE TABLE system_user_post
 (
-    id          int8        NOT NULL,
+    id          int8        NOT NULL default nextval('system_user_post_seq'),
     user_id     int8        NOT NULL DEFAULT 0,
     post_id     int8        NOT NULL DEFAULT 0,
     creator     varchar(64) NULL     DEFAULT '',
@@ -4749,9 +4756,9 @@ INSERT INTO system_user_post (id, user_id, post_id, creator, create_time, update
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_user_post_seq;
-CREATE SEQUENCE system_user_post_seq
-    START 126;
+DROP SEQUENCE IF EXISTS system_user_role_seq;
+CREATE SEQUENCE system_user_role_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_user_role
@@ -4759,7 +4766,7 @@ CREATE SEQUENCE system_user_post_seq
 DROP TABLE IF EXISTS system_user_role;
 CREATE TABLE system_user_role
 (
-    id          int8        NOT NULL,
+    id          int8        NOT NULL default nextval('system_user_role_seq'),
     user_id     int8        NOT NULL,
     role_id     int8        NOT NULL,
     creator     varchar(64) NULL     DEFAULT '',
@@ -4809,9 +4816,9 @@ INSERT INTO system_user_role (id, user_id, role_id, creator, create_time, update
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_user_role_seq;
-CREATE SEQUENCE system_user_role_seq
-    START 49;
+DROP SEQUENCE IF EXISTS system_users_seq;
+CREATE SEQUENCE system_users_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for system_users
@@ -4819,7 +4826,7 @@ CREATE SEQUENCE system_user_role_seq
 DROP TABLE IF EXISTS system_users;
 CREATE TABLE system_users
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('system_users_seq'),
     username    varchar(30)  NOT NULL,
     password    varchar(100) NOT NULL DEFAULT '',
     nickname    varchar(30)  NOT NULL,
@@ -4892,9 +4899,9 @@ INSERT INTO system_users (id, username, password, nickname, remark, dept_id, pos
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS system_users_seq;
-CREATE SEQUENCE system_users_seq
-    START 142;
+DROP SEQUENCE IF EXISTS yudao_demo01_contact_seq;
+CREATE SEQUENCE yudao_demo01_contact_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for yudao_demo01_contact
@@ -4902,7 +4909,7 @@ CREATE SEQUENCE system_users_seq
 DROP TABLE IF EXISTS yudao_demo01_contact;
 CREATE TABLE yudao_demo01_contact
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('yudao_demo01_contact_seq'),
     name        varchar(100) NOT NULL DEFAULT '',
     sex         int2         NOT NULL,
     birthday    timestamp    NOT NULL,
@@ -4942,9 +4949,9 @@ INSERT INTO yudao_demo01_contact (id, name, sex, birthday, description, avatar, 
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS yudao_demo01_contact_seq;
-CREATE SEQUENCE yudao_demo01_contact_seq
-    START 2;
+DROP SEQUENCE IF EXISTS yudao_demo02_category_seq;
+CREATE SEQUENCE yudao_demo02_category_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for yudao_demo02_category
@@ -4952,7 +4959,7 @@ CREATE SEQUENCE yudao_demo01_contact_seq
 DROP TABLE IF EXISTS yudao_demo02_category;
 CREATE TABLE yudao_demo02_category
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('yudao_demo02_category_seq'),
     name        varchar(100) NOT NULL DEFAULT '',
     parent_id   int8         NOT NULL,
     creator     varchar(64)  NULL     DEFAULT '',
@@ -4991,9 +4998,9 @@ INSERT INTO yudao_demo02_category (id, name, parent_id, creator, create_time, up
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS yudao_demo02_category_seq;
-CREATE SEQUENCE yudao_demo02_category_seq
-    START 7;
+DROP SEQUENCE IF EXISTS yudao_demo03_course_seq;
+CREATE SEQUENCE yudao_demo03_course_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for yudao_demo03_course
@@ -5001,7 +5008,7 @@ CREATE SEQUENCE yudao_demo02_category_seq
 DROP TABLE IF EXISTS yudao_demo03_course;
 CREATE TABLE yudao_demo03_course
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('yudao_demo03_course_seq'),
     student_id  int8         NOT NULL,
     name        varchar(100) NOT NULL DEFAULT '',
     score       int2         NOT NULL,
@@ -5053,9 +5060,9 @@ INSERT INTO yudao_demo03_course (id, student_id, name, score, creator, create_ti
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS yudao_demo03_course_seq;
-CREATE SEQUENCE yudao_demo03_course_seq
-    START 21;
+DROP SEQUENCE IF EXISTS yudao_demo03_grade_seq;
+CREATE SEQUENCE yudao_demo03_grade_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for yudao_demo03_grade
@@ -5063,7 +5070,7 @@ CREATE SEQUENCE yudao_demo03_course_seq
 DROP TABLE IF EXISTS yudao_demo03_grade;
 CREATE TABLE yudao_demo03_grade
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('yudao_demo03_grade_seq'),
     student_id  int8         NOT NULL,
     name        varchar(100) NOT NULL DEFAULT '',
     teacher     varchar(255) NOT NULL,
@@ -5101,9 +5108,9 @@ INSERT INTO yudao_demo03_grade (id, student_id, name, teacher, creator, create_t
 COMMIT;
 -- @formatter:on
 
-DROP SEQUENCE IF EXISTS yudao_demo03_grade_seq;
-CREATE SEQUENCE yudao_demo03_grade_seq
-    START 10;
+DROP SEQUENCE IF EXISTS yudao_demo03_student_seq;
+CREATE SEQUENCE yudao_demo03_student_seq
+    START 1;
 
 -- ----------------------------
 -- Table structure for yudao_demo03_student
@@ -5111,7 +5118,7 @@ CREATE SEQUENCE yudao_demo03_grade_seq
 DROP TABLE IF EXISTS yudao_demo03_student;
 CREATE TABLE yudao_demo03_student
 (
-    id          int8         NOT NULL,
+    id          int8         NOT NULL default nextval('yudao_demo03_student_seq'),
     name        varchar(100) NOT NULL DEFAULT '',
     sex         int2         NOT NULL,
     birthday    timestamp    NOT NULL,
@@ -5150,8 +5157,4 @@ INSERT INTO yudao_demo03_student (id, name, sex, birthday, description, creator,
 INSERT INTO yudao_demo03_student (id, name, sex, birthday, description, creator, create_time, updater, update_time, deleted, tenant_id) VALUES (9, '小花', 1, '2023-11-07 00:00:00', '<p>哈哈哈</p>', '1', '2023-11-17 00:04:47', '1', '2025-04-19 10:49:04', '0', 1);
 COMMIT;
 -- @formatter:on
-
-DROP SEQUENCE IF EXISTS yudao_demo03_student_seq;
-CREATE SEQUENCE yudao_demo03_student_seq
-    START 10;
 
