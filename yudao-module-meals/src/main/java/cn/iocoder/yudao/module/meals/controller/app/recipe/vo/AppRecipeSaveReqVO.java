@@ -1,11 +1,10 @@
 package cn.iocoder.yudao.module.meals.controller.app.recipe.vo;
 
-import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-import java.util.*;
-import jakarta.validation.constraints.*;
-import cn.iocoder.yudao.module.meals.dal.dataobject.recipe.RecipeFoodDO;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+import java.util.List;
 
 @Schema(description = "用户 APP - 菜谱新增/修改 Request VO")
 @Data

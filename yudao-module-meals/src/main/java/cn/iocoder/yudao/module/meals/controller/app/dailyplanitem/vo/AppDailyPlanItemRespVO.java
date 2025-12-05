@@ -1,11 +1,11 @@
 package cn.iocoder.yudao.module.meals.controller.app.dailyplanitem.vo;
 
+import cn.idev.excel.annotation.ExcelIgnoreUnannotated;
+import cn.idev.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-import java.util.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Data;
+
 import java.time.LocalDateTime;
-import com.alibaba.excel.annotation.*;
 
 @Schema(description = "用户 APP - 每日计划明细 Response VO")
 @Data
